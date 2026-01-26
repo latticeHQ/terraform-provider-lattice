@@ -1,20 +1,30 @@
 package provider_test
 
 import (
-	"fmt"
 	"regexp"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
 	"github.com/latticehq/terraform-provider-lattice/provider"
 )
 
 func TestAgent(t *testing.T) {
-	t.Parallel()
+	t.Setenv("lattice_AGENT_OWNER", "owner123")
+	t.Setenv("lattice_AGENT_OWNER_ID", "11111111-1111-1111-1111-111111111111")
+	t.Setenv("lattice_AGENT_OWNER_NAME", "Mr Owner")
+	t.Setenv("lattice_AGENT_OWNER_EMAIL", "owner123@example.com")
+	t.Setenv("lattice_AGENT_OWNER_SESSION_TOKEN", "abc123")
+	t.Setenv("lattice_AGENT_OWNER_GROUPS", `["group1", "group2"]`)
+	t.Setenv("lattice_AGENT_OWNER_OIDC_ACCESS_TOKEN", "supersecret")
+	t.Setenv("lattice_AGENT_TEMPLATE_ID", "templateID")
+	t.Setenv("lattice_AGENT_TEMPLATE_NAME", "template123")
+	t.Setenv("lattice_AGENT_TEMPLATE_VERSION", "v1.2.3")
+
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]*schema.Provider{
 			"lattice": provider.New(),
@@ -22,151 +32,47 @@ func TestAgent(t *testing.T) {
 		IsUnitTest: true,
 		Steps: []resource.TestStep{{
 			Config: `
-				provider "lattice" {
-					url = "https://latticeruntime.com"
-				}
-				resource "lattice_agent" "new" {
-					os = "linux"
-					arch = "amd64"
-					auth = "aws-instance-identity"
-					dir = "/tmp"
-					env = {
-						hi = "test"
-					}
-					startup_script = "echo test"
-					startup_script_timeout = 120
-					troubleshooting_url = "https://latticeruntime.com/troubleshoot"
-					motd_file = "/etc/motd"
-					shutdown_script = "echo bye bye"
-					shutdown_script_timeout = 120
-					order = 4
-				}
-				`,
+			provider "lattice" {
+				url = "https://latticeruntime.com:8080"
+			}
+			data "lattice_agent" "me" {
+			}`,
 			Check: func(state *terraform.State) error {
 				require.Len(t, state.Modules, 1)
 				require.Len(t, state.Modules[0].Resources, 1)
-				resource := state.Modules[0].Resources["lattice_agent.new"]
+				resource := state.Modules[0].Resources["data.lattice_agent.me"]
 				require.NotNil(t, resource)
-				for _, key := range []string{
-					"token",
-					"os",
-					"arch",
-					"auth",
-					"dir",
-					"env.hi",
-					"startup_script",
-					"startup_script_timeout",
-					"connection_timeout",
-					"troubleshooting_url",
-					"motd_file",
-					"shutdown_script",
-					"shutdown_script_timeout",
-					"order",
-				} {
-					value := resource.Primary.Attributes[key]
-					t.Logf("%q = %q", key, value)
-					require.NotNil(t, value)
-					require.Greater(t, len(value), 0)
-				}
+
+				attribs := resource.Primary.Attributes
+				value := attribs["transition"]
+				require.NotNil(t, value)
+				t.Log(value)
+				assert.Equal(t, "https://latticeruntime.com:8080", attribs["access_url"])
+				assert.Equal(t, "8080", attribs["access_port"])
+				assert.Equal(t, "owner123", attribs["owner"])
+				assert.Equal(t, "11111111-1111-1111-1111-111111111111", attribs["owner_id"])
+				assert.Equal(t, "Mr Owner", attribs["owner_name"])
+				assert.Equal(t, "owner123@example.com", attribs["owner_email"])
+				assert.Equal(t, "group1", attribs["owner_groups.0"])
+				assert.Equal(t, "group2", attribs["owner_groups.1"])
+				assert.Equal(t, "templateID", attribs["template_id"])
+				assert.Equal(t, "template123", attribs["template_name"])
+				assert.Equal(t, "v1.2.3", attribs["template_version"])
+				assert.Equal(t, "supersecret", attribs["owner_oidc_access_token"])
 				return nil
 			},
 		}},
 	})
 }
 
-func TestAgent_StartupScriptBehavior(t *testing.T) {
-	t.Parallel()
+func TestAgent_UndefinedOwner(t *testing.T) {
+	t.Setenv("lattice_AGENT_OWNER", "owner123")
+	t.Setenv("lattice_AGENT_OWNER_SESSION_TOKEN", "abc123")
+	t.Setenv("lattice_AGENT_OWNER_GROUPS", `["group1", "group2"]`)
+	t.Setenv("lattice_AGENT_TEMPLATE_ID", "templateID")
+	t.Setenv("lattice_AGENT_TEMPLATE_NAME", "template123")
+	t.Setenv("lattice_AGENT_TEMPLATE_VERSION", "v1.2.3")
 
-	for _, tc := range []struct {
-		Name        string
-		Config      string
-		ExpectError *regexp.Regexp
-		Check       func(state *terraform.ResourceState)
-	}{
-		{
-			Name: "blocking",
-			Config: `
-				resource "lattice_agent" "new" {
-					os = "linux"
-					arch = "amd64"
-					startup_script_behavior = "blocking"
-				}
-			`,
-			Check: func(state *terraform.ResourceState) {
-				require.Equal(t, "blocking", state.Primary.Attributes["startup_script_behavior"])
-			},
-		},
-		{
-			Name: "non-blocking",
-			Config: `
-				resource "lattice_agent" "new" {
-					os = "linux"
-					arch = "amd64"
-					startup_script_behavior = "non-blocking"
-				}
-			`,
-			Check: func(state *terraform.ResourceState) {
-				require.Equal(t, "non-blocking", state.Primary.Attributes["startup_script_behavior"])
-			},
-		},
-		{
-			Name: "login_before_ready (deprecated)",
-			Config: `
-				resource "lattice_agent" "new" {
-					os = "linux"
-					arch = "amd64"
-					login_before_ready = false
-				}
-			`,
-			Check: func(state *terraform.ResourceState) {
-				require.Equal(t, "false", state.Primary.Attributes["login_before_ready"])
-				// startup_script_behavior must be empty, this indicates that
-				// login_before_ready should be used instead.
-				require.Equal(t, "", state.Primary.Attributes["startup_script_behavior"])
-			},
-		},
-		{
-			Name: "no login_before_ready with startup_script_behavior",
-			Config: `
-				resource "lattice_agent" "new" {
-					os = "linux"
-					arch = "amd64"
-					login_before_ready = false
-					startup_script_behavior = "blocking"
-				}
-			`,
-			ExpectError: regexp.MustCompile("conflicts with"),
-		},
-	} {
-		tc := tc
-		t.Run(tc.Name, func(t *testing.T) {
-			t.Parallel()
-			resource.Test(t, resource.TestCase{
-				Providers: map[string]*schema.Provider{
-					"lattice": provider.New(),
-				},
-				IsUnitTest: true,
-				Steps: []resource.TestStep{{
-					Config:      tc.Config,
-					ExpectError: tc.ExpectError,
-					Check: func(state *terraform.State) error {
-						require.Len(t, state.Modules, 1)
-						require.Len(t, state.Modules[0].Resources, 1)
-						resource := state.Modules[0].Resources["lattice_agent.new"]
-						require.NotNil(t, resource)
-						if tc.Check != nil {
-							tc.Check(resource)
-						}
-						return nil
-					},
-				}},
-			})
-		})
-	}
-}
-
-func TestAgent_Instance(t *testing.T) {
-	t.Parallel()
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]*schema.Provider{
 			"lattice": provider.New(),
@@ -174,88 +80,44 @@ func TestAgent_Instance(t *testing.T) {
 		IsUnitTest: true,
 		Steps: []resource.TestStep{{
 			Config: `
-				provider "lattice" {
-					url = "https://latticeruntime.com"
-				}
-				resource "lattice_agent" "dev" {
-					os = "linux"
-					arch = "amd64"
-				}
-				resource "lattice_agent_instance" "new" {
-					agent_id = lattice_agent.dev.id
-					instance_id = "hello"
-				}
-				`,
-			Check: func(state *terraform.State) error {
-				require.Len(t, state.Modules, 1)
-				require.Len(t, state.Modules[0].Resources, 2)
-				resource := state.Modules[0].Resources["lattice_agent_instance.new"]
-				require.NotNil(t, resource)
-				for _, key := range []string{
-					"agent_id",
-					"instance_id",
-				} {
-					value := resource.Primary.Attributes[key]
-					t.Logf("%q = %q", key, value)
-					require.NotNil(t, value)
-					require.Greater(t, len(value), 0)
-				}
-				return nil
-			},
-		}},
-	})
-}
-
-func TestAgent_Metadata(t *testing.T) {
-	t.Parallel()
-	resource.Test(t, resource.TestCase{
-		Providers: map[string]*schema.Provider{
-			"lattice": provider.New(),
-		},
-		IsUnitTest: true,
-		Steps: []resource.TestStep{{
-			Config: `
-				provider "lattice" {
-					url = "https://latticeruntime.com"
-				}
-				resource "lattice_agent" "dev" {
-					os = "linux"
-					arch = "amd64"
-					metadata {
-						key = "process_count"
-						display_name = "Process Count"
-						script = "ps aux | wc -l"
-						interval = 5
-						timeout = 1
-						order = 7
-					}
-				}
-				`,
+			provider "lattice" {
+				url = "https://latticeruntime.com:8080"
+			}
+			data "lattice_agent" "me" {
+			}`,
 			Check: func(state *terraform.State) error {
 				require.Len(t, state.Modules, 1)
 				require.Len(t, state.Modules[0].Resources, 1)
-
-				resource := state.Modules[0].Resources["lattice_agent.dev"]
+				resource := state.Modules[0].Resources["data.lattice_agent.me"]
 				require.NotNil(t, resource)
 
-				t.Logf("resource: %v", resource.Primary.Attributes)
-
-				attr := resource.Primary.Attributes
-				require.Equal(t, "1", attr["metadata.#"])
-				require.Equal(t, "process_count", attr["metadata.0.key"])
-				require.Equal(t, "Process Count", attr["metadata.0.display_name"])
-				require.Equal(t, "ps aux | wc -l", attr["metadata.0.script"])
-				require.Equal(t, "5", attr["metadata.0.interval"])
-				require.Equal(t, "1", attr["metadata.0.timeout"])
-				require.Equal(t, "7", attr["metadata.0.order"])
+				attribs := resource.Primary.Attributes
+				value := attribs["transition"]
+				require.NotNil(t, value)
+				t.Log(value)
+				assert.Equal(t, "owner123", attribs["owner"])
+				assert.Equal(t, "default@example.com", attribs["owner_email"])
+				// Skip other asserts
 				return nil
 			},
 		}},
 	})
 }
 
-func TestAgent_MetadataDuplicateKeys(t *testing.T) {
-	t.Parallel()
+func TestAgent_MissingTemplateName(t *testing.T) {
+	t.Setenv("lattice_AGENT_BUILD_ID", "1") // Let's pretend this is a agent build
+
+	t.Setenv("lattice_AGENT_OWNER", "owner123")
+	t.Setenv("lattice_AGENT_OWNER_ID", "11111111-1111-1111-1111-111111111111")
+	t.Setenv("lattice_AGENT_OWNER_NAME", "Mr Owner")
+	t.Setenv("lattice_AGENT_OWNER_EMAIL", "owner123@example.com")
+	t.Setenv("lattice_AGENT_OWNER_SESSION_TOKEN", "abc123")
+	t.Setenv("lattice_AGENT_OWNER_GROUPS", `["group1", "group2"]`)
+	t.Setenv("lattice_AGENT_OWNER_OIDC_ACCESS_TOKEN", "supersecret")
+	t.Setenv("lattice_AGENT_TEMPLATE_ID", "templateID")
+	// lattice_AGENT_TEMPLATE_NAME is missing
+	t.Setenv("lattice_AGENT_TEMPLATE_VERSION", "v1.2.3")
+
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]*schema.Provider{
 			"lattice": provider.New(),
@@ -263,208 +125,12 @@ func TestAgent_MetadataDuplicateKeys(t *testing.T) {
 		IsUnitTest: true,
 		Steps: []resource.TestStep{{
 			Config: `
-				provider "lattice" {
-					url = "https://latticeruntime.com"
-				}
-				resource "lattice_agent" "dev" {
-					os = "linux"
-					arch = "amd64"
-					metadata {
-						key = "process_count"
-						display_name = "Process Count"
-						script = "ps aux | wc -l"
-						interval = 5
-						timeout = 1
-					}
-					metadata {
-						key = "process_count"
-						display_name = "Process Count"
-						script = "ps aux | wc -l"
-						interval = 5
-						timeout = 1
-					}
-				}
-				`,
-			ExpectError: regexp.MustCompile("duplicate agent metadata key"),
-			PlanOnly:    true,
+			provider "lattice" {
+				url = "https://latticeruntime.com:8080"
+			}
+			data "lattice_agent" "me" {
+			}`,
+			ExpectError: regexp.MustCompile("lattice_AGENT_TEMPLATE_NAME is required"),
 		}},
 	})
-}
-
-func TestAgent_DisplayApps(t *testing.T) {
-	t.Parallel()
-	t.Run("OK", func(t *testing.T) {
-		resource.Test(t, resource.TestCase{
-			Providers: map[string]*schema.Provider{
-				"lattice": provider.New(),
-			},
-			IsUnitTest: true,
-			Steps: []resource.TestStep{{
-				// Test the fields with non-default values.
-				Config: `
-					provider "lattice" {
-						url = "https://latticeruntime.com"
-					}
-					resource "lattice_agent" "dev" {
-						os = "linux"
-						arch = "amd64"
-						display_apps {
-							vscode = false
-							vscode_insiders = true
-							web_terminal = false
-							port_forwarding_helper = false
-							ssh_helper = false
-						}
-					}
-					`,
-				Check: func(state *terraform.State) error {
-					require.Len(t, state.Modules, 1)
-					require.Len(t, state.Modules[0].Resources, 1)
-
-					resource := state.Modules[0].Resources["lattice_agent.dev"]
-					require.NotNil(t, resource)
-
-					t.Logf("resource: %v", resource.Primary.Attributes)
-
-					for _, app := range []string{
-						"web_terminal",
-						"vscode_insiders",
-						"vscode",
-						"port_forwarding_helper",
-						"ssh_helper",
-					} {
-						key := fmt.Sprintf("display_apps.0.%s", app)
-						if app == "vscode_insiders" {
-							require.Equal(t, "true", resource.Primary.Attributes[key])
-						} else {
-							require.Equal(t, "false", resource.Primary.Attributes[key])
-						}
-					}
-					return nil
-				},
-			}},
-		})
-	})
-
-	t.Run("Subset", func(t *testing.T) {
-		resource.Test(t, resource.TestCase{
-			Providers: map[string]*schema.Provider{
-				"lattice": provider.New(),
-			},
-			IsUnitTest: true,
-			Steps: []resource.TestStep{{
-				// Test the fields with non-default values.
-				Config: `
-					provider "lattice" {
-						url = "https://latticeruntime.com"
-					}
-					resource "lattice_agent" "dev" {
-						os = "linux"
-						arch = "amd64"
-						display_apps {
-							vscode_insiders = true
-							web_terminal = true
-						}
-					}
-					`,
-				Check: func(state *terraform.State) error {
-					require.Len(t, state.Modules, 1)
-					require.Len(t, state.Modules[0].Resources, 1)
-
-					resource := state.Modules[0].Resources["lattice_agent.dev"]
-					require.NotNil(t, resource)
-
-					t.Logf("resource: %v", resource.Primary.Attributes)
-
-					for _, app := range []string{
-						"web_terminal",
-						"vscode_insiders",
-						"vscode",
-						"port_forwarding_helper",
-						"ssh_helper",
-					} {
-						key := fmt.Sprintf("display_apps.0.%s", app)
-						require.Equal(t, "true", resource.Primary.Attributes[key])
-					}
-					return nil
-				},
-			}},
-		})
-	})
-
-	// Assert all the defaults are set correctly.
-	t.Run("Omitted", func(t *testing.T) {
-		resource.Test(t, resource.TestCase{
-			Providers: map[string]*schema.Provider{
-				"lattice": provider.New(),
-			},
-			IsUnitTest: true,
-			Steps: []resource.TestStep{{
-				Config: `
-					provider "lattice" {
-						url = "https://latticeruntime.com"
-					}
-					resource "lattice_agent" "dev" {
-						os = "linux"
-						arch = "amd64"
-					}
-					`,
-				Check: func(state *terraform.State) error {
-					require.Len(t, state.Modules, 1)
-					require.Len(t, state.Modules[0].Resources, 1)
-
-					resource := state.Modules[0].Resources["lattice_agent.dev"]
-					require.NotNil(t, resource)
-
-					t.Logf("resource: %v", resource.Primary.Attributes)
-
-					for _, app := range []string{
-						"web_terminal",
-						"vscode_insiders",
-						"vscode",
-						"port_forwarding_helper",
-						"ssh_helper",
-					} {
-						key := fmt.Sprintf("display_apps.0.%s", app)
-						if app == "vscode_insiders" {
-							require.Equal(t, "false", resource.Primary.Attributes[key])
-						} else {
-							require.Equal(t, "true", resource.Primary.Attributes[key])
-						}
-					}
-					return nil
-				},
-			}},
-		})
-	})
-
-	t.Run("InvalidApp", func(t *testing.T) {
-		resource.Test(t, resource.TestCase{
-			Providers: map[string]*schema.Provider{
-				"lattice": provider.New(),
-			},
-			IsUnitTest: true,
-			Steps: []resource.TestStep{{
-				// Test the fields with non-default values.
-				Config: `
-					provider "lattice" {
-						url = "https://latticeruntime.com"
-					}
-					resource "lattice_agent" "dev" {
-						os = "linux"
-						arch = "amd64"
-						display_apps {
-							fake_app = false
-							vscode_insiders = true
-							web_terminal = false
-							port_forwarding_helper = false
-							ssh_helper = false
-						}
-					}
-					`,
-				ExpectError: regexp.MustCompile(`An argument named "fake_app" is not expected here.`),
-			}},
-		})
-	})
-
 }

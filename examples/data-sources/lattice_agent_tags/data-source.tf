@@ -40,7 +40,7 @@ data "lattice_parameter" "feature_debug_enabled" {
   default = true
 }
 
-data "lattice_workspace_tags" "custom_workspace_tags" {
+data "lattice_agent_tags" "custom_agent_tags" {
   tags = {
     "cluster" = "developers"
     "os"      = data.lattice_parameter.os_selector.value

@@ -1,10 +1,10 @@
-data "lattice_workspace" "me" {
+data "lattice_agent" "me" {
 }
 
-resource "lattice_agent" "dev" {
+resource "lattice_sidecar" "dev" {
   os   = "linux"
   arch = "amd64"
-  dir  = "/workspace"
+  dir  = "/agent"
   display_apps {
     vscode          = true
     vscode_insiders = false
@@ -33,13 +33,13 @@ resource "lattice_agent" "dev" {
 }
 
 resource "kubernetes_pod" "dev" {
-  count = data.lattice_workspace.me.start_count
+  count = data.lattice_agent.me.start_count
   spec {
     container {
-      command = ["sh", "-c", lattice_agent.dev.init_script]
+      command = ["sh", "-c", lattice_sidecar.dev.init_script]
       env {
-        name  = "lattice_AGENT_TOKEN"
-        value = lattice_agent.dev.token
+        name  = "lattice_SIDECAR_TOKEN"
+        value = lattice_sidecar.dev.token
       }
     }
   }

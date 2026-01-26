@@ -27,7 +27,7 @@ func appResource() *schema.Resource {
 	return &schema.Resource{
 		SchemaVersion: 1,
 
-		Description: "Use this resource to define shortcuts to access applications in a workspace.",
+		Description: "Use this resource to define shortcuts to access applications in a agent.",
 		CreateContext: func(c context.Context, resourceData *schema.ResourceData, i interface{}) diag.Diagnostics {
 			resourceData.SetId(uuid.NewString())
 
@@ -68,9 +68,9 @@ func appResource() *schema.Resource {
 			return nil
 		},
 		Schema: map[string]*schema.Schema{
-			"agent_id": {
+			"sidecar_id": {
 				Type:        schema.TypeString,
-				Description: "The `id` property of a `lattice_agent` resource to associate with.",
+				Description: "The `id` property of a `lattice_sidecar` resource to associate with.",
 				ForceNew:    true,
 				Required:    true,
 			},
@@ -87,7 +87,7 @@ func appResource() *schema.Resource {
 				Type: schema.TypeString,
 				Description: "A URL to an icon that will display in the dashboard. View built-in " +
 					"icons here: https://github.com/latticehq/latticeruntime/tree/main/site/static/icon. Use a " +
-					"built-in icon with `\"${data.lattice_workspace.me.access_url}/icon/<path>\"`.",
+					"built-in icon with `\"${data.lattice_agent.me.access_url}/icon/<path>\"`.",
 				ForceNew: true,
 				Optional: true,
 				ValidateFunc: func(i interface{}, s string) ([]string, []error) {
@@ -156,7 +156,7 @@ func appResource() *schema.Resource {
 				Description: "Determines the level which the application " +
 					"is shared at. Valid levels are `\"owner\"` (default), " +
 					"`\"authenticated\"` and `\"public\"`. Level `\"owner\"` disables " +
-					"sharing on the app, so only the workspace owner can " +
+					"sharing on the app, so only the agent owner can " +
 					"access it. Level `\"authenticated\"` shares the app with " +
 					"all authenticated users. Level `\"public\"` shares it with " +
 					"any user, including unauthenticated users. Permitted " +
@@ -181,7 +181,7 @@ func appResource() *schema.Resource {
 			},
 			"url": {
 				Type: schema.TypeString,
-				Description: "An external url if `external=true` or a URL to be proxied to from inside the workspace. " +
+				Description: "An external url if `external=true` or a URL to be proxied to from inside the agent. " +
 					"This should be of the form `http://localhost:PORT[/SUBPATH]`. " +
 					"Either `command` or `url` may be specified, but not both.",
 				ForceNew:      true,
@@ -191,7 +191,7 @@ func appResource() *schema.Resource {
 			"external": {
 				Type: schema.TypeBool,
 				Description: "Specifies whether `url` is opened on the client machine " +
-					"instead of proxied through the workspace.",
+					"instead of proxied through the agent.",
 				Default:       false,
 				ForceNew:      true,
 				Optional:      true,

@@ -25,7 +25,7 @@ func TestScript(t *testing.T) {
 			provider "lattice" {
 			}
 			resource "lattice_script" "example" {
-				agent_id = "some id"
+				sidecar_id = "some id"
 				display_name = "Hey"
 				script = "Wow"
 				cron = "* * * * *"
@@ -38,7 +38,7 @@ func TestScript(t *testing.T) {
 				require.NotNil(t, script)
 				t.Logf("script attributes: %#v", script.Primary.Attributes)
 				for key, expected := range map[string]string{
-					"agent_id":     "some id",
+					"sidecar_id":   "some id",
 					"display_name": "Hey",
 					"script":       "Wow",
 					"cron":         "* * * * *",
@@ -64,7 +64,7 @@ func TestScriptNeverRuns(t *testing.T) {
 			provider "lattice" {
 			}
 			resource "lattice_script" "example" {
-				agent_id = ""
+				sidecar_id = ""
 				display_name = "Hey"
 				script = "Wow"
 			}
@@ -87,7 +87,7 @@ func TestScriptStartBlocksLoginRequiresRunOnStart(t *testing.T) {
 			provider "lattice" {
 			}
 			resource "lattice_script" "example" {
-				agent_id = ""
+				sidecar_id = ""
 				display_name = "Hey"
 				script = "Wow"
 				run_on_stop = true
@@ -107,7 +107,7 @@ func TestScriptStartBlocksLoginRequiresRunOnStart(t *testing.T) {
 			provider "lattice" {
 			}
 			resource "lattice_script" "example" {
-				agent_id = ""
+				sidecar_id = ""
 				display_name = "Hey"
 				script = "Wow"
 				start_blocks_login = true
@@ -121,7 +121,7 @@ func TestScriptStartBlocksLoginRequiresRunOnStart(t *testing.T) {
 				require.NotNil(t, script)
 				t.Logf("script attributes: %#v", script.Primary.Attributes)
 				for key, expected := range map[string]string{
-					"agent_id":           "",
+					"sidecar_id":         "",
 					"display_name":       "Hey",
 					"script":             "Wow",
 					"start_blocks_login": "true",

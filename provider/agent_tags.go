@@ -8,15 +8,15 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-type WorkspaceTags struct {
+type AgentTags struct {
 	Tags map[string]string
 }
 
-func workspaceTagDataSource() *schema.Resource {
+func agentTagDataSource() *schema.Resource {
 	return &schema.Resource{
 		SchemaVersion: 1,
 
-		Description: "Use this data source to configure workspace tags to select provisioners.",
+		Description: "Use this data source to configure agent tags to select provisioners.",
 		ReadContext: func(ctx context.Context, rd *schema.ResourceData, i interface{}) diag.Diagnostics {
 			rd.SetId(uuid.NewString())
 			return nil
@@ -24,7 +24,7 @@ func workspaceTagDataSource() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"tags": {
 				Type:        schema.TypeMap,
-				Description: `Key-value map with workspace tags`,
+				Description: `Key-value map with agent tags`,
 				ForceNew:    true,
 				Optional:    true,
 				Elem:        &schema.Schema{Type: schema.TypeString},

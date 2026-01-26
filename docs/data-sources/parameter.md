@@ -3,12 +3,12 @@
 page_title: "lattice_parameter Data Source - terraform-provider-lattice"
 subcategory: ""
 description: |-
-  Use this data source to configure editable options for workspaces.
+  Use this data source to configure editable options for agents.
 ---
 
 # lattice_parameter (Data Source)
 
-Use this data source to configure editable options for workspaces.
+Use this data source to configure editable options for agents.
 
 ## Example Usage
 
@@ -17,7 +17,7 @@ provider "lattice" {}
 
 data "lattice_parameter" "example" {
   name        = "Region"
-  description = "Specify a region to place your workspace."
+  description = "Specify a region to place your agent."
   mutable     = false
   type        = "string"
   default     = "asia-central1-a"
@@ -144,9 +144,9 @@ data "lattice_parameter" "home_volume_size" {
 - `default` (String) A default value for the parameter.
 - `description` (String) Describe what this parameter does.
 - `display_name` (String) The displayed name of the parameter as it will appear in the interface.
-- `ephemeral` (Boolean) The value of an ephemeral parameter will not be preserved between consecutive workspace builds.
-- `icon` (String) A URL to an icon that will display in the dashboard. View built-in icons [here](https://github.com/latticehq/latticeruntime/tree/main/site/static/icon). Use a built-in icon with `"${data.lattice_workspace.me.access_url}/icon/<path>"`.
-- `mutable` (Boolean) Whether this value can be changed after workspace creation. This can be destructive for values like region, so use with caution!
+- `ephemeral` (Boolean) The value of an ephemeral parameter will not be preserved between consecutive agent builds.
+- `icon` (String) A URL to an icon that will display in the dashboard. View built-in icons [here](https://github.com/latticehq/latticeruntime/tree/main/site/static/icon). Use a built-in icon with `"${data.lattice_agent.me.access_url}/icon/<path>"`.
+- `mutable` (Boolean) Whether this value can be changed after agent creation. This can be destructive for values like region, so use with caution!
 - `option` (Block List, Max: 64) Each `option` block defines a value for a user to select from. (see [below for nested schema](#nestedblock--option))
 - `order` (Number) The order determines the position of a template parameter in the UI/CLI presentation. The lowest order is shown first and parameters with equal order are sorted by name (ascending order).
 - `type` (String) The type of this parameter. Must be one of: `"number"`, `"string"`, `"bool"`, or `"list(string)"`.
@@ -169,7 +169,7 @@ Required:
 Optional:
 
 - `description` (String) Describe what selecting this value does.
-- `icon` (String) A URL to an icon that will display in the dashboard. View built-in icons [here](https://github.com/latticehq/latticeruntime/tree/main/site/static/icon). Use a built-in icon with `"${data.lattice_workspace.me.access_url}/icon/<path>"`.
+- `icon` (String) A URL to an icon that will display in the dashboard. View built-in icons [here](https://github.com/latticehq/latticeruntime/tree/main/site/static/icon). Use a built-in icon with `"${data.lattice_agent.me.access_url}/icon/<path>"`.
 
 
 <a id="nestedblock--validation"></a>

@@ -9,32 +9,32 @@ terraform {
   }
 }
 
-data "lattice_workspace" "me" {}
+data "lattice_agent" "me" {}
 
-resource "lattice_agent" "dev" {
+resource "lattice_sidecar" "dev" {
   os   = "linux"
   arch = "amd64"
-  dir  = "/workspace"
+  dir  = "/agent"
 }
 
 resource "lattice_app" "hidden" {
-  agent_id = lattice_agent.dev.id
-  slug     = "hidden"
-  share    = "owner"
-  hidden   = true
+  sidecar_id = lattice_sidecar.dev.id
+  slug       = "hidden"
+  share      = "owner"
+  hidden     = true
 }
 
 resource "lattice_app" "visible" {
-  agent_id = lattice_agent.dev.id
-  slug     = "visible"
-  share    = "owner"
-  hidden   = false
+  sidecar_id = lattice_sidecar.dev.id
+  slug       = "visible"
+  share      = "owner"
+  hidden     = false
 }
 
 resource "lattice_app" "defaulted" {
-  agent_id = lattice_agent.dev.id
-  slug     = "defaulted"
-  share    = "owner"
+  sidecar_id = lattice_sidecar.dev.id
+  slug       = "defaulted"
+  share      = "owner"
 }
 
 locals {

@@ -3,12 +3,12 @@
 page_title: "lattice_external_auth Data Source - terraform-provider-lattice"
 subcategory: ""
 description: |-
-  Use this data source to require users to authenticate with an external service prior to workspace creation. This can be used to pre-authenticate external services https://wirtual.dev/docs/admin/external-auth in a workspace. (e.g. Google Cloud, Github, Docker, etc.)
+  Use this data source to require users to authenticate with an external service prior to agent creation. This can be used to pre-authenticate external services https://wirtual.dev/docs/admin/external-auth in a agent. (e.g. Google Cloud, Github, Docker, etc.)
 ---
 
 # lattice_external_auth (Data Source)
 
-Use this data source to require users to authenticate with an external service prior to workspace creation. This can be used to [pre-authenticate external services](https://wirtual.dev/docs/admin/external-auth) in a workspace. (e.g. Google Cloud, Github, Docker, etc.)
+Use this data source to require users to authenticate with an external service prior to agent creation. This can be used to [pre-authenticate external services](https://wirtual.dev/docs/admin/external-auth) in a agent. (e.g. Google Cloud, Github, Docker, etc.)
 
 ## Example Usage
 
@@ -35,7 +35,7 @@ data "lattice_external_auth" "azure-identity" {
 
 ### Optional
 
-- `optional` (Boolean) Authenticating with the external auth provider is not required, and can be skipped by users when creating or updating workspaces
+- `optional` (Boolean) Authenticating with the external auth provider is not required, and can be skipped by users when creating or updating agents
 
 ### Read-Only
 

@@ -5,7 +5,7 @@ subcategory: ""
 description: |-
   ~> Deprecated
   Use the lattice_external_auth data source instead.
-  Use this data source to require users to authenticate with a Git provider prior to workspace creation. This can be used to perform an authenticated git clone in startup scripts.
+  Use this data source to require users to authenticate with a Git provider prior to agent creation. This can be used to perform an authenticated git clone in startup scripts.
 ---
 
 # lattice_git_auth (Data Source)
@@ -13,7 +13,7 @@ description: |-
 ~> **Deprecated**
 Use the `lattice_external_auth` data source instead.
 
-Use this data source to require users to authenticate with a Git provider prior to workspace creation. This can be used to perform an authenticated `git clone` in startup scripts.
+Use this data source to require users to authenticate with a Git provider prior to agent creation. This can be used to perform an authenticated `git clone` in startup scripts.
 
 ## Example Usage
 
@@ -25,7 +25,7 @@ data "lattice_git_auth" "github" {
   id = "github"
 }
 
-resource "lattice_agent" "dev" {
+resource "lattice_sidecar" "dev" {
   os   = "linux"
   arch = "amd64"
   dir  = "~/wirtual"

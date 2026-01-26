@@ -28,12 +28,12 @@ func TestApp(t *testing.T) {
 				Config: `
 				provider "lattice" {
 				}
-				resource "lattice_agent" "dev" {
+				resource "lattice_sidecar" "dev" {
 					os = "linux"
 					arch = "amd64"
 				}
 				resource "lattice_app" "code-server" {
-					agent_id = lattice_agent.dev.id
+					sidecar_id = lattice_sidecar.dev.id
 					slug = "code-server"
 					display_name = "code-server"
 					icon = "builtin:vim"
@@ -54,7 +54,7 @@ func TestApp(t *testing.T) {
 					resource := state.Modules[0].Resources["lattice_app.code-server"]
 					require.NotNil(t, resource)
 					for _, key := range []string{
-						"agent_id",
+						"sidecar_id",
 						"slug",
 						"display_name",
 						"icon",
@@ -92,12 +92,12 @@ func TestApp(t *testing.T) {
 			name: "Valid",
 			config: `
 			provider "lattice" {}
-			resource "lattice_agent" "dev" {
+			resource "lattice_sidecar" "dev" {
 				os = "linux"
 				arch = "amd64"
 			}
 			resource "lattice_app" "test" {
-				agent_id = lattice_agent.dev.id
+				sidecar_id = lattice_sidecar.dev.id
 				slug = "test"
 				display_name = "Testing"
 				url = "https://google.com"
@@ -109,12 +109,12 @@ func TestApp(t *testing.T) {
 			name: "ConflictsWithSubdomain",
 			config: `
 			provider "lattice" {}
-			resource "lattice_agent" "dev" {
+			resource "lattice_sidecar" "dev" {
 				os = "linux"
 				arch = "amd64"
 			}
 			resource "lattice_app" "test" {
-				agent_id = lattice_agent.dev.id
+				sidecar_id = lattice_sidecar.dev.id
 				slug = "test"
 				display_name = "Testing"
 				url = "https://google.com"
@@ -199,12 +199,12 @@ func TestApp(t *testing.T) {
 				config := fmt.Sprintf(`
 				provider "lattice" {
 				}
-				resource "lattice_agent" "dev" {
+				resource "lattice_sidecar" "dev" {
 					os = "linux"
 					arch = "amd64"
 				}
 				resource "lattice_app" "code-server" {
-					agent_id = lattice_agent.dev.id
+					sidecar_id = lattice_sidecar.dev.id
 					slug = "code-server"
 					display_name = "code-server"
 					icon = "builtin:vim"
@@ -260,12 +260,12 @@ func TestApp(t *testing.T) {
 			name: "Is Hidden",
 			config: `
 			provider "lattice" {}
-			resource "lattice_agent" "dev" {
+			resource "lattice_sidecar" "dev" {
 				os = "linux"
 				arch = "amd64"
 			}
 			resource "lattice_app" "test" {
-				agent_id = lattice_agent.dev.id
+				sidecar_id = lattice_sidecar.dev.id
 				slug = "test"
 				display_name = "Testing"
 				url = "https://google.com"
@@ -278,12 +278,12 @@ func TestApp(t *testing.T) {
 			name: "Is Not Hidden",
 			config: `
 			provider "lattice" {}
-			resource "lattice_agent" "dev" {
+			resource "lattice_sidecar" "dev" {
 				os = "linux"
 				arch = "amd64"
 			}
 			resource "lattice_app" "test" {
-				agent_id = lattice_agent.dev.id
+				sidecar_id = lattice_sidecar.dev.id
 				slug = "test"
 				display_name = "Testing"
 				url = "https://google.com"

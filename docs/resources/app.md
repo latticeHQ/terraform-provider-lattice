@@ -3,22 +3,22 @@
 page_title: "lattice_app Resource - terraform-provider-lattice"
 subcategory: ""
 description: |-
-  Use this resource to define shortcuts to access applications in a workspace.
+  Use this resource to define shortcuts to access applications in a agent.
 ---
 
 # lattice_app (Resource)
 
-Use this resource to define shortcuts to access applications in a workspace.
+Use this resource to define shortcuts to access applications in a agent.
 
 ## Example Usage
 
 ```terraform
-data "lattice_workspace" "me" {}
+data "lattice_agent" "me" {}
 
-resource "lattice_agent" "dev" {
+resource "lattice_sidecar" "dev" {
   os             = "linux"
   arch           = "amd64"
-  dir            = "/workspace"
+  dir            = "/agent"
   startup_script = <<EOF
 curl -fsSL https://code-server.dev/install.sh | sh
 code-server --auth none --port 13337
@@ -26,10 +26,10 @@ EOF
 }
 
 resource "lattice_app" "code-server" {
-  agent_id     = lattice_agent.dev.id
+  sidecar_id   = lattice_sidecar.dev.id
   slug         = "code-server"
   display_name = "VS Code"
-  icon         = "${data.lattice_workspace.me.access_url}/icon/code.svg"
+  icon         = "${data.lattice_agent.me.access_url}/icon/code.svg"
   url          = "http://localhost:13337"
   share        = "owner"
   subdomain    = false
@@ -41,10 +41,10 @@ resource "lattice_app" "code-server" {
 }
 
 resource "lattice_app" "vim" {
-  agent_id     = lattice_agent.dev.id
+  sidecar_id   = lattice_sidecar.dev.id
   slug         = "vim"
   display_name = "Vim"
-  icon         = "${data.lattice_workspace.me.access_url}/icon/vim.svg"
+  icon         = "${data.lattice_agent.me.access_url}/icon/vim.svg"
   command      = "vim"
 }
 ```
@@ -54,23 +54,23 @@ resource "lattice_app" "vim" {
 
 ### Required
 
-- `agent_id` (String) The `id` property of a `lattice_agent` resource to associate with.
+- `sidecar_id` (String) The `id` property of a `lattice_sidecar` resource to associate with.
 - `slug` (String) A hostname-friendly name for the app. This is used in URLs to access the app. May contain alphanumerics and hyphens. Cannot start/end with a hyphen or contain two consecutive hyphens.
 
 ### Optional
 
 - `command` (String) A command to run in a terminal opening this app. In the web, this will open in a new tab. In the CLI, this will SSH and execute the command. Either `command` or `url` may be specified, but not both.
 - `display_name` (String) A display name to identify the app. Defaults to the slug.
-- `external` (Boolean) Specifies whether `url` is opened on the client machine instead of proxied through the workspace.
+- `external` (Boolean) Specifies whether `url` is opened on the client machine instead of proxied through the agent.
 - `healthcheck` (Block Set, Max: 1) HTTP health checking to determine the application readiness. (see [below for nested schema](#nestedblock--healthcheck))
 - `hidden` (Boolean) Determines if the app is visible in the UI (minimum Lattice version: v2.16).
-- `icon` (String) A URL to an icon that will display in the dashboard. View built-in icons here: https://github.com/latticehq/latticeruntime/tree/main/site/static/icon. Use a built-in icon with `"${data.lattice_workspace.me.access_url}/icon/<path>"`.
+- `icon` (String) A URL to an icon that will display in the dashboard. View built-in icons here: https://github.com/latticehq/latticeruntime/tree/main/site/static/icon. Use a built-in icon with `"${data.lattice_agent.me.access_url}/icon/<path>"`.
 - `name` (String, **Deprecated**: `name` on apps is deprecated, use `display_name` instead) A display name to identify the app.
 - `order` (Number) The order determines the position of app in the UI presentation. The lowest order is shown first and apps with equal order are sorted by name (ascending order).
 - `relative_path` (Boolean, **Deprecated**: `relative_path` on apps is deprecated, use `subdomain` instead.) Specifies whether the URL will be accessed via a relative path or wildcard. Use if wildcard routing is unavailable. Defaults to `true`.
-- `share` (String) Determines the level which the application is shared at. Valid levels are `"owner"` (default), `"authenticated"` and `"public"`. Level `"owner"` disables sharing on the app, so only the workspace owner can access it. Level `"authenticated"` shares the app with all authenticated users. Level `"public"` shares it with any user, including unauthenticated users. Permitted application sharing levels can be configured site-wide via a flag on `wirtual server` (Enterprise only).
+- `share` (String) Determines the level which the application is shared at. Valid levels are `"owner"` (default), `"authenticated"` and `"public"`. Level `"owner"` disables sharing on the app, so only the agent owner can access it. Level `"authenticated"` shares the app with all authenticated users. Level `"public"` shares it with any user, including unauthenticated users. Permitted application sharing levels can be configured site-wide via a flag on `wirtual server` (Enterprise only).
 - `subdomain` (Boolean) Determines whether the app will be accessed via it's own subdomain or whether it will be accessed via a path on Lattice. If wildcards have not been setup by the administrator then apps with `subdomain` set to `true` will not be accessible. Defaults to `false`.
-- `url` (String) An external url if `external=true` or a URL to be proxied to from inside the workspace. This should be of the form `http://localhost:PORT[/SUBPATH]`. Either `command` or `url` may be specified, but not both.
+- `url` (String) An external url if `external=true` or a URL to be proxied to from inside the agent. This should be of the form `http://localhost:PORT[/SUBPATH]`. Either `command` or `url` may be specified, but not both.
 
 ### Read-Only
 

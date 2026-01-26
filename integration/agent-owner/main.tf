@@ -38,6 +38,15 @@ locals {
     "agent.template_name" : data.lattice_agent.me.template_name,
     "agent.template_version" : data.lattice_agent.me.template_version,
     "agent.transition" : data.lattice_agent.me.transition,
+    "agent_owner.email" : data.lattice_agent_owner.me.email,
+    "agent_owner.full_name" : data.lattice_agent_owner.me.full_name,
+    "agent_owner.groups" : jsonencode(data.lattice_agent_owner.me.groups),
+    "agent_owner.id" : data.lattice_agent_owner.me.id,
+    "agent_owner.name" : data.lattice_agent_owner.me.name,
+    "agent_owner.oidc_access_token" : data.lattice_agent_owner.me.oidc_access_token,
+    "agent_owner.session_token" : data.lattice_agent_owner.me.session_token,
+    "agent_owner.ssh_private_key" : data.lattice_agent_owner.me.ssh_private_key,
+    "agent_owner.ssh_public_key" : data.lattice_agent_owner.me.ssh_public_key,
   }
 }
 

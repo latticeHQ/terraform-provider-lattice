@@ -24,9 +24,9 @@ func New() *schema.Provider {
 				Type:        schema.TypeString,
 				Description: "The URL to access Lattice.",
 				Optional:    true,
-				// The "lattice_AGENT_URL" environment variable is used by default
+				// The "lattice_SIDECAR_URL" environment variable is used by default
 				// as the Access URL when generating scripts.
-				DefaultFunc: schema.EnvDefaultFunc("lattice_AGENT_URL", "https://mydeployment.wirtual.dev"),
+				DefaultFunc: schema.EnvDefaultFunc("lattice_SIDECAR_URL", "https://mydeployment.wirtual.dev"),
 				ValidateFunc: func(i interface{}, s string) ([]string, []error) {
 					_, err := url.Parse(s)
 					if err != nil {
@@ -49,7 +49,7 @@ func New() *schema.Provider {
 				return nil, diag.Errorf("unexpected type %q for url", reflect.TypeOf(resourceData.Get("url")).String())
 			}
 			if rawURL == "" {
-				return nil, diag.Errorf("lattice_AGENT_URL must not be empty; got %q", rawURL)
+				return nil, diag.Errorf("lattice_SIDECAR_URL must not be empty; got %q", rawURL)
 			}
 			parsed, err := url.Parse(resourceData.Get("url").(string))
 			if err != nil {
@@ -68,21 +68,21 @@ func New() *schema.Provider {
 			}, nil
 		},
 		DataSourcesMap: map[string]*schema.Resource{
-			"lattice_workspace":       workspaceDataSource(),
-			"lattice_workspace_tags":  workspaceTagDataSource(),
-			"lattice_provisioner":     provisionerDataSource(),
-			"lattice_parameter":       parameterDataSource(),
-			"lattice_git_auth":        gitAuthDataSource(),
-			"lattice_external_auth":   externalAuthDataSource(),
-			"lattice_workspace_owner": workspaceOwnerDataSource(),
+			"lattice_agent":         agentDataSource(),
+			"lattice_agent_tags":    agentTagDataSource(),
+			"lattice_provisioner":   provisionerDataSource(),
+			"lattice_parameter":     parameterDataSource(),
+			"lattice_git_auth":      gitAuthDataSource(),
+			"lattice_external_auth": externalAuthDataSource(),
+			"lattice_agent_owner":   agentOwnerDataSource(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"lattice_agent":          agentResource(),
-			"lattice_agent_instance": agentInstanceResource(),
-			"lattice_app":            appResource(),
-			"lattice_metadata":       metadataResource(),
-			"lattice_script":         scriptResource(),
-			"lattice_env":            envResource(),
+			"lattice_sidecar":          sidecarResource(),
+			"lattice_sidecar_instance": sidecarInstanceResource(),
+			"lattice_app":              appResource(),
+			"lattice_metadata":         metadataResource(),
+			"lattice_script":           scriptResource(),
+			"lattice_env":              envResource(),
 		},
 	}
 }

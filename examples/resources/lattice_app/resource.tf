@@ -1,9 +1,9 @@
-data "lattice_workspace" "me" {}
+data "lattice_agent" "me" {}
 
-resource "lattice_agent" "dev" {
+resource "lattice_sidecar" "dev" {
   os             = "linux"
   arch           = "amd64"
-  dir            = "/workspace"
+  dir            = "/agent"
   startup_script = <<EOF
 curl -fsSL https://code-server.dev/install.sh | sh
 code-server --auth none --port 13337
@@ -11,10 +11,10 @@ EOF
 }
 
 resource "lattice_app" "code-server" {
-  agent_id     = lattice_agent.dev.id
+  sidecar_id   = lattice_sidecar.dev.id
   slug         = "code-server"
   display_name = "VS Code"
-  icon         = "${data.lattice_workspace.me.access_url}/icon/code.svg"
+  icon         = "${data.lattice_agent.me.access_url}/icon/code.svg"
   url          = "http://localhost:13337"
   share        = "owner"
   subdomain    = false
@@ -26,9 +26,9 @@ resource "lattice_app" "code-server" {
 }
 
 resource "lattice_app" "vim" {
-  agent_id     = lattice_agent.dev.id
+  sidecar_id   = lattice_sidecar.dev.id
   slug         = "vim"
   display_name = "Vim"
-  icon         = "${data.lattice_workspace.me.access_url}/icon/vim.svg"
+  icon         = "${data.lattice_agent.me.access_url}/icon/vim.svg"
   command      = "vim"
 }

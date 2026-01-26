@@ -3,12 +3,12 @@
 page_title: "Lattice Provider"
 subcategory: "Infrastructure"
 description: |-
-    Terraform provider for defining Lattice templates, which are the underlying infrastructure for Lattice workspaces.
+    Terraform provider for defining Lattice templates, which are the underlying infrastructure for Lattice agents.
 ---
 
 # Lattice Provider
 
-Terraform provider for defining Lattice [templates](https://wirtual.dev/docs/templates), which are the underlying infrastructure for Lattice [workspaces](https://wirtual.dev/docs/workspaces).
+Terraform provider for defining Lattice [templates](https://wirtual.dev/docs/templates), which are the underlying infrastructure for Lattice [agents](https://wirtual.dev/docs/agents).
 
 ## Example
 
@@ -25,9 +25,9 @@ provider "google" {
   region = "us-central1"
 }
 
-data "lattice_workspace" "me" {}
+data "lattice_agent" "me" {}
 
-resource "lattice_agent" "dev" {
+resource "lattice_sidecar" "dev" {
   arch = "amd64"
   os   = "linux"
   auth = "google-instance-identity"
@@ -37,8 +37,8 @@ data "google_compute_default_service_account" "default" {}
 
 resource "google_compute_instance" "dev" {
   zone         = "us-central1-a"
-  count        = data.lattice_workspace.me.start_count
-  name         = "wirtual-${data.lattice_workspace.me.owner}-${data.lattice_workspace.me.name}"
+  count        = data.lattice_agent.me.start_count
+  name         = "wirtual-${data.lattice_agent.me.owner}-${data.lattice_agent.me.name}"
   machine_type = "e2-medium"
   network_interface {
     network = "default"
@@ -55,7 +55,7 @@ resource "google_compute_instance" "dev" {
     email  = data.google_compute_default_service_account.default.email
     scopes = ["cloud-platform"]
   }
-  metadata_startup_script = lattice_agent.dev.init_script
+  metadata_startup_script = lattice_sidecar.dev.init_script
 }
 ```
 

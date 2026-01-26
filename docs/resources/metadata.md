@@ -3,24 +3,24 @@
 page_title: "lattice_metadata Resource - terraform-provider-lattice"
 subcategory: ""
 description: |-
-  Use this resource to attach metadata to a resource. They will be displayed in the Lattice dashboard alongside the resource. The resource containing the agent, and it's metadata, will be shown by default.
-  Alternatively, to attach metadata to the agent, use a metadata block within a lattice_agent resource.
+  Use this resource to attach metadata to a resource. They will be displayed in the Lattice dashboard alongside the resource. The resource containing the sidecar, and it's metadata, will be shown by default.
+  Alternatively, to attach metadata to the sidecar, use a metadata block within a lattice_sidecar resource.
 ---
 
 # lattice_metadata (Resource)
 
-Use this resource to attach metadata to a resource. They will be displayed in the Lattice dashboard alongside the resource. The resource containing the agent, and it's metadata, will be shown by default. 
+Use this resource to attach metadata to a resource. They will be displayed in the Lattice dashboard alongside the resource. The resource containing the sidecar, and it's metadata, will be shown by default. 
 
-Alternatively, to attach metadata to the agent, use a `metadata` block within a `lattice_agent` resource.
+Alternatively, to attach metadata to the sidecar, use a `metadata` block within a `lattice_sidecar` resource.
 
 ## Example Usage
 
 ```terraform
-data "lattice_workspace" "me" {
+data "lattice_agent" "me" {
 }
 
 resource "kubernetes_pod" "dev" {
-  count = data.lattice_workspace.me.start_count
+  count = data.lattice_agent.me.start_count
   metadata {
     name      = "k8s_example"
     namespace = "example"
@@ -36,7 +36,7 @@ resource "tls_private_key" "example_key_pair" {
 }
 
 resource "lattice_metadata" "pod_info" {
-  count       = data.lattice_workspace.me.start_count
+  count       = data.lattice_agent.me.start_count
   resource_id = kubernetes_pod.dev[0].id
   # (Enterprise-only) this resource consumes 200 quota units
   daily_cost = 200
@@ -68,7 +68,7 @@ resource "lattice_metadata" "pod_info" {
 
 - `daily_cost` (Number) (Enterprise) The cost of this resource every 24 hours. Use the smallest denomination of your preferred currency. For example, if you work in USD, use cents.
 - `hide` (Boolean) Hide the resource from the UI.
-- `icon` (String) A URL to an icon that will display in the dashboard. View built-in icons [here](https://github.com/latticehq/latticeruntime/tree/main/site/static/icon). Use a built-in icon with `"${data.lattice_workspace.me.access_url}/icon/<path>"`.
+- `icon` (String) A URL to an icon that will display in the dashboard. View built-in icons [here](https://github.com/latticehq/latticeruntime/tree/main/site/static/icon). Use a built-in icon with `"${data.lattice_agent.me.access_url}/icon/<path>"`.
 - `item` (Block List) Each `item` block defines a single metadata item consisting of a key/value pair. (see [below for nested schema](#nestedblock--item))
 
 ### Read-Only
@@ -84,7 +84,7 @@ Required:
 
 Optional:
 
-- `sensitive` (Boolean) Set to `true` to for items such as API keys whose values should be hidden from view by default. Note that this does not prevent metadata from being retrieved using the API, so it is not suitable for secrets that should not be exposed to workspace users.
+- `sensitive` (Boolean) Set to `true` to for items such as API keys whose values should be hidden from view by default. Note that this does not prevent metadata from being retrieved using the API, so it is not suitable for secrets that should not be exposed to agent users.
 - `value` (String) The value of this metadata item. Supports basic Markdown, including hyperlinks.
 
 Read-Only:
