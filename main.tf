@@ -1,7 +1,7 @@
 terraform {
-    required_providers {
-        wirtual = {
-            source = "wirtualdev/wirtual"
-        }
+  required_providers {
+    wirtual = {
+      source = "wirtualdev/wirtual"
     }
+  }
 }
