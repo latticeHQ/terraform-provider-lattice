@@ -17,13 +17,13 @@ func TestAgent(t *testing.T) {
 	t.Parallel()
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]*schema.Provider{
-			"wirtual": provider.New(),
+			"lattice": provider.New(),
 		},
 		IsUnitTest: true,
 		Steps: []resource.TestStep{{
 			Config: `
-				provider "wirtual" {
-					url = "https://example.com"
+				provider "lattice" {
+					url = "https://latticeruntime.com"
 				}
 				resource "lattice_agent" "new" {
 					os = "linux"
@@ -35,7 +35,7 @@ func TestAgent(t *testing.T) {
 					}
 					startup_script = "echo test"
 					startup_script_timeout = 120
-					troubleshooting_url = "https://example.com/troubleshoot"
+					troubleshooting_url = "https://latticeruntime.com/troubleshoot"
 					motd_file = "/etc/motd"
 					shutdown_script = "echo bye bye"
 					shutdown_script_timeout = 120
@@ -143,7 +143,7 @@ func TestAgent_StartupScriptBehavior(t *testing.T) {
 			t.Parallel()
 			resource.Test(t, resource.TestCase{
 				Providers: map[string]*schema.Provider{
-					"wirtual": provider.New(),
+					"lattice": provider.New(),
 				},
 				IsUnitTest: true,
 				Steps: []resource.TestStep{{
@@ -169,13 +169,13 @@ func TestAgent_Instance(t *testing.T) {
 	t.Parallel()
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]*schema.Provider{
-			"wirtual": provider.New(),
+			"lattice": provider.New(),
 		},
 		IsUnitTest: true,
 		Steps: []resource.TestStep{{
 			Config: `
-				provider "wirtual" {
-					url = "https://example.com"
+				provider "lattice" {
+					url = "https://latticeruntime.com"
 				}
 				resource "lattice_agent" "dev" {
 					os = "linux"
@@ -210,13 +210,13 @@ func TestAgent_Metadata(t *testing.T) {
 	t.Parallel()
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]*schema.Provider{
-			"wirtual": provider.New(),
+			"lattice": provider.New(),
 		},
 		IsUnitTest: true,
 		Steps: []resource.TestStep{{
 			Config: `
-				provider "wirtual" {
-					url = "https://example.com"
+				provider "lattice" {
+					url = "https://latticeruntime.com"
 				}
 				resource "lattice_agent" "dev" {
 					os = "linux"
@@ -258,13 +258,13 @@ func TestAgent_MetadataDuplicateKeys(t *testing.T) {
 	t.Parallel()
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]*schema.Provider{
-			"wirtual": provider.New(),
+			"lattice": provider.New(),
 		},
 		IsUnitTest: true,
 		Steps: []resource.TestStep{{
 			Config: `
-				provider "wirtual" {
-					url = "https://example.com"
+				provider "lattice" {
+					url = "https://latticeruntime.com"
 				}
 				resource "lattice_agent" "dev" {
 					os = "linux"
@@ -296,14 +296,14 @@ func TestAgent_DisplayApps(t *testing.T) {
 	t.Run("OK", func(t *testing.T) {
 		resource.Test(t, resource.TestCase{
 			Providers: map[string]*schema.Provider{
-				"wirtual": provider.New(),
+				"lattice": provider.New(),
 			},
 			IsUnitTest: true,
 			Steps: []resource.TestStep{{
 				// Test the fields with non-default values.
 				Config: `
-					provider "wirtual" {
-						url = "https://example.com"
+					provider "lattice" {
+						url = "https://latticeruntime.com"
 					}
 					resource "lattice_agent" "dev" {
 						os = "linux"
@@ -349,14 +349,14 @@ func TestAgent_DisplayApps(t *testing.T) {
 	t.Run("Subset", func(t *testing.T) {
 		resource.Test(t, resource.TestCase{
 			Providers: map[string]*schema.Provider{
-				"wirtual": provider.New(),
+				"lattice": provider.New(),
 			},
 			IsUnitTest: true,
 			Steps: []resource.TestStep{{
 				// Test the fields with non-default values.
 				Config: `
-					provider "wirtual" {
-						url = "https://example.com"
+					provider "lattice" {
+						url = "https://latticeruntime.com"
 					}
 					resource "lattice_agent" "dev" {
 						os = "linux"
@@ -396,13 +396,13 @@ func TestAgent_DisplayApps(t *testing.T) {
 	t.Run("Omitted", func(t *testing.T) {
 		resource.Test(t, resource.TestCase{
 			Providers: map[string]*schema.Provider{
-				"wirtual": provider.New(),
+				"lattice": provider.New(),
 			},
 			IsUnitTest: true,
 			Steps: []resource.TestStep{{
 				Config: `
-					provider "wirtual" {
-						url = "https://example.com"
+					provider "lattice" {
+						url = "https://latticeruntime.com"
 					}
 					resource "lattice_agent" "dev" {
 						os = "linux"
@@ -441,14 +441,14 @@ func TestAgent_DisplayApps(t *testing.T) {
 	t.Run("InvalidApp", func(t *testing.T) {
 		resource.Test(t, resource.TestCase{
 			Providers: map[string]*schema.Provider{
-				"wirtual": provider.New(),
+				"lattice": provider.New(),
 			},
 			IsUnitTest: true,
 			Steps: []resource.TestStep{{
 				// Test the fields with non-default values.
 				Config: `
-					provider "wirtual" {
-						url = "https://example.com"
+					provider "lattice" {
+						url = "https://latticeruntime.com"
 					}
 					resource "lattice_agent" "dev" {
 						os = "linux"

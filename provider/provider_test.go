@@ -25,12 +25,12 @@ func TestProviderEmpty(t *testing.T) {
 	t.Parallel()
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]*schema.Provider{
-			"wirtual": provider.New(),
+			"lattice": provider.New(),
 		},
 		IsUnitTest: true,
 		Steps: []resource.TestStep{{
 			Config: `
-			provider "wirtual" {}
+			provider "lattice" {}
 			data "lattice_provisioner" "me" {}
 			data "lattice_workspace" "me" {}
 			data "lattice_workspace_owner" "me" {}

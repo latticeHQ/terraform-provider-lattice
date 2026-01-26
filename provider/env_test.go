@@ -17,12 +17,12 @@ func TestEnv(t *testing.T) {
 
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]*schema.Provider{
-			"wirtual": provider.New(),
+			"lattice": provider.New(),
 		},
 		IsUnitTest: true,
 		Steps: []resource.TestStep{{
 			Config: `
-			provider "wirtual" {
+			provider "lattice" {
 			}
 			resource "lattice_env" "example" {
 				agent_id = "king"
@@ -54,12 +54,12 @@ func TestEnvEmptyValue(t *testing.T) {
 
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]*schema.Provider{
-			"wirtual": provider.New(),
+			"lattice": provider.New(),
 		},
 		IsUnitTest: true,
 		Steps: []resource.TestStep{{
 			Config: `
-			provider "wirtual" {
+			provider "lattice" {
 			}
 			resource "lattice_env" "example" {
 				agent_id = "king"
@@ -90,12 +90,12 @@ func TestEnvBadName(t *testing.T) {
 
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]*schema.Provider{
-			"wirtual": provider.New(),
+			"lattice": provider.New(),
 		},
 		IsUnitTest: true,
 		Steps: []resource.TestStep{{
 			Config: `
-			provider "wirtual" {
+			provider "lattice" {
 			}
 			resource "lattice_env" "example" {
 				agent_id = ""
@@ -112,12 +112,12 @@ func TestEnvNoName(t *testing.T) {
 
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]*schema.Provider{
-			"wirtual": provider.New(),
+			"lattice": provider.New(),
 		},
 		IsUnitTest: true,
 		Steps: []resource.TestStep{{
 			Config: `
-			provider "wirtual" {
+			provider "lattice" {
 			}
 			resource "lattice_env" "example" {
 				agent_id = ""

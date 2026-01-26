@@ -1,4 +1,4 @@
-provider "wirtual" {}
+provider "lattice" {}
 
 data "lattice_provisioner" "dev" {}
 

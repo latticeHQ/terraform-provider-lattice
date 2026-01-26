@@ -1,4 +1,4 @@
-provider "wirtual" {}
+provider "lattice" {}
 
 data "lattice_git_auth" "github" {
   # Matches the ID of the git auth provider in Lattice.

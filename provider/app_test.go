@@ -21,12 +21,12 @@ func TestApp(t *testing.T) {
 
 		resource.Test(t, resource.TestCase{
 			Providers: map[string]*schema.Provider{
-				"wirtual": provider.New(),
+				"lattice": provider.New(),
 			},
 			IsUnitTest: true,
 			Steps: []resource.TestStep{{
 				Config: `
-				provider "wirtual" {
+				provider "lattice" {
 				}
 				resource "lattice_agent" "dev" {
 					os = "linux"
@@ -91,7 +91,7 @@ func TestApp(t *testing.T) {
 		}{{
 			name: "Valid",
 			config: `
-			provider "wirtual" {}
+			provider "lattice" {}
 			resource "lattice_agent" "dev" {
 				os = "linux"
 				arch = "amd64"
@@ -108,7 +108,7 @@ func TestApp(t *testing.T) {
 		}, {
 			name: "ConflictsWithSubdomain",
 			config: `
-			provider "wirtual" {}
+			provider "lattice" {}
 			resource "lattice_agent" "dev" {
 				os = "linux"
 				arch = "amd64"
@@ -130,7 +130,7 @@ func TestApp(t *testing.T) {
 				t.Parallel()
 				resource.Test(t, resource.TestCase{
 					Providers: map[string]*schema.Provider{
-						"wirtual": provider.New(),
+						"lattice": provider.New(),
 					},
 					IsUnitTest: true,
 					Steps: []resource.TestStep{{
@@ -197,7 +197,7 @@ func TestApp(t *testing.T) {
 					sharingLine = fmt.Sprintf("share = %q", c.value)
 				}
 				config := fmt.Sprintf(`
-				provider "wirtual" {
+				provider "lattice" {
 				}
 				resource "lattice_agent" "dev" {
 					os = "linux"
@@ -236,7 +236,7 @@ func TestApp(t *testing.T) {
 
 				resource.Test(t, resource.TestCase{
 					Providers: map[string]*schema.Provider{
-						"wirtual": provider.New(),
+						"lattice": provider.New(),
 					},
 					IsUnitTest: true,
 					Steps: []resource.TestStep{{
@@ -259,7 +259,7 @@ func TestApp(t *testing.T) {
 		}{{
 			name: "Is Hidden",
 			config: `
-			provider "wirtual" {}
+			provider "lattice" {}
 			resource "lattice_agent" "dev" {
 				os = "linux"
 				arch = "amd64"
@@ -277,7 +277,7 @@ func TestApp(t *testing.T) {
 		}, {
 			name: "Is Not Hidden",
 			config: `
-			provider "wirtual" {}
+			provider "lattice" {}
 			resource "lattice_agent" "dev" {
 				os = "linux"
 				arch = "amd64"
@@ -299,7 +299,7 @@ func TestApp(t *testing.T) {
 				t.Parallel()
 				resource.Test(t, resource.TestCase{
 					Providers: map[string]*schema.Provider{
-						"wirtual": provider.New(),
+						"lattice": provider.New(),
 					},
 					IsUnitTest: true,
 					Steps: []resource.TestStep{{
