@@ -26,15 +26,15 @@ const (
 
 func TestAgentOwnerDatasource(t *testing.T) {
 	t.Run("OK", func(t *testing.T) {
-		t.Setenv("lattice_AGENT_OWNER_ID", "11111111-1111-1111-1111-111111111111")
-		t.Setenv("lattice_AGENT_OWNER", "owner123")
-		t.Setenv("lattice_AGENT_OWNER_NAME", "Mr Owner")
-		t.Setenv("lattice_AGENT_OWNER_EMAIL", "owner123@example.com")
-		t.Setenv("lattice_AGENT_OWNER_SSH_PUBLIC_KEY", testSSHEd25519PublicKey)
-		t.Setenv("lattice_AGENT_OWNER_SSH_PRIVATE_KEY", testSSHEd25519PrivateKey)
-		t.Setenv("lattice_AGENT_OWNER_GROUPS", `["group1", "group2"]`)
-		t.Setenv("lattice_AGENT_OWNER_SESSION_TOKEN", `supersecret`)
-		t.Setenv("lattice_AGENT_OWNER_OIDC_ACCESS_TOKEN", `alsosupersecret`)
+		t.Setenv("LATTICE_AGENT_OWNER_ID", "11111111-1111-1111-1111-111111111111")
+		t.Setenv("LATTICE_AGENT_OWNER", "owner123")
+		t.Setenv("LATTICE_AGENT_OWNER_NAME", "Mr Owner")
+		t.Setenv("LATTICE_AGENT_OWNER_EMAIL", "owner123@example.com")
+		t.Setenv("LATTICE_AGENT_OWNER_SSH_PUBLIC_KEY", testSSHEd25519PublicKey)
+		t.Setenv("LATTICE_AGENT_OWNER_SSH_PRIVATE_KEY", testSSHEd25519PrivateKey)
+		t.Setenv("LATTICE_AGENT_OWNER_GROUPS", `["group1", "group2"]`)
+		t.Setenv("LATTICE_AGENT_OWNER_SESSION_TOKEN", `supersecret`)
+		t.Setenv("LATTICE_AGENT_OWNER_OIDC_ACCESS_TOKEN", `alsosupersecret`)
 
 		resource.Test(t, resource.TestCase{
 			Providers: map[string]*schema.Provider{
@@ -71,15 +71,15 @@ func TestAgentOwnerDatasource(t *testing.T) {
 
 	t.Run("Defaults", func(t *testing.T) {
 		for _, v := range []string{
-			"lattice_AGENT_OWNER",
-			"lattice_AGENT_OWNER_ID",
-			"lattice_AGENT_OWNER_EMAIL",
-			"lattice_AGENT_OWNER_NAME",
-			"lattice_AGENT_OWNER_SESSION_TOKEN",
-			"lattice_AGENT_OWNER_GROUPS",
-			"lattice_AGENT_OWNER_OIDC_ACCESS_TOKEN",
-			"lattice_AGENT_OWNER_SSH_PUBLIC_KEY",
-			"lattice_AGENT_OWNER_SSH_PRIVATE_KEY",
+			"LATTICE_AGENT_OWNER",
+			"LATTICE_AGENT_OWNER_ID",
+			"LATTICE_AGENT_OWNER_EMAIL",
+			"LATTICE_AGENT_OWNER_NAME",
+			"LATTICE_AGENT_OWNER_SESSION_TOKEN",
+			"LATTICE_AGENT_OWNER_GROUPS",
+			"LATTICE_AGENT_OWNER_OIDC_ACCESS_TOKEN",
+			"LATTICE_AGENT_OWNER_SSH_PUBLIC_KEY",
+			"LATTICE_AGENT_OWNER_SSH_PRIVATE_KEY",
 		} { // https://github.com/golang/go/issues/52817
 			t.Setenv(v, "")
 			os.Unsetenv(v)

@@ -14,16 +14,16 @@ import (
 )
 
 func TestAgent(t *testing.T) {
-	t.Setenv("lattice_AGENT_OWNER", "owner123")
-	t.Setenv("lattice_AGENT_OWNER_ID", "11111111-1111-1111-1111-111111111111")
-	t.Setenv("lattice_AGENT_OWNER_NAME", "Mr Owner")
-	t.Setenv("lattice_AGENT_OWNER_EMAIL", "owner123@example.com")
-	t.Setenv("lattice_AGENT_OWNER_SESSION_TOKEN", "abc123")
-	t.Setenv("lattice_AGENT_OWNER_GROUPS", `["group1", "group2"]`)
-	t.Setenv("lattice_AGENT_OWNER_OIDC_ACCESS_TOKEN", "supersecret")
-	t.Setenv("lattice_AGENT_TEMPLATE_ID", "templateID")
-	t.Setenv("lattice_AGENT_TEMPLATE_NAME", "template123")
-	t.Setenv("lattice_AGENT_TEMPLATE_VERSION", "v1.2.3")
+	t.Setenv("LATTICE_AGENT_OWNER", "owner123")
+	t.Setenv("LATTICE_AGENT_OWNER_ID", "11111111-1111-1111-1111-111111111111")
+	t.Setenv("LATTICE_AGENT_OWNER_NAME", "Mr Owner")
+	t.Setenv("LATTICE_AGENT_OWNER_EMAIL", "owner123@example.com")
+	t.Setenv("LATTICE_AGENT_OWNER_SESSION_TOKEN", "abc123")
+	t.Setenv("LATTICE_AGENT_OWNER_GROUPS", `["group1", "group2"]`)
+	t.Setenv("LATTICE_AGENT_OWNER_OIDC_ACCESS_TOKEN", "supersecret")
+	t.Setenv("LATTICE_AGENT_TEMPLATE_ID", "templateID")
+	t.Setenv("LATTICE_AGENT_TEMPLATE_NAME", "template123")
+	t.Setenv("LATTICE_AGENT_TEMPLATE_VERSION", "v1.2.3")
 
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]*schema.Provider{
@@ -66,12 +66,12 @@ func TestAgent(t *testing.T) {
 }
 
 func TestAgent_UndefinedOwner(t *testing.T) {
-	t.Setenv("lattice_AGENT_OWNER", "owner123")
-	t.Setenv("lattice_AGENT_OWNER_SESSION_TOKEN", "abc123")
-	t.Setenv("lattice_AGENT_OWNER_GROUPS", `["group1", "group2"]`)
-	t.Setenv("lattice_AGENT_TEMPLATE_ID", "templateID")
-	t.Setenv("lattice_AGENT_TEMPLATE_NAME", "template123")
-	t.Setenv("lattice_AGENT_TEMPLATE_VERSION", "v1.2.3")
+	t.Setenv("LATTICE_AGENT_OWNER", "owner123")
+	t.Setenv("LATTICE_AGENT_OWNER_SESSION_TOKEN", "abc123")
+	t.Setenv("LATTICE_AGENT_OWNER_GROUPS", `["group1", "group2"]`)
+	t.Setenv("LATTICE_AGENT_TEMPLATE_ID", "templateID")
+	t.Setenv("LATTICE_AGENT_TEMPLATE_NAME", "template123")
+	t.Setenv("LATTICE_AGENT_TEMPLATE_VERSION", "v1.2.3")
 
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]*schema.Provider{
@@ -105,18 +105,18 @@ func TestAgent_UndefinedOwner(t *testing.T) {
 }
 
 func TestAgent_MissingTemplateName(t *testing.T) {
-	t.Setenv("lattice_AGENT_BUILD_ID", "1") // Let's pretend this is a agent build
+	t.Setenv("LATTICE_AGENT_BUILD_ID", "1") // Let's pretend this is a agent build
 
-	t.Setenv("lattice_AGENT_OWNER", "owner123")
-	t.Setenv("lattice_AGENT_OWNER_ID", "11111111-1111-1111-1111-111111111111")
-	t.Setenv("lattice_AGENT_OWNER_NAME", "Mr Owner")
-	t.Setenv("lattice_AGENT_OWNER_EMAIL", "owner123@example.com")
-	t.Setenv("lattice_AGENT_OWNER_SESSION_TOKEN", "abc123")
-	t.Setenv("lattice_AGENT_OWNER_GROUPS", `["group1", "group2"]`)
-	t.Setenv("lattice_AGENT_OWNER_OIDC_ACCESS_TOKEN", "supersecret")
-	t.Setenv("lattice_AGENT_TEMPLATE_ID", "templateID")
-	// lattice_AGENT_TEMPLATE_NAME is missing
-	t.Setenv("lattice_AGENT_TEMPLATE_VERSION", "v1.2.3")
+	t.Setenv("LATTICE_AGENT_OWNER", "owner123")
+	t.Setenv("LATTICE_AGENT_OWNER_ID", "11111111-1111-1111-1111-111111111111")
+	t.Setenv("LATTICE_AGENT_OWNER_NAME", "Mr Owner")
+	t.Setenv("LATTICE_AGENT_OWNER_EMAIL", "owner123@example.com")
+	t.Setenv("LATTICE_AGENT_OWNER_SESSION_TOKEN", "abc123")
+	t.Setenv("LATTICE_AGENT_OWNER_GROUPS", `["group1", "group2"]`)
+	t.Setenv("LATTICE_AGENT_OWNER_OIDC_ACCESS_TOKEN", "supersecret")
+	t.Setenv("LATTICE_AGENT_TEMPLATE_ID", "templateID")
+	// LATTICE_AGENT_TEMPLATE_NAME is missing
+	t.Setenv("LATTICE_AGENT_TEMPLATE_VERSION", "v1.2.3")
 
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]*schema.Provider{

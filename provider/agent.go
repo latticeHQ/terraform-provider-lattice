@@ -19,7 +19,7 @@ func agentDataSource() *schema.Resource {
 
 		Description: "Use this data source to get information for the active agent build.",
 		ReadContext: func(c context.Context, rd *schema.ResourceData, i interface{}) diag.Diagnostics {
-			transition := helpers.OptionalEnvOrDefault("lattice_AGENT_TRANSITION", "start") // Default to start!
+			transition := helpers.OptionalEnvOrDefault("LATTICE_AGENT_TRANSITION", "start") // Default to start!
 			_ = rd.Set("transition", transition)
 
 			count := 0
@@ -28,13 +28,13 @@ func agentDataSource() *schema.Resource {
 			}
 			_ = rd.Set("start_count", count)
 
-			owner := helpers.OptionalEnvOrDefault("lattice_AGENT_OWNER", "default")
+			owner := helpers.OptionalEnvOrDefault("LATTICE_AGENT_OWNER", "default")
 			_ = rd.Set("owner", owner)
 
-			ownerEmail := helpers.OptionalEnvOrDefault("lattice_AGENT_OWNER_EMAIL", "default@example.com")
+			ownerEmail := helpers.OptionalEnvOrDefault("LATTICE_AGENT_OWNER_EMAIL", "default@example.com")
 			_ = rd.Set("owner_email", ownerEmail)
 
-			ownerGroupsText := helpers.OptionalEnv("lattice_AGENT_OWNER_GROUPS")
+			ownerGroupsText := helpers.OptionalEnv("LATTICE_AGENT_OWNER_GROUPS")
 			var ownerGroups []string
 			if ownerGroupsText != "" {
 				err := json.Unmarshal([]byte(ownerGroupsText), &ownerGroups)
@@ -44,37 +44,37 @@ func agentDataSource() *schema.Resource {
 			}
 			_ = rd.Set("owner_groups", ownerGroups)
 
-			ownerName := helpers.OptionalEnvOrDefault("lattice_AGENT_OWNER_NAME", "default")
+			ownerName := helpers.OptionalEnvOrDefault("LATTICE_AGENT_OWNER_NAME", "default")
 			_ = rd.Set("owner_name", ownerName)
 
-			ownerID := helpers.OptionalEnvOrDefault("lattice_AGENT_OWNER_ID", uuid.Nil.String())
+			ownerID := helpers.OptionalEnvOrDefault("LATTICE_AGENT_OWNER_ID", uuid.Nil.String())
 			_ = rd.Set("owner_id", ownerID)
 
-			ownerOIDCAccessToken := helpers.OptionalEnv("lattice_AGENT_OWNER_OIDC_ACCESS_TOKEN")
+			ownerOIDCAccessToken := helpers.OptionalEnv("LATTICE_AGENT_OWNER_OIDC_ACCESS_TOKEN")
 			_ = rd.Set("owner_oidc_access_token", ownerOIDCAccessToken)
 
-			name := helpers.OptionalEnvOrDefault("lattice_AGENT_NAME", "default")
+			name := helpers.OptionalEnvOrDefault("LATTICE_AGENT_NAME", "default")
 			rd.Set("name", name)
 
-			sessionToken := helpers.OptionalEnv("lattice_AGENT_OWNER_SESSION_TOKEN")
+			sessionToken := helpers.OptionalEnv("LATTICE_AGENT_OWNER_SESSION_TOKEN")
 			_ = rd.Set("owner_session_token", sessionToken)
 
-			id := helpers.OptionalEnvOrDefault("lattice_AGENT_ID", uuid.NewString())
+			id := helpers.OptionalEnvOrDefault("LATTICE_AGENT_ID", uuid.NewString())
 			rd.SetId(id)
 
-			templateID, err := helpers.RequireEnv("lattice_AGENT_TEMPLATE_ID")
+			templateID, err := helpers.RequireEnv("LATTICE_AGENT_TEMPLATE_ID")
 			if err != nil {
 				return diag.Errorf("template ID is missing: %s", err.Error())
 			}
 			_ = rd.Set("template_id", templateID)
 
-			templateName, err := helpers.RequireEnv("lattice_AGENT_TEMPLATE_NAME")
+			templateName, err := helpers.RequireEnv("LATTICE_AGENT_TEMPLATE_NAME")
 			if err != nil {
 				return diag.Errorf("template name is missing: %s", err.Error())
 			}
 			_ = rd.Set("template_name", templateName)
 
-			templateVersion, err := helpers.RequireEnv("lattice_AGENT_TEMPLATE_VERSION")
+			templateVersion, err := helpers.RequireEnv("LATTICE_AGENT_TEMPLATE_VERSION")
 			if err != nil {
 				return diag.Errorf("template version is missing: %s", err.Error())
 			}
