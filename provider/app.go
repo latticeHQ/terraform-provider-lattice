@@ -161,7 +161,7 @@ func appResource() *schema.Resource {
 					"all authenticated users. Level `\"public\"` shares it with " +
 					"any user, including unauthenticated users. Permitted " +
 					"application sharing levels can be configured site-wide " +
-					"via a flag on `wirtual server` (Enterprise only).",
+					"via a flag on `lattice server` (Enterprise only).",
 				ForceNew: true,
 				Optional: true,
 				Default:  "owner",

@@ -8,12 +8,12 @@ data "lattice_git_auth" "github" {
 resource "lattice_sidecar" "dev" {
   os   = "linux"
   arch = "amd64"
-  dir  = "~/wirtual"
+  dir  = "~/lattice"
   env = {
     GITHUB_TOKEN : data.lattice_git_auth.github.access_token
   }
   startup_script = <<EOF
-if [ ! -d ~/wirtual ]; then
+if [ ! -d ~/lattice ]; then
     git clone https://github.com/latticehq/lattice
 fi
 EOF

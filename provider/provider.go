@@ -26,7 +26,7 @@ func New() *schema.Provider {
 				Optional:    true,
 				// The "lattice_SIDECAR_URL" environment variable is used by default
 				// as the Access URL when generating scripts.
-				DefaultFunc: schema.EnvDefaultFunc("lattice_SIDECAR_URL", "https://mydeployment.wirtual.dev"),
+				DefaultFunc: schema.EnvDefaultFunc("lattice_SIDECAR_URL", "https://mydeployment.lattice.dev"),
 				ValidateFunc: func(i interface{}, s string) ([]string, []error) {
 					_, err := url.Parse(s)
 					if err != nil {

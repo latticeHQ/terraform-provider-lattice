@@ -32,7 +32,7 @@ import (
 //     local_file resource containing JSON that can be marshalled as a map[string]string
 //   - Fetches the content of the JSON file created and compares it against the expected output.
 //
-// NOTE: all interfaces to this Lattice deployment are performed without github.com/latticehq/latticeruntime/v2/wirtualsdk
+// NOTE: all interfaces to this Lattice deployment are performed without github.com/latticehq/latticeruntime/v2/latticesdk
 // in order to avoid a circular dependency.
 func TestIntegration(t *testing.T) {
 	if os.Getenv("TF_ACC") == "1" {
@@ -44,9 +44,9 @@ func TestIntegration(t *testing.T) {
 		latticeImg = "docker.io/onchainengineer/lattice"
 	}
 
-	wirtualVersion := os.Getenv("lattice_VERSION")
-	if wirtualVersion == "" {
-		wirtualVersion = "latest"
+	latticeVersion := os.Getenv("lattice_VERSION")
+	if latticeVersion == "" {
+		latticeVersion = "latest"
 	}
 
 	timeoutStr := os.Getenv("TIMEOUT_MINS")
@@ -57,12 +57,12 @@ func TestIntegration(t *testing.T) {
 	require.NoError(t, err, "invalid value specified for timeout")
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(timeoutMins)*time.Minute)
 	t.Cleanup(cancel)
-	ctrID := setup(ctx, t, t.Name(), latticeImg, wirtualVersion)
+	ctrID := setup(ctx, t, t.Name(), latticeImg, latticeVersion)
 
 	for _, tt := range []struct {
 		// Name of the folder under `integration/` containing a test template
 		name string
-		// Minimum wirtual version for which to run this test
+		// Minimum lattice version for which to run this test
 		minVersion string
 		// map of string to regex to be passed to assertOutput()
 		expectedOutput map[string]string
@@ -79,7 +79,7 @@ func TestIntegration(t *testing.T) {
 				"agent.id":                      `[a-zA-z0-9-]+`,
 				"agent.name":                    `test-data-source`,
 				"agent.owner":                   `testing`,
-				"agent.owner_email":             `testing@wirtual\.com`,
+				"agent.owner_email":             `testing@lattice\.com`,
 				"agent.owner_groups":            `\[(\"Everyone\")?\]`,
 				"agent.owner_id":                `[a-zA-Z0-9]+`,
 				"agent.owner_name":              `default`,
@@ -104,7 +104,7 @@ func TestIntegration(t *testing.T) {
 				"agent.id":                      `[a-zA-z0-9-]+`,
 				"agent.name":                    ``,
 				"agent.owner":                   `testing`,
-				"agent.owner_email":             `testing@wirtual\.com`,
+				"agent.owner_email":             `testing@lattice\.com`,
 				"agent.owner_groups":            `\[(\"Everyone\")?\]`,
 				"agent.owner_id":                `[a-zA-Z0-9]+`,
 				"agent.owner_name":              `default`,
@@ -115,7 +115,7 @@ func TestIntegration(t *testing.T) {
 				"agent.template_name":           `agent-owner`,
 				"agent.template_version":        `.+`,
 				"agent.transition":              `start`,
-				"agent_owner.email":             `testing@wirtual\.com`,
+				"agent_owner.email":             `testing@lattice\.com`,
 				"agent_owner.full_name":         `default`,
 				"agent_owner.groups":            `\[(\"Everyone\")?\]`,
 				"agent_owner.id":                `[a-zA-Z0-9-]+`,
@@ -127,7 +127,7 @@ func TestIntegration(t *testing.T) {
 			},
 		},
 		{
-			name:       "wirtual-app-hidden",
+			name:       "lattice-app-hidden",
 			minVersion: "v0.0.0",
 			expectedOutput: map[string]string{
 				"lattice_app.hidden.hidden":    "true",
@@ -139,8 +139,8 @@ func TestIntegration(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			if wirtualVersion != "latest" && semver.Compare(wirtualVersion, tt.minVersion) < 0 {
-				t.Skipf("skipping due to lattice_VERSION %q < minVersion %q", wirtualVersion, tt.minVersion)
+			if latticeVersion != "latest" && semver.Compare(latticeVersion, tt.minVersion) < 0 {
+				t.Skipf("skipping due to lattice_VERSION %q < minVersion %q", latticeVersion, tt.minVersion)
 			}
 			// Given: we have an existing Lattice deployment running locally
 			// Import named template
@@ -148,14 +148,14 @@ func TestIntegration(t *testing.T) {
 			// NOTE: Template create command was deprecated after this version
 			// ref: https://github.com/latticehq/latticeruntime/pull/11390
 			templateCreateCmd := "push"
-			if semver.Compare(wirtualVersion, "v2.7.0") < 1 {
-				t.Logf("using now-deprecated templates create command for older wirtual version")
+			if semver.Compare(latticeVersion, "v2.7.0") < 1 {
+				t.Logf("using now-deprecated templates create command for older lattice version")
 				templateCreateCmd = "create"
 			}
-			_, rc := execContainer(ctx, t, ctrID, fmt.Sprintf(`wirtual templates %s %s --directory /src/integration/%s --var output_path=/tmp/%s.json --yes`, templateCreateCmd, tt.name, tt.name, tt.name))
+			_, rc := execContainer(ctx, t, ctrID, fmt.Sprintf(`lattice templates %s %s --directory /src/integration/%s --var output_path=/tmp/%s.json --yes`, templateCreateCmd, tt.name, tt.name, tt.name))
 			require.Equal(t, 0, rc)
 			// Create a agent
-			_, rc = execContainer(ctx, t, ctrID, fmt.Sprintf(`wirtual create %s -t %s --yes`, tt.name, tt.name))
+			_, rc = execContainer(ctx, t, ctrID, fmt.Sprintf(`lattice create %s -t %s --yes`, tt.name, tt.name))
 			require.Equal(t, 0, rc)
 			// Fetch the output created by the template
 			out, rc := execContainer(ctx, t, ctrID, fmt.Sprintf(`cat /tmp/%s.json`, tt.name))
@@ -167,23 +167,23 @@ func TestIntegration(t *testing.T) {
 	}
 }
 
-func setup(ctx context.Context, t *testing.T, name, latticeImg, wirtualVersion string) string {
+func setup(ctx context.Context, t *testing.T, name, latticeImg, latticeVersion string) string {
 	var (
 		// For this test to work, we pass in a custom terraformrc to use
 		// the locally built version of the provider.
 		testTerraformrc = `provider_installation {
 		dev_overrides {
-		  "wirtualdev/wirtual" = "/src"
+		  "latticehq/lattice" = "/src"
 		}
 		  direct{}
 	  }`
 		localURL = "http://localhost:3000"
 	)
 
-	t.Logf("using wirtual image %s:%s", latticeImg, wirtualVersion)
+	t.Logf("using lattice image %s:%s", latticeImg, latticeVersion)
 
 	// Ensure the binary is built
-	binPath, err := filepath.Abs("../terraform-provider-wirtual")
+	binPath, err := filepath.Abs("../terraform-provider-lattice")
 	require.NoError(t, err)
 	if _, err := os.Stat(binPath); os.IsNotExist(err) {
 		t.Fatalf("not found: %q - please build the provider first", binPath)
@@ -202,14 +202,14 @@ func setup(ctx context.Context, t *testing.T, name, latticeImg, wirtualVersion s
 	t.Logf("src path is %s\n", srcPath)
 
 	// Ensure the image is available locally.
-	refStr := latticeImg + ":" + wirtualVersion
+	refStr := latticeImg + ":" + latticeVersion
 	ensureImage(ctx, t, cli, refStr)
 
 	// Stand up a temporary Lattice instance
 	ctr, err := cli.ContainerCreate(ctx, &container.Config{
 		Image: refStr,
 		Env: []string{
-			"lattice_ACCESS_URL=" + localURL,           // Set explicitly to avoid creating try.wirtual.app URLs.
+			"lattice_ACCESS_URL=" + localURL,           // Set explicitly to avoid creating try.lattice.app URLs.
 			"lattice_IN_MEMORY=true",                   // We don't necessarily care about real persistence here.
 			"lattice_TELEMETRY_ENABLE=false",           // Avoid creating noise.
 			"lattice_VERBOSE=TRUE",                     // Debug logging.
@@ -222,7 +222,7 @@ func setup(ctx context.Context, t *testing.T, name, latticeImg, wirtualVersion s
 			tfrcPath + ":/tmp/integration.tfrc", // Custom tfrc from above.
 			srcPath + ":/src",                   // Bind-mount in the repo with the built binary and templates.
 		},
-	}, nil, nil, "terraform-provider-wirtual-integration-"+name)
+	}, nil, nil, "terraform-provider-lattice-integration-"+name)
 	require.NoError(t, err, "create test deployment")
 
 	t.Logf("created container %s\n", ctr.ID)
@@ -240,7 +240,7 @@ func setup(ctx context.Context, t *testing.T, name, latticeImg, wirtualVersion s
 
 	// nolint:gosec // For testing only.
 	var (
-		testEmail    = "testing@wirtual.dev"
+		testEmail    = "testing@lattice.dev"
 		testPassword = "InsecurePassw0rd!"
 		testUsername = "testing"
 	)
@@ -253,10 +253,10 @@ func setup(ctx context.Context, t *testing.T, name, latticeImg, wirtualVersion s
 		}
 		t.Logf("not ready yet...")
 		return false
-	}, 10*time.Second, time.Second, "wirtual failed to become ready in time")
+	}, 10*time.Second, time.Second, "lattice failed to become ready in time")
 
 	// Perform first time setup
-	_, rc := execContainer(ctx, t, ctr.ID, fmt.Sprintf(`wirtual login %s --first-user-email=%q --first-user-password=%q --first-user-trial=false --first-user-username=%q`, localURL, testEmail, testPassword, testUsername))
+	_, rc := execContainer(ctx, t, ctr.ID, fmt.Sprintf(`lattice login %s --first-user-email=%q --first-user-password=%q --first-user-trial=false --first-user-username=%q`, localURL, testEmail, testPassword, testUsername))
 	require.Equal(t, 0, rc, "failed to perform first-time setup")
 	return ctr.ID
 }

@@ -36,5 +36,4 @@ website/vendor
 *.winfile eol=crlf
 
 # Binary
-terraform-provider-wirtual
 terraform-provider-lattice

@@ -1,5 +1,5 @@
 {
-  "name": "terraform-provider-wirtual",
+  "name": "terraform-provider-lattice",
   "image": "mcr.microsoft.com/devcontainers/go:1.22",
   "features": {
     "ghcr.io/devcontainers/features/terraform:1": {
