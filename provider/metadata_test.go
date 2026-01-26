@@ -7,8 +7,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
+	"github.com/latticehq/terraform-provider-lattice/provider"
 	"github.com/stretchr/testify/require"
-	"github.com/wirtualdev/terraform-provider-wirtual/provider"
 )
 
 func TestMetadata(t *testing.T) {
@@ -23,12 +23,12 @@ func TestMetadata(t *testing.T) {
 			Config: `
 				provider "wirtual" {
 				}
-				resource "wirtual_agent" "dev" {
+				resource "lattice_agent" "dev" {
 					os = "linux"
 					arch = "amd64"
 				}
-				resource "wirtual_metadata" "agent" {
-					resource_id = wirtual_agent.dev.id
+				resource "lattice_metadata" "agent" {
+					resource_id = lattice_agent.dev.id
 					hide = true
 					icon = "/icon/storage.svg"
 					daily_cost = 200
@@ -57,9 +57,9 @@ func TestMetadata(t *testing.T) {
 			Check: func(state *terraform.State) error {
 				require.Len(t, state.Modules, 1)
 				require.Len(t, state.Modules[0].Resources, 2)
-				agent := state.Modules[0].Resources["wirtual_agent.dev"]
+				agent := state.Modules[0].Resources["lattice_agent.dev"]
 				require.NotNil(t, agent)
-				metadata := state.Modules[0].Resources["wirtual_metadata.agent"]
+				metadata := state.Modules[0].Resources["lattice_metadata.agent"]
 				require.NotNil(t, metadata)
 				t.Logf("metadata attributes: %#v", metadata.Primary.Attributes)
 				for key, expected := range map[string]string{
@@ -105,12 +105,12 @@ func TestMetadataDuplicateKeys(t *testing.T) {
 			Config: `
 				provider "wirtual" {
 				}
-				resource "wirtual_agent" "dev" {
+				resource "lattice_agent" "dev" {
 					os = "linux"
 					arch = "amd64"
 				}
-				resource "wirtual_metadata" "agent" {
-					resource_id = wirtual_agent.dev.id
+				resource "lattice_metadata" "agent" {
+					resource_id = lattice_agent.dev.id
 					hide = true
 					icon = "/icon/storage.svg"
 					item {

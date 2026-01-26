@@ -12,14 +12,14 @@ import (
 )
 
 var (
-	// appSlugRegex is the regex used to validate the slug of a wirtual_app
+	// appSlugRegex is the regex used to validate the slug of a lattice_app
 	// resource. It must be a valid hostname and cannot contain two consecutive
 	// hyphens or start/end with a hyphen.
 	//
-	// This regex is duplicated in the Wirtual source code, so make sure to update
+	// This regex is duplicated in the Lattice source code, so make sure to update
 	// it there as well.
 	//
-	// There are test cases for this regex in the Wirtual product.
+	// There are test cases for this regex in the Lattice product.
 	appSlugRegex = regexp.MustCompile(`^[a-z0-9](-?[a-z0-9])*$`)
 )
 
@@ -70,7 +70,7 @@ func appResource() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"agent_id": {
 				Type:        schema.TypeString,
-				Description: "The `id` property of a `wirtual_agent` resource to associate with.",
+				Description: "The `id` property of a `lattice_agent` resource to associate with.",
 				ForceNew:    true,
 				Required:    true,
 			},
@@ -86,8 +86,8 @@ func appResource() *schema.Resource {
 			"icon": {
 				Type: schema.TypeString,
 				Description: "A URL to an icon that will display in the dashboard. View built-in " +
-					"icons here: https://github.com/wirtualdev/wirtual/tree/main/site/static/icon. Use a " +
-					"built-in icon with `\"${data.wirtual_workspace.me.access_url}/icon/<path>\"`.",
+					"icons here: https://github.com/latticehq/latticeruntime/tree/main/site/static/icon. Use a " +
+					"built-in icon with `\"${data.lattice_workspace.me.access_url}/icon/<path>\"`.",
 				ForceNew: true,
 				Optional: true,
 				ValidateFunc: func(i interface{}, s string) ([]string, []error) {
@@ -113,7 +113,7 @@ func appResource() *schema.Resource {
 					}
 
 					if !appSlugRegex.MatchString(valStr) {
-						return diag.Errorf(`invalid "wirtual_app" slug, must be a valid hostname (%q, cannot contain two consecutive hyphens or start/end with a hyphen): %q`, appSlugRegex.String(), valStr)
+						return diag.Errorf(`invalid "lattice_app" slug, must be a valid hostname (%q, cannot contain two consecutive hyphens or start/end with a hyphen): %q`, appSlugRegex.String(), valStr)
 					}
 
 					return nil
@@ -136,7 +136,7 @@ func appResource() *schema.Resource {
 			"subdomain": {
 				Type: schema.TypeBool,
 				Description: "Determines whether the app will be accessed via it's own " +
-					"subdomain or whether it will be accessed via a path on Wirtual. If " +
+					"subdomain or whether it will be accessed via a path on Lattice. If " +
 					"wildcards have not been setup by the administrator then apps with " +
 					"`subdomain` set to `true` will not be accessible. Defaults to `false`.",
 				ForceNew: true,
@@ -235,7 +235,7 @@ func appResource() *schema.Resource {
 			},
 			"hidden": {
 				Type:        schema.TypeBool,
-				Description: "Determines if the app is visible in the UI (minimum Wirtual version: v2.16).",
+				Description: "Determines if the app is visible in the UI (minimum Lattice version: v2.16).",
 				Default:     false,
 				ForceNew:    true,
 				Optional:    true,

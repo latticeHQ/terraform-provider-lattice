@@ -1,6 +1,6 @@
 provider "wirtual" {}
 
-data "wirtual_parameter" "os_selector" {
+data "lattice_parameter" "os_selector" {
   name         = "os_selector"
   display_name = "Operating System"
   mutable      = false
@@ -24,7 +24,7 @@ data "wirtual_parameter" "os_selector" {
   }
 }
 
-data "wirtual_parameter" "feature_cache_enabled" {
+data "lattice_parameter" "feature_cache_enabled" {
   name         = "feature_cache_enabled"
   display_name = "Enable cache?"
   type         = "bool"
@@ -32,7 +32,7 @@ data "wirtual_parameter" "feature_cache_enabled" {
   default = false
 }
 
-data "wirtual_parameter" "feature_debug_enabled" {
+data "lattice_parameter" "feature_debug_enabled" {
   name         = "feature_debug_enabled"
   display_name = "Enable debug?"
   type         = "bool"
@@ -40,11 +40,11 @@ data "wirtual_parameter" "feature_debug_enabled" {
   default = true
 }
 
-data "wirtual_workspace_tags" "custom_workspace_tags" {
+data "lattice_workspace_tags" "custom_workspace_tags" {
   tags = {
     "cluster" = "developers"
-    "os"      = data.wirtual_parameter.os_selector.value
-    "debug"   = "${data.wirtual_parameter.feature_debug_enabled.value}+12345"
-    "cache"   = data.wirtual_parameter.feature_cache_enabled.value == "true" ? "nix-with-cache" : "no-cache"
+    "os"      = data.lattice_parameter.os_selector.value
+    "debug"   = "${data.lattice_parameter.feature_debug_enabled.value}+12345"
+    "cache"   = data.lattice_parameter.feature_cache_enabled.value == "true" ? "nix-with-cache" : "no-cache"
   }
 }

@@ -220,8 +220,8 @@ func parameterDataSource() *schema.Resource {
 			"icon": {
 				Type: schema.TypeString,
 				Description: "A URL to an icon that will display in the dashboard. View built-in " +
-					"icons [here](https://github.com/wirtualdev/wirtual/tree/main/site/static/icon). Use a " +
-					"built-in icon with `\"${data.wirtual_workspace.me.access_url}/icon/<path>\"`.",
+					"icons [here](https://github.com/latticehq/latticeruntime/tree/main/site/static/icon). Use a " +
+					"built-in icon with `\"${data.lattice_workspace.me.access_url}/icon/<path>\"`.",
 				ForceNew: true,
 				Optional: true,
 				ValidateFunc: func(i interface{}, s string) ([]string, []error) {
@@ -261,8 +261,8 @@ func parameterDataSource() *schema.Resource {
 						"icon": {
 							Type: schema.TypeString,
 							Description: "A URL to an icon that will display in the dashboard. View built-in " +
-								"icons [here](https://github.com/wirtualdev/wirtual/tree/main/site/static/icon). Use a " +
-								"built-in icon with `\"${data.wirtual_workspace.me.access_url}/icon/<path>\"`.",
+								"icons [here](https://github.com/latticehq/latticeruntime/tree/main/site/static/icon). Use a " +
+								"built-in icon with `\"${data.lattice_workspace.me.access_url}/icon/<path>\"`.",
 							ForceNew: true,
 							Optional: true,
 							ValidateFunc: func(i interface{}, s string) ([]string, []error) {
@@ -467,7 +467,7 @@ func (v *Validation) Valid(typ, value string) error {
 // can be used in parameter names that may not be valid in env vars.
 func ParameterEnvironmentVariable(name string) string {
 	sum := sha256.Sum256([]byte(name))
-	return "WIRTUAL_PARAMETER_" + hex.EncodeToString(sum[:])
+	return "lattice_PARAMETER_" + hex.EncodeToString(sum[:])
 }
 
 func takeFirstError(errs ...error) error {

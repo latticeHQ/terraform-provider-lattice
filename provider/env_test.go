@@ -4,8 +4,8 @@ import (
 	"regexp"
 	"testing"
 
+	"github.com/latticehq/terraform-provider-lattice/provider"
 	"github.com/stretchr/testify/require"
-	"github.com/wirtualdev/terraform-provider-wirtual/provider"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -24,7 +24,7 @@ func TestEnv(t *testing.T) {
 			Config: `
 			provider "wirtual" {
 			}
-			resource "wirtual_env" "example" {
+			resource "lattice_env" "example" {
 				agent_id = "king"
 				name = "MESSAGE"
 				value = "Believe in yourself and there will come a day when others will have no choice but to believe with you."
@@ -33,7 +33,7 @@ func TestEnv(t *testing.T) {
 			Check: func(state *terraform.State) error {
 				require.Len(t, state.Modules, 1)
 				require.Len(t, state.Modules[0].Resources, 1)
-				script := state.Modules[0].Resources["wirtual_env.example"]
+				script := state.Modules[0].Resources["lattice_env.example"]
 				require.NotNil(t, script)
 				t.Logf("script attributes: %#v", script.Primary.Attributes)
 				for key, expected := range map[string]string{
@@ -61,7 +61,7 @@ func TestEnvEmptyValue(t *testing.T) {
 			Config: `
 			provider "wirtual" {
 			}
-			resource "wirtual_env" "example" {
+			resource "lattice_env" "example" {
 				agent_id = "king"
 				name = "MESSAGE"
 			}
@@ -69,7 +69,7 @@ func TestEnvEmptyValue(t *testing.T) {
 			Check: func(state *terraform.State) error {
 				require.Len(t, state.Modules, 1)
 				require.Len(t, state.Modules[0].Resources, 1)
-				script := state.Modules[0].Resources["wirtual_env.example"]
+				script := state.Modules[0].Resources["lattice_env.example"]
 				require.NotNil(t, script)
 				t.Logf("script attributes: %#v", script.Primary.Attributes)
 				for key, expected := range map[string]string{
@@ -97,7 +97,7 @@ func TestEnvBadName(t *testing.T) {
 			Config: `
 			provider "wirtual" {
 			}
-			resource "wirtual_env" "example" {
+			resource "lattice_env" "example" {
 				agent_id = ""
 				name = "bad-name"
 			}
@@ -119,7 +119,7 @@ func TestEnvNoName(t *testing.T) {
 			Config: `
 			provider "wirtual" {
 			}
-			resource "wirtual_env" "example" {
+			resource "lattice_env" "example" {
 				agent_id = ""
 			}
 			`,

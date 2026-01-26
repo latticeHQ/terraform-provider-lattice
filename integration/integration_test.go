@@ -25,26 +25,26 @@ import (
 	"golang.org/x/mod/semver"
 )
 
-// TestIntegration performs an integration test against an ephemeral Wirtual deployment.
+// TestIntegration performs an integration test against an ephemeral Lattice deployment.
 // For each directory containing a `main.tf` under `/integration`, performs the following:
-//   - Pushes the template to a temporary Wirtual instance running in Docker
+//   - Pushes the template to a temporary Lattice instance running in Docker
 //   - Creates a workspace from the template. Templates here are expected to create a
 //     local_file resource containing JSON that can be marshalled as a map[string]string
 //   - Fetches the content of the JSON file created and compares it against the expected output.
 //
-// NOTE: all interfaces to this Wirtual deployment are performed without github.com/wirtualdev/wirtual/v2/wirtualsdk
+// NOTE: all interfaces to this Lattice deployment are performed without github.com/latticehq/latticeruntime/v2/wirtualsdk
 // in order to avoid a circular dependency.
 func TestIntegration(t *testing.T) {
 	if os.Getenv("TF_ACC") == "1" {
 		t.Skip("Skipping integration tests during tf acceptance tests")
 	}
 
-	wirtualImg := os.Getenv("WIRTUAL_IMAGE")
-	if wirtualImg == "" {
-		wirtualImg = "docker.io/onchainengineer/wirtual"
+	latticeImg := os.Getenv("lattice_IMAGE")
+	if latticeImg == "" {
+		latticeImg = "docker.io/onchainengineer/lattice"
 	}
 
-	wirtualVersion := os.Getenv("WIRTUAL_VERSION")
+	wirtualVersion := os.Getenv("lattice_VERSION")
 	if wirtualVersion == "" {
 		wirtualVersion = "latest"
 	}
@@ -57,7 +57,7 @@ func TestIntegration(t *testing.T) {
 	require.NoError(t, err, "invalid value specified for timeout")
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(timeoutMins)*time.Minute)
 	t.Cleanup(cancel)
-	ctrID := setup(ctx, t, t.Name(), wirtualImg, wirtualVersion)
+	ctrID := setup(ctx, t, t.Name(), latticeImg, wirtualVersion)
 
 	for _, tt := range []struct {
 		// Name of the folder under `integration/` containing a test template
@@ -130,9 +130,9 @@ func TestIntegration(t *testing.T) {
 			name:       "wirtual-app-hidden",
 			minVersion: "v0.0.0",
 			expectedOutput: map[string]string{
-				"wirtual_app.hidden.hidden":    "true",
-				"wirtual_app.visible.hidden":   "false",
-				"wirtual_app.defaulted.hidden": "false",
+				"lattice_app.hidden.hidden":    "true",
+				"lattice_app.visible.hidden":   "false",
+				"lattice_app.defaulted.hidden": "false",
 			},
 		},
 	} {
@@ -140,13 +140,13 @@ func TestIntegration(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			if wirtualVersion != "latest" && semver.Compare(wirtualVersion, tt.minVersion) < 0 {
-				t.Skipf("skipping due to WIRTUAL_VERSION %q < minVersion %q", wirtualVersion, tt.minVersion)
+				t.Skipf("skipping due to lattice_VERSION %q < minVersion %q", wirtualVersion, tt.minVersion)
 			}
-			// Given: we have an existing Wirtual deployment running locally
+			// Given: we have an existing Lattice deployment running locally
 			// Import named template
 
 			// NOTE: Template create command was deprecated after this version
-			// ref: https://github.com/wirtualdev/wirtual/pull/11390
+			// ref: https://github.com/latticehq/latticeruntime/pull/11390
 			templateCreateCmd := "push"
 			if semver.Compare(wirtualVersion, "v2.7.0") < 1 {
 				t.Logf("using now-deprecated templates create command for older wirtual version")
@@ -167,7 +167,7 @@ func TestIntegration(t *testing.T) {
 	}
 }
 
-func setup(ctx context.Context, t *testing.T, name, wirtualImg, wirtualVersion string) string {
+func setup(ctx context.Context, t *testing.T, name, latticeImg, wirtualVersion string) string {
 	var (
 		// For this test to work, we pass in a custom terraformrc to use
 		// the locally built version of the provider.
@@ -180,7 +180,7 @@ func setup(ctx context.Context, t *testing.T, name, wirtualImg, wirtualVersion s
 		localURL = "http://localhost:3000"
 	)
 
-	t.Logf("using wirtual image %s:%s", wirtualImg, wirtualVersion)
+	t.Logf("using wirtual image %s:%s", latticeImg, wirtualVersion)
 
 	// Ensure the binary is built
 	binPath, err := filepath.Abs("../terraform-provider-wirtual")
@@ -202,17 +202,17 @@ func setup(ctx context.Context, t *testing.T, name, wirtualImg, wirtualVersion s
 	t.Logf("src path is %s\n", srcPath)
 
 	// Ensure the image is available locally.
-	refStr := wirtualImg + ":" + wirtualVersion
+	refStr := latticeImg + ":" + wirtualVersion
 	ensureImage(ctx, t, cli, refStr)
 
-	// Stand up a temporary Wirtual instance
+	// Stand up a temporary Lattice instance
 	ctr, err := cli.ContainerCreate(ctx, &container.Config{
 		Image: refStr,
 		Env: []string{
-			"WIRTUAL_ACCESS_URL=" + localURL,           // Set explicitly to avoid creating try.wirtual.app URLs.
-			"WIRTUAL_IN_MEMORY=true",                   // We don't necessarily care about real persistence here.
-			"WIRTUAL_TELEMETRY_ENABLE=false",           // Avoid creating noise.
-			"WIRTUAL_VERBOSE=TRUE",                     // Debug logging.
+			"lattice_ACCESS_URL=" + localURL,           // Set explicitly to avoid creating try.wirtual.app URLs.
+			"lattice_IN_MEMORY=true",                   // We don't necessarily care about real persistence here.
+			"lattice_TELEMETRY_ENABLE=false",           // Avoid creating noise.
+			"lattice_VERBOSE=TRUE",                     // Debug logging.
 			"TF_CLI_CONFIG_FILE=/tmp/integration.tfrc", // Our custom tfrc from above.
 			"TF_LOG=DEBUG",                             // Debug logging in Terraform provider
 		},

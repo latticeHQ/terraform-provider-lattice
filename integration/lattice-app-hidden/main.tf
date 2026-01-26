@@ -9,30 +9,30 @@ terraform {
   }
 }
 
-data "wirtual_workspace" "me" {}
+data "lattice_workspace" "me" {}
 
-resource "wirtual_agent" "dev" {
+resource "lattice_agent" "dev" {
   os   = "linux"
   arch = "amd64"
   dir  = "/workspace"
 }
 
-resource "wirtual_app" "hidden" {
-  agent_id = wirtual_agent.dev.id
+resource "lattice_app" "hidden" {
+  agent_id = lattice_agent.dev.id
   slug     = "hidden"
   share    = "owner"
   hidden   = true
 }
 
-resource "wirtual_app" "visible" {
-  agent_id = wirtual_agent.dev.id
+resource "lattice_app" "visible" {
+  agent_id = lattice_agent.dev.id
   slug     = "visible"
   share    = "owner"
   hidden   = false
 }
 
-resource "wirtual_app" "defaulted" {
-  agent_id = wirtual_agent.dev.id
+resource "lattice_app" "defaulted" {
+  agent_id = lattice_agent.dev.id
   slug     = "defaulted"
   share    = "owner"
 }
@@ -40,9 +40,9 @@ resource "wirtual_app" "defaulted" {
 locals {
   # NOTE: these must all be strings in the output
   output = {
-    "wirtual_app.hidden.hidden"    = tostring(wirtual_app.hidden.hidden)
-    "wirtual_app.visible.hidden"   = tostring(wirtual_app.visible.hidden)
-    "wirtual_app.defaulted.hidden" = tostring(wirtual_app.defaulted.hidden)
+    "lattice_app.hidden.hidden"    = tostring(lattice_app.hidden.hidden)
+    "lattice_app.visible.hidden"   = tostring(lattice_app.visible.hidden)
+    "lattice_app.defaulted.hidden" = tostring(lattice_app.defaulted.hidden)
   }
 }
 

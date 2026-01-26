@@ -1,8 +1,8 @@
-data "wirtual_workspace" "me" {
+data "lattice_workspace" "me" {
 }
 
 resource "kubernetes_pod" "dev" {
-  count = data.wirtual_workspace.me.start_count
+  count = data.lattice_workspace.me.start_count
   metadata {
     name      = "k8s_example"
     namespace = "example"
@@ -17,14 +17,14 @@ resource "tls_private_key" "example_key_pair" {
   ecdsa_curve = "P256"
 }
 
-resource "wirtual_metadata" "pod_info" {
-  count       = data.wirtual_workspace.me.start_count
+resource "lattice_metadata" "pod_info" {
+  count       = data.lattice_workspace.me.start_count
   resource_id = kubernetes_pod.dev[0].id
   # (Enterprise-only) this resource consumes 200 quota units
   daily_cost = 200
   item {
     key   = "description"
-    value = "This description will show up in the Wirtual dashboard."
+    value = "This description will show up in the Lattice dashboard."
   }
   item {
     key   = "pod_uid"

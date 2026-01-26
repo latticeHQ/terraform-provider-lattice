@@ -10,20 +10,20 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/wirtualdev/terraform-provider-wirtual/provider"
+	"github.com/latticehq/terraform-provider-lattice/provider"
 )
 
 func TestWorkspace(t *testing.T) {
-	t.Setenv("WIRTUAL_WORKSPACE_OWNER", "owner123")
-	t.Setenv("WIRTUAL_WORKSPACE_OWNER_ID", "11111111-1111-1111-1111-111111111111")
-	t.Setenv("WIRTUAL_WORKSPACE_OWNER_NAME", "Mr Owner")
-	t.Setenv("WIRTUAL_WORKSPACE_OWNER_EMAIL", "owner123@example.com")
-	t.Setenv("WIRTUAL_WORKSPACE_OWNER_SESSION_TOKEN", "abc123")
-	t.Setenv("WIRTUAL_WORKSPACE_OWNER_GROUPS", `["group1", "group2"]`)
-	t.Setenv("WIRTUAL_WORKSPACE_OWNER_OIDC_ACCESS_TOKEN", "supersecret")
-	t.Setenv("WIRTUAL_WORKSPACE_TEMPLATE_ID", "templateID")
-	t.Setenv("WIRTUAL_WORKSPACE_TEMPLATE_NAME", "template123")
-	t.Setenv("WIRTUAL_WORKSPACE_TEMPLATE_VERSION", "v1.2.3")
+	t.Setenv("lattice_WORKSPACE_OWNER", "owner123")
+	t.Setenv("lattice_WORKSPACE_OWNER_ID", "11111111-1111-1111-1111-111111111111")
+	t.Setenv("lattice_WORKSPACE_OWNER_NAME", "Mr Owner")
+	t.Setenv("lattice_WORKSPACE_OWNER_EMAIL", "owner123@example.com")
+	t.Setenv("lattice_WORKSPACE_OWNER_SESSION_TOKEN", "abc123")
+	t.Setenv("lattice_WORKSPACE_OWNER_GROUPS", `["group1", "group2"]`)
+	t.Setenv("lattice_WORKSPACE_OWNER_OIDC_ACCESS_TOKEN", "supersecret")
+	t.Setenv("lattice_WORKSPACE_TEMPLATE_ID", "templateID")
+	t.Setenv("lattice_WORKSPACE_TEMPLATE_NAME", "template123")
+	t.Setenv("lattice_WORKSPACE_TEMPLATE_VERSION", "v1.2.3")
 
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]*schema.Provider{
@@ -35,12 +35,12 @@ func TestWorkspace(t *testing.T) {
 			provider "wirtual" {
 				url = "https://example.com:8080"
 			}
-			data "wirtual_workspace" "me" {
+			data "lattice_workspace" "me" {
 			}`,
 			Check: func(state *terraform.State) error {
 				require.Len(t, state.Modules, 1)
 				require.Len(t, state.Modules[0].Resources, 1)
-				resource := state.Modules[0].Resources["data.wirtual_workspace.me"]
+				resource := state.Modules[0].Resources["data.lattice_workspace.me"]
 				require.NotNil(t, resource)
 
 				attribs := resource.Primary.Attributes
@@ -66,12 +66,12 @@ func TestWorkspace(t *testing.T) {
 }
 
 func TestWorkspace_UndefinedOwner(t *testing.T) {
-	t.Setenv("WIRTUAL_WORKSPACE_OWNER", "owner123")
-	t.Setenv("WIRTUAL_WORKSPACE_OWNER_SESSION_TOKEN", "abc123")
-	t.Setenv("WIRTUAL_WORKSPACE_OWNER_GROUPS", `["group1", "group2"]`)
-	t.Setenv("WIRTUAL_WORKSPACE_TEMPLATE_ID", "templateID")
-	t.Setenv("WIRTUAL_WORKSPACE_TEMPLATE_NAME", "template123")
-	t.Setenv("WIRTUAL_WORKSPACE_TEMPLATE_VERSION", "v1.2.3")
+	t.Setenv("lattice_WORKSPACE_OWNER", "owner123")
+	t.Setenv("lattice_WORKSPACE_OWNER_SESSION_TOKEN", "abc123")
+	t.Setenv("lattice_WORKSPACE_OWNER_GROUPS", `["group1", "group2"]`)
+	t.Setenv("lattice_WORKSPACE_TEMPLATE_ID", "templateID")
+	t.Setenv("lattice_WORKSPACE_TEMPLATE_NAME", "template123")
+	t.Setenv("lattice_WORKSPACE_TEMPLATE_VERSION", "v1.2.3")
 
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]*schema.Provider{
@@ -83,12 +83,12 @@ func TestWorkspace_UndefinedOwner(t *testing.T) {
 			provider "wirtual" {
 				url = "https://example.com:8080"
 			}
-			data "wirtual_workspace" "me" {
+			data "lattice_workspace" "me" {
 			}`,
 			Check: func(state *terraform.State) error {
 				require.Len(t, state.Modules, 1)
 				require.Len(t, state.Modules[0].Resources, 1)
-				resource := state.Modules[0].Resources["data.wirtual_workspace.me"]
+				resource := state.Modules[0].Resources["data.lattice_workspace.me"]
 				require.NotNil(t, resource)
 
 				attribs := resource.Primary.Attributes
@@ -105,18 +105,18 @@ func TestWorkspace_UndefinedOwner(t *testing.T) {
 }
 
 func TestWorkspace_MissingTemplateName(t *testing.T) {
-	t.Setenv("WIRTUAL_WORKSPACE_BUILD_ID", "1") // Let's pretend this is a workspace build
+	t.Setenv("lattice_WORKSPACE_BUILD_ID", "1") // Let's pretend this is a workspace build
 
-	t.Setenv("WIRTUAL_WORKSPACE_OWNER", "owner123")
-	t.Setenv("WIRTUAL_WORKSPACE_OWNER_ID", "11111111-1111-1111-1111-111111111111")
-	t.Setenv("WIRTUAL_WORKSPACE_OWNER_NAME", "Mr Owner")
-	t.Setenv("WIRTUAL_WORKSPACE_OWNER_EMAIL", "owner123@example.com")
-	t.Setenv("WIRTUAL_WORKSPACE_OWNER_SESSION_TOKEN", "abc123")
-	t.Setenv("WIRTUAL_WORKSPACE_OWNER_GROUPS", `["group1", "group2"]`)
-	t.Setenv("WIRTUAL_WORKSPACE_OWNER_OIDC_ACCESS_TOKEN", "supersecret")
-	t.Setenv("WIRTUAL_WORKSPACE_TEMPLATE_ID", "templateID")
-	// WIRTUAL_WORKSPACE_TEMPLATE_NAME is missing
-	t.Setenv("WIRTUAL_WORKSPACE_TEMPLATE_VERSION", "v1.2.3")
+	t.Setenv("lattice_WORKSPACE_OWNER", "owner123")
+	t.Setenv("lattice_WORKSPACE_OWNER_ID", "11111111-1111-1111-1111-111111111111")
+	t.Setenv("lattice_WORKSPACE_OWNER_NAME", "Mr Owner")
+	t.Setenv("lattice_WORKSPACE_OWNER_EMAIL", "owner123@example.com")
+	t.Setenv("lattice_WORKSPACE_OWNER_SESSION_TOKEN", "abc123")
+	t.Setenv("lattice_WORKSPACE_OWNER_GROUPS", `["group1", "group2"]`)
+	t.Setenv("lattice_WORKSPACE_OWNER_OIDC_ACCESS_TOKEN", "supersecret")
+	t.Setenv("lattice_WORKSPACE_TEMPLATE_ID", "templateID")
+	// lattice_WORKSPACE_TEMPLATE_NAME is missing
+	t.Setenv("lattice_WORKSPACE_TEMPLATE_VERSION", "v1.2.3")
 
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]*schema.Provider{
@@ -128,9 +128,9 @@ func TestWorkspace_MissingTemplateName(t *testing.T) {
 			provider "wirtual" {
 				url = "https://example.com:8080"
 			}
-			data "wirtual_workspace" "me" {
+			data "lattice_workspace" "me" {
 			}`,
-			ExpectError: regexp.MustCompile("WIRTUAL_WORKSPACE_TEMPLATE_NAME is required"),
+			ExpectError: regexp.MustCompile("lattice_WORKSPACE_TEMPLATE_NAME is required"),
 		}},
 	})
 }

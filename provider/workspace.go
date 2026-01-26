@@ -10,7 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
-	"github.com/wirtualdev/terraform-provider-wirtual/provider/helpers"
+	"github.com/latticehq/terraform-provider-lattice/provider/helpers"
 )
 
 func workspaceDataSource() *schema.Resource {
@@ -19,7 +19,7 @@ func workspaceDataSource() *schema.Resource {
 
 		Description: "Use this data source to get information for the active workspace build.",
 		ReadContext: func(c context.Context, rd *schema.ResourceData, i interface{}) diag.Diagnostics {
-			transition := helpers.OptionalEnvOrDefault("WIRTUAL_WORKSPACE_TRANSITION", "start") // Default to start!
+			transition := helpers.OptionalEnvOrDefault("lattice_WORKSPACE_TRANSITION", "start") // Default to start!
 			_ = rd.Set("transition", transition)
 
 			count := 0
@@ -28,13 +28,13 @@ func workspaceDataSource() *schema.Resource {
 			}
 			_ = rd.Set("start_count", count)
 
-			owner := helpers.OptionalEnvOrDefault("WIRTUAL_WORKSPACE_OWNER", "default")
+			owner := helpers.OptionalEnvOrDefault("lattice_WORKSPACE_OWNER", "default")
 			_ = rd.Set("owner", owner)
 
-			ownerEmail := helpers.OptionalEnvOrDefault("WIRTUAL_WORKSPACE_OWNER_EMAIL", "default@example.com")
+			ownerEmail := helpers.OptionalEnvOrDefault("lattice_WORKSPACE_OWNER_EMAIL", "default@example.com")
 			_ = rd.Set("owner_email", ownerEmail)
 
-			ownerGroupsText := helpers.OptionalEnv("WIRTUAL_WORKSPACE_OWNER_GROUPS")
+			ownerGroupsText := helpers.OptionalEnv("lattice_WORKSPACE_OWNER_GROUPS")
 			var ownerGroups []string
 			if ownerGroupsText != "" {
 				err := json.Unmarshal([]byte(ownerGroupsText), &ownerGroups)
@@ -44,37 +44,37 @@ func workspaceDataSource() *schema.Resource {
 			}
 			_ = rd.Set("owner_groups", ownerGroups)
 
-			ownerName := helpers.OptionalEnvOrDefault("WIRTUAL_WORKSPACE_OWNER_NAME", "default")
+			ownerName := helpers.OptionalEnvOrDefault("lattice_WORKSPACE_OWNER_NAME", "default")
 			_ = rd.Set("owner_name", ownerName)
 
-			ownerID := helpers.OptionalEnvOrDefault("WIRTUAL_WORKSPACE_OWNER_ID", uuid.Nil.String())
+			ownerID := helpers.OptionalEnvOrDefault("lattice_WORKSPACE_OWNER_ID", uuid.Nil.String())
 			_ = rd.Set("owner_id", ownerID)
 
-			ownerOIDCAccessToken := helpers.OptionalEnv("WIRTUAL_WORKSPACE_OWNER_OIDC_ACCESS_TOKEN")
+			ownerOIDCAccessToken := helpers.OptionalEnv("lattice_WORKSPACE_OWNER_OIDC_ACCESS_TOKEN")
 			_ = rd.Set("owner_oidc_access_token", ownerOIDCAccessToken)
 
-			name := helpers.OptionalEnvOrDefault("WIRTUAL_WORKSPACE_NAME", "default")
+			name := helpers.OptionalEnvOrDefault("lattice_WORKSPACE_NAME", "default")
 			rd.Set("name", name)
 
-			sessionToken := helpers.OptionalEnv("WIRTUAL_WORKSPACE_OWNER_SESSION_TOKEN")
+			sessionToken := helpers.OptionalEnv("lattice_WORKSPACE_OWNER_SESSION_TOKEN")
 			_ = rd.Set("owner_session_token", sessionToken)
 
-			id := helpers.OptionalEnvOrDefault("WIRTUAL_WORKSPACE_ID", uuid.NewString())
+			id := helpers.OptionalEnvOrDefault("lattice_WORKSPACE_ID", uuid.NewString())
 			rd.SetId(id)
 
-			templateID, err := helpers.RequireEnv("WIRTUAL_WORKSPACE_TEMPLATE_ID")
+			templateID, err := helpers.RequireEnv("lattice_WORKSPACE_TEMPLATE_ID")
 			if err != nil {
 				return diag.Errorf("template ID is missing: %s", err.Error())
 			}
 			_ = rd.Set("template_id", templateID)
 
-			templateName, err := helpers.RequireEnv("WIRTUAL_WORKSPACE_TEMPLATE_NAME")
+			templateName, err := helpers.RequireEnv("lattice_WORKSPACE_TEMPLATE_NAME")
 			if err != nil {
 				return diag.Errorf("template name is missing: %s", err.Error())
 			}
 			_ = rd.Set("template_name", templateName)
 
-			templateVersion, err := helpers.RequireEnv("WIRTUAL_WORKSPACE_TEMPLATE_VERSION")
+			templateVersion, err := helpers.RequireEnv("lattice_WORKSPACE_TEMPLATE_VERSION")
 			if err != nil {
 				return diag.Errorf("template version is missing: %s", err.Error())
 			}
@@ -105,12 +105,12 @@ func workspaceDataSource() *schema.Resource {
 			"access_url": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: "The access URL of the Wirtual deployment provisioning this workspace.",
+				Description: "The access URL of the Lattice deployment provisioning this workspace.",
 			},
 			"access_port": {
 				Type:        schema.TypeInt,
 				Computed:    true,
-				Description: "The access port of the Wirtual deployment provisioning this workspace.",
+				Description: "The access port of the Lattice deployment provisioning this workspace.",
 			},
 			"start_count": {
 				Type:        schema.TypeInt,
@@ -126,25 +126,25 @@ func workspaceDataSource() *schema.Resource {
 				Type:        schema.TypeString,
 				Computed:    true,
 				Description: "Username of the workspace owner.",
-				Deprecated:  "Use `wirtual_workspace_owner.name` instead.",
+				Deprecated:  "Use `lattice_workspace_owner.name` instead.",
 			},
 			"owner_email": {
 				Type:        schema.TypeString,
 				Computed:    true,
 				Description: "Email address of the workspace owner.",
-				Deprecated:  "Use `wirtual_workspace_owner.email` instead.",
+				Deprecated:  "Use `lattice_workspace_owner.email` instead.",
 			},
 			"owner_id": {
 				Type:        schema.TypeString,
 				Computed:    true,
 				Description: "UUID of the workspace owner.",
-				Deprecated:  "Use `wirtual_workspace_owner.id` instead.",
+				Deprecated:  "Use `lattice_workspace_owner.id` instead.",
 			},
 			"owner_name": {
 				Type:        schema.TypeString,
 				Computed:    true,
 				Description: "Name of the workspace owner.",
-				Deprecated:  "Use `wirtual_workspace_owner.full_name` instead.",
+				Deprecated:  "Use `lattice_workspace_owner.full_name` instead.",
 			},
 			"owner_oidc_access_token": {
 				Type:     schema.TypeString,
@@ -152,7 +152,7 @@ func workspaceDataSource() *schema.Resource {
 				Description: "A valid OpenID Connect access token of the workspace owner. " +
 					"This is only available if the workspace owner authenticated with OpenID Connect. " +
 					"If a valid token cannot be obtained, this value will be an empty string.",
-				Deprecated: "Use `wirtual_workspace_owner.oidc_access_token` instead.",
+				Deprecated: "Use `lattice_workspace_owner.oidc_access_token` instead.",
 			},
 			"owner_groups": {
 				Type: schema.TypeList,
@@ -161,7 +161,7 @@ func workspaceDataSource() *schema.Resource {
 				},
 				Computed:    true,
 				Description: "List of groups the workspace owner belongs to.",
-				Deprecated:  "Use `wirtual_workspace_owner.groups` instead.",
+				Deprecated:  "Use `lattice_workspace_owner.groups` instead.",
 			},
 			"id": {
 				Type:        schema.TypeString,
@@ -176,8 +176,8 @@ func workspaceDataSource() *schema.Resource {
 			"owner_session_token": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: "Session token for authenticating with a Wirtual deployment. It is regenerated everytime a workspace is started.",
-				Deprecated:  "Use `wirtual_workspace_owner.session_token` instead.",
+				Description: "Session token for authenticating with a Lattice deployment. It is regenerated everytime a workspace is started.",
+				Deprecated:  "Use `lattice_workspace_owner.session_token` instead.",
 			},
 			"template_id": {
 				Type:        schema.TypeString,

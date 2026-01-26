@@ -1,6 +1,6 @@
-data "wirtual_workspace" "me" {}
+data "lattice_workspace" "me" {}
 
-resource "wirtual_agent" "dev" {
+resource "lattice_agent" "dev" {
   os             = "linux"
   arch           = "amd64"
   dir            = "/workspace"
@@ -10,11 +10,11 @@ code-server --auth none --port 13337
 EOF
 }
 
-resource "wirtual_app" "code-server" {
-  agent_id     = wirtual_agent.dev.id
+resource "lattice_app" "code-server" {
+  agent_id     = lattice_agent.dev.id
   slug         = "code-server"
   display_name = "VS Code"
-  icon         = "${data.wirtual_workspace.me.access_url}/icon/code.svg"
+  icon         = "${data.lattice_workspace.me.access_url}/icon/code.svg"
   url          = "http://localhost:13337"
   share        = "owner"
   subdomain    = false
@@ -25,10 +25,10 @@ resource "wirtual_app" "code-server" {
   }
 }
 
-resource "wirtual_app" "vim" {
-  agent_id     = wirtual_agent.dev.id
+resource "lattice_app" "vim" {
+  agent_id     = lattice_agent.dev.id
   slug         = "vim"
   display_name = "Vim"
-  icon         = "${data.wirtual_workspace.me.access_url}/icon/vim.svg"
+  icon         = "${data.lattice_workspace.me.access_url}/icon/vim.svg"
   command      = "vim"
 }

@@ -9,35 +9,35 @@ terraform {
   }
 }
 
-// TODO: test wirtual_external_auth and wirtual_git_auth
-// data wirtual_external_auth "me" {}
-// data wirtual_git_auth "me" {}
-data "wirtual_provisioner" "me" {}
-data "wirtual_workspace" "me" {}
-data "wirtual_workspace_owner" "me" {}
+// TODO: test lattice_external_auth and lattice_git_auth
+// data lattice_external_auth "me" {}
+// data lattice_git_auth "me" {}
+data "lattice_provisioner" "me" {}
+data "lattice_workspace" "me" {}
+data "lattice_workspace_owner" "me" {}
 
 locals {
   # NOTE: these must all be strings in the output
   output = {
-    "provisioner.arch" : data.wirtual_provisioner.me.arch,
-    "provisioner.id" : data.wirtual_provisioner.me.id,
-    "provisioner.os" : data.wirtual_provisioner.me.os,
-    "workspace.access_port" : tostring(data.wirtual_workspace.me.access_port),
-    "workspace.access_url" : data.wirtual_workspace.me.access_url,
-    "workspace.id" : data.wirtual_workspace.me.id,
-    "workspace.name" : data.wirtual_workspace.me.name,
-    "workspace.owner" : data.wirtual_workspace.me.owner,
-    "workspace.owner_email" : data.wirtual_workspace.me.owner_email,
-    "workspace.owner_groups" : jsonencode(data.wirtual_workspace.me.owner_groups),
-    "workspace.owner_id" : data.wirtual_workspace.me.owner_id,
-    "workspace.owner_name" : data.wirtual_workspace.me.owner_name,
-    "workspace.owner_oidc_access_token" : data.wirtual_workspace.me.owner_oidc_access_token,
-    "workspace.owner_session_token" : data.wirtual_workspace.me.owner_session_token,
-    "workspace.start_count" : tostring(data.wirtual_workspace.me.start_count),
-    "workspace.template_id" : data.wirtual_workspace.me.template_id,
-    "workspace.template_name" : data.wirtual_workspace.me.template_name,
-    "workspace.template_version" : data.wirtual_workspace.me.template_version,
-    "workspace.transition" : data.wirtual_workspace.me.transition,
+    "provisioner.arch" : data.lattice_provisioner.me.arch,
+    "provisioner.id" : data.lattice_provisioner.me.id,
+    "provisioner.os" : data.lattice_provisioner.me.os,
+    "workspace.access_port" : tostring(data.lattice_workspace.me.access_port),
+    "workspace.access_url" : data.lattice_workspace.me.access_url,
+    "workspace.id" : data.lattice_workspace.me.id,
+    "workspace.name" : data.lattice_workspace.me.name,
+    "workspace.owner" : data.lattice_workspace.me.owner,
+    "workspace.owner_email" : data.lattice_workspace.me.owner_email,
+    "workspace.owner_groups" : jsonencode(data.lattice_workspace.me.owner_groups),
+    "workspace.owner_id" : data.lattice_workspace.me.owner_id,
+    "workspace.owner_name" : data.lattice_workspace.me.owner_name,
+    "workspace.owner_oidc_access_token" : data.lattice_workspace.me.owner_oidc_access_token,
+    "workspace.owner_session_token" : data.lattice_workspace.me.owner_session_token,
+    "workspace.start_count" : tostring(data.lattice_workspace.me.start_count),
+    "workspace.template_id" : data.lattice_workspace.me.template_id,
+    "workspace.template_name" : data.lattice_workspace.me.template_name,
+    "workspace.template_version" : data.lattice_workspace.me.template_version,
+    "workspace.transition" : data.lattice_workspace.me.transition,
   }
 }
 

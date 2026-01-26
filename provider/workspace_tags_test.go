@@ -8,7 +8,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	"github.com/stretchr/testify/require"
 
-	"github.com/wirtualdev/terraform-provider-wirtual/provider"
+	"github.com/latticehq/terraform-provider-lattice/provider"
 )
 
 func TestWorkspaceTags(t *testing.T) {
@@ -21,21 +21,21 @@ func TestWorkspaceTags(t *testing.T) {
 			Config: `
 			provider "wirtual" {
 			}
-			data "wirtual_parameter" "animal" {
+			data "lattice_parameter" "animal" {
 				name = "animal"
 				type = "string"
 				default = "chris"
 			}
-			data "wirtual_workspace_tags" "wt" {
+			data "lattice_workspace_tags" "wt" {
 				tags = {
 					"cat" = "james"
-					"dog" = data.wirtual_parameter.animal.value
+					"dog" = data.lattice_parameter.animal.value
 				}
 			}`,
 			Check: func(state *terraform.State) error {
 				require.Len(t, state.Modules, 1)
 				require.Len(t, state.Modules[0].Resources, 2)
-				resource := state.Modules[0].Resources["data.wirtual_workspace_tags.wt"]
+				resource := state.Modules[0].Resources["data.lattice_workspace_tags.wt"]
 				require.NotNil(t, resource)
 
 				attribs := resource.Primary.Attributes

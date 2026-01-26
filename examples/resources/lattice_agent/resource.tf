@@ -1,7 +1,7 @@
-data "wirtual_workspace" "me" {
+data "lattice_workspace" "me" {
 }
 
-resource "wirtual_agent" "dev" {
+resource "lattice_agent" "dev" {
   os   = "linux"
   arch = "amd64"
   dir  = "/workspace"
@@ -33,13 +33,13 @@ resource "wirtual_agent" "dev" {
 }
 
 resource "kubernetes_pod" "dev" {
-  count = data.wirtual_workspace.me.start_count
+  count = data.lattice_workspace.me.start_count
   spec {
     container {
-      command = ["sh", "-c", wirtual_agent.dev.init_script]
+      command = ["sh", "-c", lattice_agent.dev.init_script]
       env {
-        name  = "WIRTUAL_AGENT_TOKEN"
-        value = wirtual_agent.dev.token
+        name  = "lattice_AGENT_TOKEN"
+        value = lattice_agent.dev.token
       }
     }
   }

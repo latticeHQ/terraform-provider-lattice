@@ -13,7 +13,7 @@ func provisionerDataSource() *schema.Resource {
 	return &schema.Resource{
 		SchemaVersion: 1,
 
-		Description: "Use this data source to get information about the Wirtual provisioner.",
+		Description: "Use this data source to get information about the Lattice provisioner.",
 		ReadContext: func(c context.Context, rd *schema.ResourceData, i interface{}) diag.Diagnostics {
 			rd.SetId(uuid.NewString())
 			rd.Set("os", runtime.GOOS)

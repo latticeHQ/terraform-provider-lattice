@@ -7,9 +7,9 @@ import (
 
 // RequireEnv requires environment variable to be present.
 // The constraint can be verified only during execution of the workspace build
-// (determined with env `WIRTUAL_WORKSPACE_BUILD_ID`).
+// (determined with env `lattice_WORKSPACE_BUILD_ID`).
 func RequireEnv(name string) (string, error) {
-	if os.Getenv("WIRTUAL_WORKSPACE_BUILD_ID") == "" {
+	if os.Getenv("lattice_WORKSPACE_BUILD_ID") == "" {
 		return os.Getenv(name), nil
 	}
 

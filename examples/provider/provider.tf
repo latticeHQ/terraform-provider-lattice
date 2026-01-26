@@ -10,9 +10,9 @@ provider "google" {
   region = "us-central1"
 }
 
-data "wirtual_workspace" "me" {}
+data "lattice_workspace" "me" {}
 
-resource "wirtual_agent" "dev" {
+resource "lattice_agent" "dev" {
   arch = "amd64"
   os   = "linux"
   auth = "google-instance-identity"
@@ -22,8 +22,8 @@ data "google_compute_default_service_account" "default" {}
 
 resource "google_compute_instance" "dev" {
   zone         = "us-central1-a"
-  count        = data.wirtual_workspace.me.start_count
-  name         = "wirtual-${data.wirtual_workspace.me.owner}-${data.wirtual_workspace.me.name}"
+  count        = data.lattice_workspace.me.start_count
+  name         = "wirtual-${data.lattice_workspace.me.owner}-${data.lattice_workspace.me.name}"
   machine_type = "e2-medium"
   network_interface {
     network = "default"
@@ -40,5 +40,5 @@ resource "google_compute_instance" "dev" {
     email  = data.google_compute_default_service_account.default.email
     scopes = ["cloud-platform"]
   }
-  metadata_startup_script = wirtual_agent.dev.init_script
+  metadata_startup_script = lattice_agent.dev.init_script
 }
