@@ -70,7 +70,7 @@ type release struct {
 	TagName string `json:"tag_name"`
 }
 
-const releasesURL = "https://api.github.com/repos/latticehq/latticeRuntime/releases"
+const releasesURL = "https://api.github.com/repos/latticehq/lattice/releases"
 
 // fetchReleases fetches the releases of latticehq/lattice
 // this is done directly via JSON API to avoid pulling in the entire
