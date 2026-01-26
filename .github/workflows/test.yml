@@ -48,18 +48,18 @@ jobs:
       - name: Run integration test (mainline)
         timeout-minutes: 10
         env:
-          lattice_IMAGE: "ghcr.io/latticehq/lattice"
+          LATTICE_IMAGE: "ghcr.io/latticehq/lattice"
         run: |
-          source <(go run ./scripts/latticeversion) || true
-          lattice_VERSION="${LATTICE_MAINLINE_VERSION:-latest}" go test -v ./integration
+          source <(go run ./scripts/latticeversion)
+          LATTICE_VERSION="${LATTICE_MAINLINE_VERSION}" go test -v ./integration
 
       - name: Run integration test (stable)
         timeout-minutes: 10
         env:
-          lattice_IMAGE: "ghcr.io/latticehq/lattice"
+          LATTICE_IMAGE: "ghcr.io/latticehq/lattice"
         run: |
-          source <(go run ./scripts/latticeversion) || true
-          lattice_VERSION="${LATTICE_STABLE_VERSION:-latest}" go test -v ./integration
+          source <(go run ./scripts/latticeversion)
+          LATTICE_VERSION="${LATTICE_STABLE_VERSION}" go test -v ./integration
 
   # run acceptance tests in a matrix with Terraform core versions
   test:
