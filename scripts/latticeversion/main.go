@@ -31,7 +31,7 @@ func main() {
 	}
 
 	mainline := fmt.Sprintf("v%d.%d.%d", mainlineVer.Major(), mainlineVer.Minor(), mainlineVer.Patch())
-	_, _ = fmt.Fprintf(os.Stdout, "lattice_MAINLINE_VERSION=%q\n", mainline)
+	_, _ = fmt.Fprintf(os.Stdout, "LATTICE_MAINLINE_VERSION=%q\n", mainline)
 
 	expectedStableMinor := mainlineVer.Minor() - 1
 	if expectedStableMinor < 0 {
@@ -63,7 +63,7 @@ func main() {
 	}
 
 	stable := fmt.Sprintf("v%d.%d.%d", stableVer.Major(), stableVer.Minor(), stableVer.Patch())
-	_, _ = fmt.Fprintf(os.Stdout, "lattice_STABLE_VERSION=%q\n", stable)
+	_, _ = fmt.Fprintf(os.Stdout, "LATTICE_STABLE_VERSION=%q\n", stable)
 }
 
 type release struct {

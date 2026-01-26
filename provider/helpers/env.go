@@ -7,9 +7,9 @@ import (
 
 // RequireEnv requires environment variable to be present.
 // The constraint can be verified only during execution of the agent build
-// (determined with env `lattice_AGENT_BUILD_ID`).
+// (determined with env `LATTICE_AGENT_BUILD_ID`).
 func RequireEnv(name string) (string, error) {
-	if os.Getenv("lattice_AGENT_BUILD_ID") == "" {
+	if os.Getenv("LATTICE_AGENT_BUILD_ID") == "" {
 		return os.Getenv(name), nil
 	}
 
