@@ -30,7 +30,7 @@ resource "lattice_sidecar" "dev" {
   metadata {
     display_name = "CPU Usage"
     key          = "cpu_usage"
-    script       = "wirtual stat cpu"
+    script       = "lattice stat cpu"
     interval     = 10
     timeout      = 1
     order        = 2
@@ -38,7 +38,7 @@ resource "lattice_sidecar" "dev" {
   metadata {
     display_name = "RAM Usage"
     key          = "ram_usage"
-    script       = "wirtual stat mem"
+    script       = "lattice stat mem"
     interval     = 10
     timeout      = 1
     order        = 1

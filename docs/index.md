@@ -8,15 +8,15 @@ description: |-
 
 # Lattice Provider
 
-Terraform provider for defining Lattice [templates](https://wirtual.dev/docs/templates), which are the underlying infrastructure for Lattice [agents](https://wirtual.dev/docs/agents).
+Terraform provider for defining Lattice [templates](https://lattice.dev/docs/templates), which are the underlying infrastructure for Lattice [agents](https://lattice.dev/docs/agents).
 
 ## Example
 
 ```terraform
 terraform {
   required_providers {
-    wirtual = {
-      source = "wirtualdev/wirtual"
+    lattice = {
+      source = "latticehq/lattice"
     }
   }
 }
@@ -38,7 +38,7 @@ data "google_compute_default_service_account" "default" {}
 resource "google_compute_instance" "dev" {
   zone         = "us-central1-a"
   count        = data.lattice_agent.me.start_count
-  name         = "wirtual-${data.lattice_agent.me.owner}-${data.lattice_agent.me.name}"
+  name         = "lattice-${data.lattice_agent.me.owner}-${data.lattice_agent.me.name}"
   machine_type = "e2-medium"
   network_interface {
     network = "default"

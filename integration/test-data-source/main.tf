@@ -1,7 +1,7 @@
 terraform {
   required_providers {
-    wirtual = {
-      source = "wirtualdev/wirtual"
+    lattice = {
+      source = "latticehq/lattice"
     }
     local = {
       source = "hashicorp/local"

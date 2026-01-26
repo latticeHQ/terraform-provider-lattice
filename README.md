@@ -1,4 +1,4 @@
-# terraform-provider-wirtual
+# terraform-provider-lattice
 
 Terraform provider for [Lattice](https://github.com/latticehq/lattice).
 
@@ -23,9 +23,9 @@ to setup your local Terraform to use your local version rather than the registry
 
    ```hcl
     provider_installation {
-        # Override the wirtualdev/wirtual provider to use your local version
+        # Override the latticehq/lattice provider to use your local version
         dev_overrides {
-          "wirtualdev/wirtual" = "/path/to/terraform-provider-wirtual"
+          "latticehq/lattice" = "/path/to/terraform-provider-lattice"
         }
 
         # For all other providers, install them directly from their origin provider
@@ -40,16 +40,16 @@ to setup your local Terraform to use your local version rather than the registry
    ```hcl
    terraform {
        required_providers {
-           wirtual = {
-               source = "wirtualdev/wirtual"
+           lattice = {
+               source = "latticehq/lattice"
            }
        }
    }
    ```
    2. Run `terraform init` and observe a warning like `Warning: Provider development overrides are in effect`
-4. Run `go build -o terraform-provider-wirtual` to build the provider binary, which Terraform will try locate and execute
+4. Run `go build -o terraform-provider-lattice` to build the provider binary, which Terraform will try locate and execute
 5. All local Terraform runs will now use your local provider!
-6. _**NOTE**: we vendor in this provider into `github.com/latticehq/lattice`, so if you're testing with a local clone then you should also run `go mod edit -replace github.com/latticehq/terraform-provider-lattice=/path/to/terraform-provider-wirtual` in your clone._
+6. _**NOTE**: we vendor in this provider into `github.com/latticehq/lattice`, so if you're testing with a local clone then you should also run `go mod edit -replace github.com/latticehq/terraform-provider-lattice=/path/to/terraform-provider-lattice` in your clone._
 
 #### Terraform Acceptance Tests
 
@@ -76,4 +76,4 @@ To run these integration tests locally:
 1. Run `lattice_VERSION=main-x.y.z-devel-abcd1234 make test-integration`.
 
 > **Note:** you can specify `lattice_IMAGE` if the Lattice image you wish to test is hosted somewhere other than `docker.io/onchainengineer/lattice`.
-> For example, `lattice_IMAGE=example.com/repo/wirtual lattice_VERSION=foobar make test-integration`.
+> For example, `lattice_IMAGE=example.com/repo/lattice lattice_VERSION=foobar make test-integration`.
