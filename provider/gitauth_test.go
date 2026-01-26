@@ -17,12 +17,12 @@ func TestGitAuth(t *testing.T) {
 
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]*schema.Provider{
-			"wirtual": provider.New(),
+			"lattice": provider.New(),
 		},
 		IsUnitTest: true,
 		Steps: []resource.TestStep{{
 			Config: `
-			provider "wirtual" {
+			provider "lattice" {
 			}
 			data "lattice_git_auth" "github" {
 				id = "github"

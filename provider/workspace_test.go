@@ -27,13 +27,13 @@ func TestWorkspace(t *testing.T) {
 
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]*schema.Provider{
-			"wirtual": provider.New(),
+			"lattice": provider.New(),
 		},
 		IsUnitTest: true,
 		Steps: []resource.TestStep{{
 			Config: `
-			provider "wirtual" {
-				url = "https://example.com:8080"
+			provider "lattice" {
+				url = "https://latticeruntime.com:8080"
 			}
 			data "lattice_workspace" "me" {
 			}`,
@@ -47,7 +47,7 @@ func TestWorkspace(t *testing.T) {
 				value := attribs["transition"]
 				require.NotNil(t, value)
 				t.Log(value)
-				assert.Equal(t, "https://example.com:8080", attribs["access_url"])
+				assert.Equal(t, "https://latticeruntime.com:8080", attribs["access_url"])
 				assert.Equal(t, "8080", attribs["access_port"])
 				assert.Equal(t, "owner123", attribs["owner"])
 				assert.Equal(t, "11111111-1111-1111-1111-111111111111", attribs["owner_id"])
@@ -75,13 +75,13 @@ func TestWorkspace_UndefinedOwner(t *testing.T) {
 
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]*schema.Provider{
-			"wirtual": provider.New(),
+			"lattice": provider.New(),
 		},
 		IsUnitTest: true,
 		Steps: []resource.TestStep{{
 			Config: `
-			provider "wirtual" {
-				url = "https://example.com:8080"
+			provider "lattice" {
+				url = "https://latticeruntime.com:8080"
 			}
 			data "lattice_workspace" "me" {
 			}`,
@@ -120,13 +120,13 @@ func TestWorkspace_MissingTemplateName(t *testing.T) {
 
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]*schema.Provider{
-			"wirtual": provider.New(),
+			"lattice": provider.New(),
 		},
 		IsUnitTest: true,
 		Steps: []resource.TestStep{{
 			Config: `
-			provider "wirtual" {
-				url = "https://example.com:8080"
+			provider "lattice" {
+				url = "https://latticeruntime.com:8080"
 			}
 			data "lattice_workspace" "me" {
 			}`,

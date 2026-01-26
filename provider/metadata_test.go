@@ -16,12 +16,12 @@ func TestMetadata(t *testing.T) {
 	prov := provider.New()
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]*schema.Provider{
-			"wirtual": prov,
+			"lattice": prov,
 		},
 		IsUnitTest: true,
 		Steps: []resource.TestStep{{
 			Config: `
-				provider "wirtual" {
+				provider "lattice" {
 				}
 				resource "lattice_agent" "dev" {
 					os = "linux"
@@ -98,12 +98,12 @@ func TestMetadataDuplicateKeys(t *testing.T) {
 	prov := provider.New()
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]*schema.Provider{
-			"wirtual": prov,
+			"lattice": prov,
 		},
 		IsUnitTest: true,
 		Steps: []resource.TestStep{{
 			Config: `
-				provider "wirtual" {
+				provider "lattice" {
 				}
 				resource "lattice_agent" "dev" {
 					os = "linux"

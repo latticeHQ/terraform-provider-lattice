@@ -661,7 +661,7 @@ data "lattice_parameter" "region" {
 			t.Parallel()
 			resource.Test(t, resource.TestCase{
 				Providers: map[string]*schema.Provider{
-					"wirtual": provider.New(),
+					"lattice": provider.New(),
 				},
 				IsUnitTest: true,
 				Steps: []resource.TestStep{{

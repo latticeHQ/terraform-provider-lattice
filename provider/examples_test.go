@@ -30,7 +30,7 @@ func TestExamples(t *testing.T) {
 func resourceTest(t *testing.T, testDir string) {
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]*schema.Provider{
-			"wirtual": provider.New(),
+			"lattice": provider.New(),
 		},
 		IsUnitTest: true,
 		Steps: []resource.TestStep{{
