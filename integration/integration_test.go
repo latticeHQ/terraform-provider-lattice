@@ -39,12 +39,12 @@ func TestIntegration(t *testing.T) {
 		t.Skip("Skipping integration tests during tf acceptance tests")
 	}
 
-	latticeImg := os.Getenv("lattice_IMAGE")
+	latticeImg := os.Getenv("LATTICE_IMAGE")
 	if latticeImg == "" {
 		latticeImg = "ghcr.io/latticehq/lattice"
 	}
 
-	latticeVersion := os.Getenv("lattice_VERSION")
+	latticeVersion := os.Getenv("LATTICE_VERSION")
 	if latticeVersion == "" {
 		latticeVersion = "latest"
 	}
@@ -140,7 +140,7 @@ func TestIntegration(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			if latticeVersion != "latest" && semver.Compare(latticeVersion, tt.minVersion) < 0 {
-				t.Skipf("skipping due to lattice_VERSION %q < minVersion %q", latticeVersion, tt.minVersion)
+				t.Skipf("skipping due to LATTICE_VERSION %q < minVersion %q", latticeVersion, tt.minVersion)
 			}
 			// Given: we have an existing Lattice deployment running locally
 			// Import named template
@@ -209,10 +209,10 @@ func setup(ctx context.Context, t *testing.T, name, latticeImg, latticeVersion s
 	ctr, err := cli.ContainerCreate(ctx, &container.Config{
 		Image: refStr,
 		Env: []string{
-			"lattice_ACCESS_URL=" + localURL,           // Set explicitly to avoid creating try.lattice.app URLs.
-			"lattice_IN_MEMORY=true",                   // We don't necessarily care about real persistence here.
-			"lattice_TELEMETRY_ENABLE=false",           // Avoid creating noise.
-			"lattice_VERBOSE=TRUE",                     // Debug logging.
+			"LATTICE_ACCESS_URL=" + localURL,           // Set explicitly to avoid creating try.lattice.app URLs.
+			"LATTICE_IN_MEMORY=true",                   // We don't necessarily care about real persistence here.
+			"LATTICE_TELEMETRY_ENABLE=false",           // Avoid creating noise.
+			"LATTICE_VERBOSE=TRUE",                     // Debug logging.
 			"TF_CLI_CONFIG_FILE=/tmp/integration.tfrc", // Our custom tfrc from above.
 			"TF_LOG=DEBUG",                             // Debug logging in Terraform provider
 		},
