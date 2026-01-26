@@ -41,7 +41,7 @@ func TestIntegration(t *testing.T) {
 
 	latticeImg := os.Getenv("lattice_IMAGE")
 	if latticeImg == "" {
-		latticeImg = "docker.io/onchainengineer/lattice"
+		latticeImg = "ghcr.io/latticehq/lattice"
 	}
 
 	latticeVersion := os.Getenv("lattice_VERSION")
