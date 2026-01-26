@@ -17,7 +17,7 @@ func scriptResource() *schema.Resource {
 	return &schema.Resource{
 		SchemaVersion: 1,
 
-		Description: "Use this resource to run a script from an agent. When multiple scripts are assigned to the same agent, they are executed in parallel.",
+		Description: "Use this resource to run a script from an sidecar. When multiple scripts are assigned to the same sidecar, they are executed in parallel.",
 		CreateContext: func(_ context.Context, rd *schema.ResourceData, _ interface{}) diag.Diagnostics {
 			rd.SetId(uuid.NewString())
 			runOnStart, _ := rd.Get("run_on_start").(bool)
@@ -36,9 +36,9 @@ func scriptResource() *schema.Resource {
 		ReadContext:   schema.NoopContext,
 		DeleteContext: schema.NoopContext,
 		Schema: map[string]*schema.Schema{
-			"agent_id": {
+			"sidecar_id": {
 				Type:        schema.TypeString,
-				Description: "The `id` property of a `lattice_agent` resource to associate with.",
+				Description: "The `id` property of a `lattice_sidecar` resource to associate with.",
 				ForceNew:    true,
 				Required:    true,
 			},
@@ -60,7 +60,7 @@ func scriptResource() *schema.Resource {
 				Optional: true,
 				Description: "A URL to an icon that will display in the dashboard. View built-in " +
 					"icons [here](https://github.com/latticehq/latticeruntime/tree/main/site/static/icon). Use a " +
-					"built-in icon with `\"${data.lattice_workspace.me.access_url}/icon/<path>\"`.",
+					"built-in icon with `\"${data.lattice_agent.me.access_url}/icon/<path>\"`.",
 			},
 			"script": {
 				ForceNew:    true,
@@ -90,28 +90,28 @@ func scriptResource() *schema.Resource {
 				Default:     false,
 				ForceNew:    true,
 				Optional:    true,
-				Description: "This option determines whether users can log in immediately or must wait for the workspace to finish running this script upon startup. If not enabled, users may encounter an incomplete workspace when logging in. This option only sets the default, the user can still manually override the behavior.",
+				Description: "This option determines whether users can log in immediately or must wait for the agent to finish running this script upon startup. If not enabled, users may encounter an incomplete agent when logging in. This option only sets the default, the user can still manually override the behavior.",
 			},
 			"run_on_start": {
 				Type:        schema.TypeBool,
 				Default:     false,
 				ForceNew:    true,
 				Optional:    true,
-				Description: "This option defines whether or not the script should run when the agent starts. The script should exit when it is done to signal that the agent is ready.",
+				Description: "This option defines whether or not the script should run when the sidecar starts. The script should exit when it is done to signal that the sidecar is ready.",
 			},
 			"run_on_stop": {
 				Type:        schema.TypeBool,
 				Default:     false,
 				ForceNew:    true,
 				Optional:    true,
-				Description: "This option defines whether or not the script should run when the agent stops. The script should exit when it is done to signal that the workspace can be stopped.",
+				Description: "This option defines whether or not the script should run when the sidecar stops. The script should exit when it is done to signal that the agent can be stopped.",
 			},
 			"timeout": {
 				Type:         schema.TypeInt,
 				Default:      0,
 				ForceNew:     true,
 				Optional:     true,
-				Description:  "Time in seconds that the script is allowed to run. If the script does not complete within this time, the script is terminated and the agent lifecycle status is marked as timed out. A value of zero (default) means no timeout.",
+				Description:  "Time in seconds that the script is allowed to run. If the script does not complete within this time, the script is terminated and the sidecar lifecycle status is marked as timed out. A value of zero (default) means no timeout.",
 				ValidateFunc: validation.IntAtLeast(1),
 			},
 		},

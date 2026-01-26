@@ -11,7 +11,7 @@ import (
 	"github.com/latticehq/terraform-provider-lattice/provider"
 )
 
-func TestWorkspaceTags(t *testing.T) {
+func TestAgentTags(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		Providers: map[string]*schema.Provider{
 			"lattice": provider.New(),
@@ -26,7 +26,7 @@ func TestWorkspaceTags(t *testing.T) {
 				type = "string"
 				default = "chris"
 			}
-			data "lattice_workspace_tags" "wt" {
+			data "lattice_agent_tags" "wt" {
 				tags = {
 					"cat" = "james"
 					"dog" = data.lattice_parameter.animal.value
@@ -35,7 +35,7 @@ func TestWorkspaceTags(t *testing.T) {
 			Check: func(state *terraform.State) error {
 				require.Len(t, state.Modules, 1)
 				require.Len(t, state.Modules[0].Resources, 2)
-				resource := state.Modules[0].Resources["data.lattice_workspace_tags.wt"]
+				resource := state.Modules[0].Resources["data.lattice_agent_tags.wt"]
 				require.NotNil(t, resource)
 
 				attribs := resource.Primary.Attributes

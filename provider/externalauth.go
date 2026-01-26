@@ -15,7 +15,7 @@ func externalAuthDataSource() *schema.Resource {
 	return &schema.Resource{
 		SchemaVersion: 1,
 
-		Description: "Use this data source to require users to authenticate with an external service prior to workspace creation. This can be used to [pre-authenticate external services](https://wirtual.dev/docs/admin/external-auth) in a workspace. (e.g. Google Cloud, Github, Docker, etc.)",
+		Description: "Use this data source to require users to authenticate with an external service prior to agent creation. This can be used to [pre-authenticate external services](https://wirtual.dev/docs/admin/external-auth) in a agent. (e.g. Google Cloud, Github, Docker, etc.)",
 		ReadContext: func(ctx context.Context, rd *schema.ResourceData, i interface{}) diag.Diagnostics {
 			id, ok := rd.Get("id").(string)
 			if !ok || id == "" {
@@ -40,7 +40,7 @@ func externalAuthDataSource() *schema.Resource {
 			},
 			"optional": {
 				Type:        schema.TypeBool,
-				Description: "Authenticating with the external auth provider is not required, and can be skipped by users when creating or updating workspaces",
+				Description: "Authenticating with the external auth provider is not required, and can be skipped by users when creating or updating agents",
 				Optional:    true,
 			},
 		},

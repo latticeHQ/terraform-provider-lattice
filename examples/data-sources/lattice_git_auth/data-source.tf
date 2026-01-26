@@ -5,7 +5,7 @@ data "lattice_git_auth" "github" {
   id = "github"
 }
 
-resource "lattice_agent" "dev" {
+resource "lattice_sidecar" "dev" {
   os   = "linux"
   arch = "amd64"
   dir  = "~/wirtual"

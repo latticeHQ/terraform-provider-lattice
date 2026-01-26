@@ -1,19 +1,19 @@
-data "lattice_workspace" "me" {}
+data "lattice_agent" "me" {}
 
-resource "lattice_agent" "dev" {
+resource "lattice_sidecar" "dev" {
   os   = "linux"
   arch = "amd64"
-  dir  = "/workspace"
+  dir  = "/agent"
 }
 
 resource "lattice_env" "welcome_message" {
-  agent_id = lattice_agent.dev.id
-  name     = "WELCOME_MESSAGE"
-  value    = "Welcome to your Lattice workspace!"
+  sidecar_id = lattice_sidecar.dev.id
+  name       = "WELCOME_MESSAGE"
+  value      = "Welcome to your Lattice agent!"
 }
 
 resource "lattice_env" "internal_api_url" {
-  agent_id = lattice_agent.dev.id
-  name     = "INTERNAL_API_URL"
-  value    = "https://api.internal.company.com/v1"
+  sidecar_id = lattice_sidecar.dev.id
+  name       = "INTERNAL_API_URL"
+  value      = "https://api.internal.company.com/v1"
 }

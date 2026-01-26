@@ -14,7 +14,7 @@ func envResource() *schema.Resource {
 	return &schema.Resource{
 		SchemaVersion: 1,
 
-		Description: "Use this resource to set an environment variable in a workspace. Note that this resource cannot be used to overwrite existing environment variables set on the `lattice_agent` resource.",
+		Description: "Use this resource to set an environment variable in a agent. Note that this resource cannot be used to overwrite existing environment variables set on the `lattice_sidecar` resource.",
 		CreateContext: func(_ context.Context, rd *schema.ResourceData, _ interface{}) diag.Diagnostics {
 			rd.SetId(uuid.NewString())
 
@@ -23,9 +23,9 @@ func envResource() *schema.Resource {
 		ReadContext:   schema.NoopContext,
 		DeleteContext: schema.NoopContext,
 		Schema: map[string]*schema.Schema{
-			"agent_id": {
+			"sidecar_id": {
 				Type:        schema.TypeString,
-				Description: "The `id` property of a `lattice_agent` resource to associate with.",
+				Description: "The `id` property of a `lattice_sidecar` resource to associate with.",
 				ForceNew:    true,
 				Required:    true,
 			},

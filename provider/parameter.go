@@ -65,7 +65,7 @@ func parameterDataSource() *schema.Resource {
 	return &schema.Resource{
 		SchemaVersion: 1,
 
-		Description: "Use this data source to configure editable options for workspaces.",
+		Description: "Use this data source to configure editable options for agents.",
 		ReadContext: func(ctx context.Context, rd *schema.ResourceData, i interface{}) diag.Diagnostics {
 			rd.SetId(uuid.NewString())
 
@@ -210,7 +210,7 @@ func parameterDataSource() *schema.Resource {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     false,
-				Description: "Whether this value can be changed after workspace creation. This can be destructive for values like region, so use with caution!",
+				Description: "Whether this value can be changed after agent creation. This can be destructive for values like region, so use with caution!",
 			},
 			"default": {
 				Type:        schema.TypeString,
@@ -221,7 +221,7 @@ func parameterDataSource() *schema.Resource {
 				Type: schema.TypeString,
 				Description: "A URL to an icon that will display in the dashboard. View built-in " +
 					"icons [here](https://github.com/latticehq/latticeruntime/tree/main/site/static/icon). Use a " +
-					"built-in icon with `\"${data.lattice_workspace.me.access_url}/icon/<path>\"`.",
+					"built-in icon with `\"${data.lattice_agent.me.access_url}/icon/<path>\"`.",
 				ForceNew: true,
 				Optional: true,
 				ValidateFunc: func(i interface{}, s string) ([]string, []error) {
@@ -262,7 +262,7 @@ func parameterDataSource() *schema.Resource {
 							Type: schema.TypeString,
 							Description: "A URL to an icon that will display in the dashboard. View built-in " +
 								"icons [here](https://github.com/latticehq/latticeruntime/tree/main/site/static/icon). Use a " +
-								"built-in icon with `\"${data.lattice_workspace.me.access_url}/icon/<path>\"`.",
+								"built-in icon with `\"${data.lattice_agent.me.access_url}/icon/<path>\"`.",
 							ForceNew: true,
 							Optional: true,
 							ValidateFunc: func(i interface{}, s string) ([]string, []error) {
@@ -336,7 +336,7 @@ func parameterDataSource() *schema.Resource {
 				Type:        schema.TypeBool,
 				Default:     false,
 				Optional:    true,
-				Description: "The value of an ephemeral parameter will not be preserved between consecutive workspace builds.",
+				Description: "The value of an ephemeral parameter will not be preserved between consecutive agent builds.",
 			},
 		},
 	}

@@ -1,8 +1,8 @@
-data "lattice_workspace" "me" {
+data "lattice_agent" "me" {
 }
 
 resource "kubernetes_pod" "dev" {
-  count = data.lattice_workspace.me.start_count
+  count = data.lattice_agent.me.start_count
   metadata {
     name      = "k8s_example"
     namespace = "example"
@@ -18,7 +18,7 @@ resource "tls_private_key" "example_key_pair" {
 }
 
 resource "lattice_metadata" "pod_info" {
-  count       = data.lattice_workspace.me.start_count
+  count       = data.lattice_agent.me.start_count
   resource_id = kubernetes_pod.dev[0].id
   # (Enterprise-only) this resource consumes 200 quota units
   daily_cost = 200

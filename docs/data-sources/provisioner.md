@@ -17,12 +17,12 @@ provider "lattice" {}
 
 data "lattice_provisioner" "dev" {}
 
-data "lattice_workspace" "dev" {}
+data "lattice_agent" "dev" {}
 
-resource "lattice_agent" "main" {
+resource "lattice_sidecar" "main" {
   arch = data.lattice_provisioner.dev.arch
   os   = data.lattice_provisioner.dev.os
-  dir  = "/workspace"
+  dir  = "/agent"
   display_apps {
     vscode          = true
     vscode_insiders = false

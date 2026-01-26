@@ -11,47 +11,47 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-func workspaceOwnerDataSource() *schema.Resource {
+func agentOwnerDataSource() *schema.Resource {
 	return &schema.Resource{
-		Description: "Use this data source to fetch information about the workspace owner.",
+		Description: "Use this data source to fetch information about the agent owner.",
 		ReadContext: func(ctx context.Context, rd *schema.ResourceData, i interface{}) diag.Diagnostics {
-			if idStr := os.Getenv("lattice_WORKSPACE_OWNER_ID"); idStr != "" {
+			if idStr := os.Getenv("lattice_AGENT_OWNER_ID"); idStr != "" {
 				rd.SetId(idStr)
 			} else {
 				rd.SetId(uuid.NewString())
 			}
 
-			if username := os.Getenv("lattice_WORKSPACE_OWNER"); username != "" {
+			if username := os.Getenv("lattice_AGENT_OWNER"); username != "" {
 				_ = rd.Set("name", username)
 			} else {
 				_ = rd.Set("name", "default")
 			}
 
-			if fullname := os.Getenv("lattice_WORKSPACE_OWNER_NAME"); fullname != "" {
+			if fullname := os.Getenv("lattice_AGENT_OWNER_NAME"); fullname != "" {
 				_ = rd.Set("full_name", fullname)
 			} else { // compat: field can be blank, fill in default
 				_ = rd.Set("full_name", "default")
 			}
 
-			if email := os.Getenv("lattice_WORKSPACE_OWNER_EMAIL"); email != "" {
+			if email := os.Getenv("lattice_AGENT_OWNER_EMAIL"); email != "" {
 				_ = rd.Set("email", email)
 			} else {
 				_ = rd.Set("email", "default@example.com")
 			}
 
-			_ = rd.Set("ssh_public_key", os.Getenv("lattice_WORKSPACE_OWNER_SSH_PUBLIC_KEY"))
-			_ = rd.Set("ssh_private_key", os.Getenv("lattice_WORKSPACE_OWNER_SSH_PRIVATE_KEY"))
+			_ = rd.Set("ssh_public_key", os.Getenv("lattice_AGENT_OWNER_SSH_PUBLIC_KEY"))
+			_ = rd.Set("ssh_private_key", os.Getenv("lattice_AGENT_OWNER_SSH_PRIVATE_KEY"))
 
 			var groups []string
-			if groupsRaw, ok := os.LookupEnv("lattice_WORKSPACE_OWNER_GROUPS"); ok {
+			if groupsRaw, ok := os.LookupEnv("lattice_AGENT_OWNER_GROUPS"); ok {
 				if err := json.NewDecoder(strings.NewReader(groupsRaw)).Decode(&groups); err != nil {
 					return diag.Errorf("invalid user groups: %s", err.Error())
 				}
 			}
 			_ = rd.Set("groups", groups)
 
-			_ = rd.Set("session_token", os.Getenv("lattice_WORKSPACE_OWNER_SESSION_TOKEN"))
-			_ = rd.Set("oidc_access_token", os.Getenv("lattice_WORKSPACE_OWNER_OIDC_ACCESS_TOKEN"))
+			_ = rd.Set("session_token", os.Getenv("lattice_AGENT_OWNER_SESSION_TOKEN"))
+			_ = rd.Set("oidc_access_token", os.Getenv("lattice_AGENT_OWNER_OIDC_ACCESS_TOKEN"))
 
 			return nil
 		},
@@ -59,7 +59,7 @@ func workspaceOwnerDataSource() *schema.Resource {
 			"id": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: "The UUID of the workspace owner.",
+				Description: "The UUID of the agent owner.",
 			},
 			"name": {
 				Type:        schema.TypeString,
@@ -98,13 +98,13 @@ func workspaceOwnerDataSource() *schema.Resource {
 			"session_token": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: "Session token for authenticating with a Lattice deployment. It is regenerated every time a workspace is started.",
+				Description: "Session token for authenticating with a Lattice deployment. It is regenerated every time a agent is started.",
 			},
 			"oidc_access_token": {
 				Type:     schema.TypeString,
 				Computed: true,
-				Description: "A valid OpenID Connect access token of the workspace owner. " +
-					"This is only available if the workspace owner authenticated with OpenID Connect. " +
+				Description: "A valid OpenID Connect access token of the agent owner. " +
+					"This is only available if the agent owner authenticated with OpenID Connect. " +
 					"If a valid token cannot be obtained, this value will be an empty string.",
 			},
 		},

@@ -28,7 +28,7 @@ import (
 // TestIntegration performs an integration test against an ephemeral Lattice deployment.
 // For each directory containing a `main.tf` under `/integration`, performs the following:
 //   - Pushes the template to a temporary Lattice instance running in Docker
-//   - Creates a workspace from the template. Templates here are expected to create a
+//   - Creates a agent from the template. Templates here are expected to create a
 //     local_file resource containing JSON that can be marshalled as a map[string]string
 //   - Fetches the content of the JSON file created and compares it against the expected output.
 //
@@ -71,59 +71,59 @@ func TestIntegration(t *testing.T) {
 			name:       "test-data-source",
 			minVersion: "v0.0.0",
 			expectedOutput: map[string]string{
-				"provisioner.arch":                  runtime.GOARCH,
-				"provisioner.id":                    `[a-zA-Z0-9-]+`,
-				"provisioner.os":                    runtime.GOOS,
-				"workspace.access_port":             `\d+`,
-				"workspace.access_url":              `https?://\D+:\d+`,
-				"workspace.id":                      `[a-zA-z0-9-]+`,
-				"workspace.name":                    `test-data-source`,
-				"workspace.owner":                   `testing`,
-				"workspace.owner_email":             `testing@wirtual\.com`,
-				"workspace.owner_groups":            `\[(\"Everyone\")?\]`,
-				"workspace.owner_id":                `[a-zA-Z0-9]+`,
-				"workspace.owner_name":              `default`,
-				"workspace.owner_oidc_access_token": `^$`, // TODO: need a test OIDC integration
-				"workspace.owner_session_token":     `[a-zA-Z0-9-]+`,
-				"workspace.start_count":             `1`,
-				"workspace.template_id":             `[a-zA-Z0-9-]+`,
-				"workspace.template_name":           `test-data-source`,
-				"workspace.template_version":        `.+`,
-				"workspace.transition":              `start`,
+				"provisioner.arch":              runtime.GOARCH,
+				"provisioner.id":                `[a-zA-Z0-9-]+`,
+				"provisioner.os":                runtime.GOOS,
+				"agent.access_port":             `\d+`,
+				"agent.access_url":              `https?://\D+:\d+`,
+				"agent.id":                      `[a-zA-z0-9-]+`,
+				"agent.name":                    `test-data-source`,
+				"agent.owner":                   `testing`,
+				"agent.owner_email":             `testing@wirtual\.com`,
+				"agent.owner_groups":            `\[(\"Everyone\")?\]`,
+				"agent.owner_id":                `[a-zA-Z0-9]+`,
+				"agent.owner_name":              `default`,
+				"agent.owner_oidc_access_token": `^$`, // TODO: need a test OIDC integration
+				"agent.owner_session_token":     `[a-zA-Z0-9-]+`,
+				"agent.start_count":             `1`,
+				"agent.template_id":             `[a-zA-Z0-9-]+`,
+				"agent.template_name":           `test-data-source`,
+				"agent.template_version":        `.+`,
+				"agent.transition":              `start`,
 			},
 		},
 		{
-			name:       "workspace-owner",
+			name:       "agent-owner",
 			minVersion: "v2.12.0",
 			expectedOutput: map[string]string{
-				"provisioner.arch":                  runtime.GOARCH,
-				"provisioner.id":                    `[a-zA-Z0-9-]+`,
-				"provisioner.os":                    runtime.GOOS,
-				"workspace.access_port":             `\d+`,
-				"workspace.access_url":              `https?://\D+:\d+`,
-				"workspace.id":                      `[a-zA-z0-9-]+`,
-				"workspace.name":                    ``,
-				"workspace.owner":                   `testing`,
-				"workspace.owner_email":             `testing@wirtual\.com`,
-				"workspace.owner_groups":            `\[(\"Everyone\")?\]`,
-				"workspace.owner_id":                `[a-zA-Z0-9]+`,
-				"workspace.owner_name":              `default`,
-				"workspace.owner_oidc_access_token": `^$`, // TODO: need a test OIDC integration
-				"workspace.owner_session_token":     `[a-zA-Z0-9-]+`,
-				"workspace.start_count":             `1`,
-				"workspace.template_id":             `[a-zA-Z0-9-]+`,
-				"workspace.template_name":           `workspace-owner`,
-				"workspace.template_version":        `.+`,
-				"workspace.transition":              `start`,
-				"workspace_owner.email":             `testing@wirtual\.com`,
-				"workspace_owner.full_name":         `default`,
-				"workspace_owner.groups":            `\[(\"Everyone\")?\]`,
-				"workspace_owner.id":                `[a-zA-Z0-9-]+`,
-				"workspace_owner.name":              `testing`,
-				"workspace_owner.oidc_access_token": `^$`, // TODO: test OIDC integration
-				"workspace_owner.session_token":     `.+`,
-				"workspace_owner.ssh_private_key":   `(?s)^.+?BEGIN OPENSSH PRIVATE KEY.+?END OPENSSH PRIVATE KEY.+?$`,
-				"workspace_owner.ssh_public_key":    `(?s)^ssh-ed25519.+$`,
+				"provisioner.arch":              runtime.GOARCH,
+				"provisioner.id":                `[a-zA-Z0-9-]+`,
+				"provisioner.os":                runtime.GOOS,
+				"agent.access_port":             `\d+`,
+				"agent.access_url":              `https?://\D+:\d+`,
+				"agent.id":                      `[a-zA-z0-9-]+`,
+				"agent.name":                    ``,
+				"agent.owner":                   `testing`,
+				"agent.owner_email":             `testing@wirtual\.com`,
+				"agent.owner_groups":            `\[(\"Everyone\")?\]`,
+				"agent.owner_id":                `[a-zA-Z0-9]+`,
+				"agent.owner_name":              `default`,
+				"agent.owner_oidc_access_token": `^$`, // TODO: need a test OIDC integration
+				"agent.owner_session_token":     `[a-zA-Z0-9-]+`,
+				"agent.start_count":             `1`,
+				"agent.template_id":             `[a-zA-Z0-9-]+`,
+				"agent.template_name":           `agent-owner`,
+				"agent.template_version":        `.+`,
+				"agent.transition":              `start`,
+				"agent_owner.email":             `testing@wirtual\.com`,
+				"agent_owner.full_name":         `default`,
+				"agent_owner.groups":            `\[(\"Everyone\")?\]`,
+				"agent_owner.id":                `[a-zA-Z0-9-]+`,
+				"agent_owner.name":              `testing`,
+				"agent_owner.oidc_access_token": `^$`, // TODO: test OIDC integration
+				"agent_owner.session_token":     `.+`,
+				"agent_owner.ssh_private_key":   `(?s)^.+?BEGIN OPENSSH PRIVATE KEY.+?END OPENSSH PRIVATE KEY.+?$`,
+				"agent_owner.ssh_public_key":    `(?s)^ssh-ed25519.+$`,
 			},
 		},
 		{
@@ -154,7 +154,7 @@ func TestIntegration(t *testing.T) {
 			}
 			_, rc := execContainer(ctx, t, ctrID, fmt.Sprintf(`wirtual templates %s %s --directory /src/integration/%s --var output_path=/tmp/%s.json --yes`, templateCreateCmd, tt.name, tt.name, tt.name))
 			require.Equal(t, 0, rc)
-			// Create a workspace
+			// Create a agent
 			_, rc = execContainer(ctx, t, ctrID, fmt.Sprintf(`wirtual create %s -t %s --yes`, tt.name, tt.name))
 			require.Equal(t, 0, rc)
 			// Fetch the output created by the template

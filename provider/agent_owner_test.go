@@ -24,17 +24,17 @@ const (
 	-----END OPENSSH PRIVATE KEY-----`
 )
 
-func TestWorkspaceOwnerDatasource(t *testing.T) {
+func TestAgentOwnerDatasource(t *testing.T) {
 	t.Run("OK", func(t *testing.T) {
-		t.Setenv("lattice_WORKSPACE_OWNER_ID", "11111111-1111-1111-1111-111111111111")
-		t.Setenv("lattice_WORKSPACE_OWNER", "owner123")
-		t.Setenv("lattice_WORKSPACE_OWNER_NAME", "Mr Owner")
-		t.Setenv("lattice_WORKSPACE_OWNER_EMAIL", "owner123@example.com")
-		t.Setenv("lattice_WORKSPACE_OWNER_SSH_PUBLIC_KEY", testSSHEd25519PublicKey)
-		t.Setenv("lattice_WORKSPACE_OWNER_SSH_PRIVATE_KEY", testSSHEd25519PrivateKey)
-		t.Setenv("lattice_WORKSPACE_OWNER_GROUPS", `["group1", "group2"]`)
-		t.Setenv("lattice_WORKSPACE_OWNER_SESSION_TOKEN", `supersecret`)
-		t.Setenv("lattice_WORKSPACE_OWNER_OIDC_ACCESS_TOKEN", `alsosupersecret`)
+		t.Setenv("lattice_AGENT_OWNER_ID", "11111111-1111-1111-1111-111111111111")
+		t.Setenv("lattice_AGENT_OWNER", "owner123")
+		t.Setenv("lattice_AGENT_OWNER_NAME", "Mr Owner")
+		t.Setenv("lattice_AGENT_OWNER_EMAIL", "owner123@example.com")
+		t.Setenv("lattice_AGENT_OWNER_SSH_PUBLIC_KEY", testSSHEd25519PublicKey)
+		t.Setenv("lattice_AGENT_OWNER_SSH_PRIVATE_KEY", testSSHEd25519PrivateKey)
+		t.Setenv("lattice_AGENT_OWNER_GROUPS", `["group1", "group2"]`)
+		t.Setenv("lattice_AGENT_OWNER_SESSION_TOKEN", `supersecret`)
+		t.Setenv("lattice_AGENT_OWNER_OIDC_ACCESS_TOKEN", `alsosupersecret`)
 
 		resource.Test(t, resource.TestCase{
 			Providers: map[string]*schema.Provider{
@@ -44,12 +44,12 @@ func TestWorkspaceOwnerDatasource(t *testing.T) {
 			Steps: []resource.TestStep{{
 				Config: `
 			provider "lattice" {}
-			data "lattice_workspace_owner" "me" {}
+			data "lattice_agent_owner" "me" {}
 			`,
 				Check: func(s *terraform.State) error {
 					require.Len(t, s.Modules, 1)
 					require.Len(t, s.Modules[0].Resources, 1)
-					resource := s.Modules[0].Resources["data.lattice_workspace_owner.me"]
+					resource := s.Modules[0].Resources["data.lattice_agent_owner.me"]
 					require.NotNil(t, resource)
 
 					attrs := resource.Primary.Attributes
@@ -71,15 +71,15 @@ func TestWorkspaceOwnerDatasource(t *testing.T) {
 
 	t.Run("Defaults", func(t *testing.T) {
 		for _, v := range []string{
-			"lattice_WORKSPACE_OWNER",
-			"lattice_WORKSPACE_OWNER_ID",
-			"lattice_WORKSPACE_OWNER_EMAIL",
-			"lattice_WORKSPACE_OWNER_NAME",
-			"lattice_WORKSPACE_OWNER_SESSION_TOKEN",
-			"lattice_WORKSPACE_OWNER_GROUPS",
-			"lattice_WORKSPACE_OWNER_OIDC_ACCESS_TOKEN",
-			"lattice_WORKSPACE_OWNER_SSH_PUBLIC_KEY",
-			"lattice_WORKSPACE_OWNER_SSH_PRIVATE_KEY",
+			"lattice_AGENT_OWNER",
+			"lattice_AGENT_OWNER_ID",
+			"lattice_AGENT_OWNER_EMAIL",
+			"lattice_AGENT_OWNER_NAME",
+			"lattice_AGENT_OWNER_SESSION_TOKEN",
+			"lattice_AGENT_OWNER_GROUPS",
+			"lattice_AGENT_OWNER_OIDC_ACCESS_TOKEN",
+			"lattice_AGENT_OWNER_SSH_PUBLIC_KEY",
+			"lattice_AGENT_OWNER_SSH_PRIVATE_KEY",
 		} { // https://github.com/golang/go/issues/52817
 			t.Setenv(v, "")
 			os.Unsetenv(v)
@@ -93,12 +93,12 @@ func TestWorkspaceOwnerDatasource(t *testing.T) {
 			Steps: []resource.TestStep{{
 				Config: `
 			provider "lattice" {}
-			data "lattice_workspace_owner" "me" {}
+			data "lattice_agent_owner" "me" {}
 			`,
 				Check: func(s *terraform.State) error {
 					require.Len(t, s.Modules, 1)
 					require.Len(t, s.Modules[0].Resources, 1)
-					resource := s.Modules[0].Resources["data.lattice_workspace_owner.me"]
+					resource := s.Modules[0].Resources["data.lattice_agent_owner.me"]
 					require.NotNil(t, resource)
 
 					attrs := resource.Primary.Attributes

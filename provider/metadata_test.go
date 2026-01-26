@@ -23,12 +23,12 @@ func TestMetadata(t *testing.T) {
 			Config: `
 				provider "lattice" {
 				}
-				resource "lattice_agent" "dev" {
+				resource "lattice_sidecar" "dev" {
 					os = "linux"
 					arch = "amd64"
 				}
-				resource "lattice_metadata" "agent" {
-					resource_id = lattice_agent.dev.id
+				resource "lattice_metadata" "sidecar" {
+					resource_id = lattice_sidecar.dev.id
 					hide = true
 					icon = "/icon/storage.svg"
 					daily_cost = 200
@@ -57,13 +57,13 @@ func TestMetadata(t *testing.T) {
 			Check: func(state *terraform.State) error {
 				require.Len(t, state.Modules, 1)
 				require.Len(t, state.Modules[0].Resources, 2)
-				agent := state.Modules[0].Resources["lattice_agent.dev"]
-				require.NotNil(t, agent)
-				metadata := state.Modules[0].Resources["lattice_metadata.agent"]
+				sidecar := state.Modules[0].Resources["lattice_sidecar.dev"]
+				require.NotNil(t, sidecar)
+				metadata := state.Modules[0].Resources["lattice_metadata.sidecar"]
 				require.NotNil(t, metadata)
 				t.Logf("metadata attributes: %#v", metadata.Primary.Attributes)
 				for key, expected := range map[string]string{
-					"resource_id":      agent.Primary.Attributes["id"],
+					"resource_id":      sidecar.Primary.Attributes["id"],
 					"hide":             "true",
 					"icon":             "/icon/storage.svg",
 					"daily_cost":       "200",
@@ -105,12 +105,12 @@ func TestMetadataDuplicateKeys(t *testing.T) {
 			Config: `
 				provider "lattice" {
 				}
-				resource "lattice_agent" "dev" {
+				resource "lattice_sidecar" "dev" {
 					os = "linux"
 					arch = "amd64"
 				}
-				resource "lattice_metadata" "agent" {
-					resource_id = lattice_agent.dev.id
+				resource "lattice_metadata" "sidecar" {
+					resource_id = lattice_sidecar.dev.id
 					hide = true
 					icon = "/icon/storage.svg"
 					item {

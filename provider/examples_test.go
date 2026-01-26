@@ -16,7 +16,7 @@ func TestExamples(t *testing.T) {
 
 	for _, testDir := range []string{
 		"lattice_parameter",
-		"lattice_workspace_tags",
+		"lattice_agent_tags",
 	} {
 		t.Run(testDir, func(t *testing.T) {
 			testDir := testDir

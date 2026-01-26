@@ -3,34 +3,34 @@
 page_title: "lattice_env Resource - terraform-provider-lattice"
 subcategory: ""
 description: |-
-  Use this resource to set an environment variable in a workspace. Note that this resource cannot be used to overwrite existing environment variables set on the lattice_agent resource.
+  Use this resource to set an environment variable in a agent. Note that this resource cannot be used to overwrite existing environment variables set on the lattice_sidecar resource.
 ---
 
 # lattice_env (Resource)
 
-Use this resource to set an environment variable in a workspace. Note that this resource cannot be used to overwrite existing environment variables set on the `lattice_agent` resource.
+Use this resource to set an environment variable in a agent. Note that this resource cannot be used to overwrite existing environment variables set on the `lattice_sidecar` resource.
 
 ## Example Usage
 
 ```terraform
-data "lattice_workspace" "me" {}
+data "lattice_agent" "me" {}
 
-resource "lattice_agent" "dev" {
+resource "lattice_sidecar" "dev" {
   os   = "linux"
   arch = "amd64"
-  dir  = "/workspace"
+  dir  = "/agent"
 }
 
 resource "lattice_env" "welcome_message" {
-  agent_id = lattice_agent.dev.id
-  name     = "WELCOME_MESSAGE"
-  value    = "Welcome to your Lattice workspace!"
+  sidecar_id = lattice_sidecar.dev.id
+  name       = "WELCOME_MESSAGE"
+  value      = "Welcome to your Lattice agent!"
 }
 
 resource "lattice_env" "internal_api_url" {
-  agent_id = lattice_agent.dev.id
-  name     = "INTERNAL_API_URL"
-  value    = "https://api.internal.company.com/v1"
+  sidecar_id = lattice_sidecar.dev.id
+  name       = "INTERNAL_API_URL"
+  value      = "https://api.internal.company.com/v1"
 }
 ```
 
@@ -39,8 +39,8 @@ resource "lattice_env" "internal_api_url" {
 
 ### Required
 
-- `agent_id` (String) The `id` property of a `lattice_agent` resource to associate with.
 - `name` (String) The name of the environment variable.
+- `sidecar_id` (String) The `id` property of a `lattice_sidecar` resource to associate with.
 
 ### Optional
 

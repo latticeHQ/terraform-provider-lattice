@@ -1,13 +1,13 @@
-data "lattice_workspace" "me" {}
+data "lattice_agent" "me" {}
 
-resource "lattice_agent" "dev" {
+resource "lattice_sidecar" "dev" {
   os   = "linux"
   arch = "amd64"
-  dir  = "/workspace"
+  dir  = "/agent"
 }
 
 resource "lattice_script" "dotfiles" {
-  agent_id     = lattice_agent.dev.agent_id
+  sidecar_id   = lattice_sidecar.dev.sidecar_id
   display_name = "Dotfiles"
   icon         = "/icon/dotfiles.svg"
   run_on_start = true
@@ -18,7 +18,7 @@ resource "lattice_script" "dotfiles" {
 }
 
 resource "lattice_script" "code-server" {
-  agent_id           = lattice_agent.dev.agent_id
+  sidecar_id         = lattice_sidecar.dev.sidecar_id
   display_name       = "code-server"
   icon               = "/icon/code.svg"
   run_on_start       = true
@@ -29,7 +29,7 @@ resource "lattice_script" "code-server" {
 }
 
 resource "lattice_script" "nightly_sleep_reminder" {
-  agent_id     = lattice_agent.dev.agent_id
+  sidecar_id   = lattice_sidecar.dev.sidecar_id
   display_name = "Nightly update"
   icon         = "/icon/database.svg"
   cron         = "0 22 * * *"
@@ -41,7 +41,7 @@ resource "lattice_script" "nightly_sleep_reminder" {
 }
 
 resource "lattice_script" "shutdown" {
-  agent_id     = lattice_agent.dev.id
+  sidecar_id   = lattice_sidecar.dev.id
   display_name = "Stop daemon server"
   run_on_stop  = true
   icon         = "/icons/memory.svg"

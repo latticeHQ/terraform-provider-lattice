@@ -32,8 +32,8 @@ func TestProviderEmpty(t *testing.T) {
 			Config: `
 			provider "lattice" {}
 			data "lattice_provisioner" "me" {}
-			data "lattice_workspace" "me" {}
-			data "lattice_workspace_owner" "me" {}
+			data "lattice_agent" "me" {}
+			data "lattice_agent_owner" "me" {}
 			data "lattice_external_auth" "git" {
 				id = "git"
 			}

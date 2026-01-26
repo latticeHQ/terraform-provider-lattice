@@ -2,7 +2,7 @@ provider "lattice" {}
 
 data "lattice_parameter" "example" {
   name        = "Region"
-  description = "Specify a region to place your workspace."
+  description = "Specify a region to place your agent."
   mutable     = false
   type        = "string"
   default     = "asia-central1-a"

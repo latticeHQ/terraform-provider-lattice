@@ -25,7 +25,7 @@ func TestEnv(t *testing.T) {
 			provider "lattice" {
 			}
 			resource "lattice_env" "example" {
-				agent_id = "king"
+				sidecar_id = "king"
 				name = "MESSAGE"
 				value = "Believe in yourself and there will come a day when others will have no choice but to believe with you."
 			}
@@ -37,9 +37,9 @@ func TestEnv(t *testing.T) {
 				require.NotNil(t, script)
 				t.Logf("script attributes: %#v", script.Primary.Attributes)
 				for key, expected := range map[string]string{
-					"agent_id": "king",
-					"name":     "MESSAGE",
-					"value":    "Believe in yourself and there will come a day when others will have no choice but to believe with you.",
+					"sidecar_id": "king",
+					"name":       "MESSAGE",
+					"value":      "Believe in yourself and there will come a day when others will have no choice but to believe with you.",
 				} {
 					require.Equal(t, expected, script.Primary.Attributes[key])
 				}
@@ -62,7 +62,7 @@ func TestEnvEmptyValue(t *testing.T) {
 			provider "lattice" {
 			}
 			resource "lattice_env" "example" {
-				agent_id = "king"
+				sidecar_id = "king"
 				name = "MESSAGE"
 			}
 			`,
@@ -73,9 +73,9 @@ func TestEnvEmptyValue(t *testing.T) {
 				require.NotNil(t, script)
 				t.Logf("script attributes: %#v", script.Primary.Attributes)
 				for key, expected := range map[string]string{
-					"agent_id": "king",
-					"name":     "MESSAGE",
-					"value":    "",
+					"sidecar_id": "king",
+					"name":       "MESSAGE",
+					"value":      "",
 				} {
 					require.Equal(t, expected, script.Primary.Attributes[key])
 				}
@@ -98,7 +98,7 @@ func TestEnvBadName(t *testing.T) {
 			provider "lattice" {
 			}
 			resource "lattice_env" "example" {
-				agent_id = ""
+				sidecar_id = ""
 				name = "bad-name"
 			}
 			`,
@@ -120,7 +120,7 @@ func TestEnvNoName(t *testing.T) {
 			provider "lattice" {
 			}
 			resource "lattice_env" "example" {
-				agent_id = ""
+				sidecar_id = ""
 			}
 			`,
 			ExpectError: regexp.MustCompile(`The argument "name" is required, but no definition was found.`),

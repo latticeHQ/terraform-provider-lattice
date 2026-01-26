@@ -16,8 +16,8 @@ func metadataResource() *schema.Resource {
 
 		Description: "Use this resource to attach metadata to a resource. They will be " +
 			"displayed in the Lattice dashboard alongside the resource. " +
-			"The resource containing the agent, and it's metadata, will be shown by default. " + "\n\n" +
-			"Alternatively, to attach metadata to the agent, use a `metadata` block within a `lattice_agent` resource.",
+			"The resource containing the sidecar, and it's metadata, will be shown by default. " + "\n\n" +
+			"Alternatively, to attach metadata to the sidecar, use a `metadata` block within a `lattice_sidecar` resource.",
 		CreateContext: func(c context.Context, resourceData *schema.ResourceData, i interface{}) diag.Diagnostics {
 			resourceData.SetId(uuid.NewString())
 
@@ -55,7 +55,7 @@ func metadataResource() *schema.Resource {
 				Type: schema.TypeString,
 				Description: "A URL to an icon that will display in the dashboard. View built-in " +
 					"icons [here](https://github.com/latticehq/latticeruntime/tree/main/site/static/icon). Use a " +
-					"built-in icon with `\"${data.lattice_workspace.me.access_url}/icon/<path>\"`.",
+					"built-in icon with `\"${data.lattice_agent.me.access_url}/icon/<path>\"`.",
 				ForceNew: true,
 				Optional: true,
 				ValidateFunc: func(i interface{}, s string) ([]string, []error) {
@@ -98,7 +98,7 @@ func metadataResource() *schema.Resource {
 							Description: "Set to `true` to for items such as API keys whose values should be " +
 								"hidden from view by default. Note that this does not prevent metadata from " +
 								"being retrieved using the API, so it is not suitable for secrets that should " +
-								"not be exposed to workspace users.",
+								"not be exposed to agent users.",
 							ForceNew: true,
 							Optional: true,
 							Default:  false,
