@@ -7,7 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
-	"github.com/wirtualdev/terraform-provider-wirtual/provider/helpers"
+	"github.com/latticehq/terraform-provider-lattice/provider/helpers"
 )
 
 // externalAuthDataSource returns a schema for an external authentication data source.
@@ -30,7 +30,7 @@ func externalAuthDataSource() *schema.Resource {
 		Schema: map[string]*schema.Schema{
 			"id": {
 				Type:        schema.TypeString,
-				Description: "The ID of a configured external auth provider set up in your Wirtual deployment.",
+				Description: "The ID of a configured external auth provider set up in your Lattice deployment.",
 				Required:    true,
 			},
 			"access_token": {
@@ -48,5 +48,5 @@ func externalAuthDataSource() *schema.Resource {
 }
 
 func ExternalAuthAccessTokenEnvironmentVariable(id string) string {
-	return fmt.Sprintf("WIRTUAL_EXTERNAL_AUTH_ACCESS_TOKEN_%s", id)
+	return fmt.Sprintf("lattice_EXTERNAL_AUTH_ACCESS_TOKEN_%s", id)
 }

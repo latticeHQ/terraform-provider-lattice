@@ -7,8 +7,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
+	"github.com/latticehq/terraform-provider-lattice/provider"
 	"github.com/stretchr/testify/require"
-	"github.com/wirtualdev/terraform-provider-wirtual/provider"
 )
 
 func TestProvisioner(t *testing.T) {
@@ -22,12 +22,12 @@ func TestProvisioner(t *testing.T) {
 			Config: `
 			provider "wirtual" {
 			}
-			data "wirtual_provisioner" "me" {
+			data "lattice_provisioner" "me" {
 			}`,
 			Check: func(state *terraform.State) error {
 				require.Len(t, state.Modules, 1)
 				require.Len(t, state.Modules[0].Resources, 1)
-				resource := state.Modules[0].Resources["data.wirtual_provisioner.me"]
+				resource := state.Modules[0].Resources["data.lattice_provisioner.me"]
 				require.NotNil(t, resource)
 
 				attribs := resource.Primary.Attributes

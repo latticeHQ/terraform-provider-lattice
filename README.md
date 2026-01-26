@@ -1,6 +1,6 @@
 # terraform-provider-wirtual
 
-Terraform provider for [Wirtual](https://github.com/wirtualdev/wirtual).
+Terraform provider for [Lattice](https://github.com/latticehq/lattice).
 
 ### Developing
 
@@ -49,7 +49,7 @@ to setup your local Terraform to use your local version rather than the registry
    2. Run `terraform init` and observe a warning like `Warning: Provider development overrides are in effect`
 4. Run `go build -o terraform-provider-wirtual` to build the provider binary, which Terraform will try locate and execute
 5. All local Terraform runs will now use your local provider!
-6. _**NOTE**: we vendor in this provider into `github.com/wirtualdev/wirtual`, so if you're testing with a local clone then you should also run `go mod edit -replace github.com/wirtualdev/terraform-provider-wirtual=/path/to/terraform-provider-wirtual` in your clone._
+6. _**NOTE**: we vendor in this provider into `github.com/latticehq/lattice`, so if you're testing with a local clone then you should also run `go mod edit -replace github.com/latticehq/terraform-provider-lattice=/path/to/terraform-provider-wirtual` in your clone._
 
 #### Terraform Acceptance Tests
 
@@ -62,18 +62,18 @@ To run Terraform acceptance tests, run `make testacc`. This will test the provid
 The tests under the `./integration` directory perform the following steps:
 
 - Build the local version of the provider,
-- Run an in-memory Wirtual instance with a specified version,
-- Validate the behaviour of the local provider against that specific version of Wirtual.
+- Run an in-memory Lattice instance with a specified version,
+- Validate the behaviour of the local provider against that specific version of Lattice.
 
 To run these integration tests locally:
 
-1. Pull the version of the Wirtual image you wish to test:
+1. Pull the version of the Lattice image you wish to test:
 
    ```console
-     docker pull docker.io/onchainengineer/wirtual:main-x.y.z-devel-abcd1234
+     docker pull docker.io/onchainengineer/lattice:main-x.y.z-devel-abcd1234
    ```
 
-1. Run `WIRTUAL_VERSION=main-x.y.z-devel-abcd1234 make test-integration`.
+1. Run `lattice_VERSION=main-x.y.z-devel-abcd1234 make test-integration`.
 
-> **Note:** you can specify `WIRTUAL_IMAGE` if the Wirtual image you wish to test is hosted somewhere other than `docker.io/onchainengineer/wirtual`.
-> For example, `WIRTUAL_IMAGE=example.com/repo/wirtual WIRTUAL_VERSION=foobar make test-integration`.
+> **Note:** you can specify `lattice_IMAGE` if the Lattice image you wish to test is hosted somewhere other than `docker.io/onchainengineer/lattice`.
+> For example, `lattice_IMAGE=example.com/repo/wirtual lattice_VERSION=foobar make test-integration`.

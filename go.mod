@@ -1,4 +1,4 @@
-module github.com/wirtualdev/terraform-provider-wirtual
+module github.com/latticehq/terraform-provider-lattice
 
 go 1.22
 
@@ -92,4 +92,4 @@ require (
 	gotest.tools/v3 v3.5.1 // indirect
 )
 
-replace github.com/wirtualdev/terraform-provider-wirtual => ~/codespace/modules/github.com/wirtualdev/terraform-provider-wirtual v1.0.2
+replace github.com/latticehq/terraform-provider-lattice => ~/codespace/modules/github.com/latticehq/terraform-provider-lattice v1.0.2

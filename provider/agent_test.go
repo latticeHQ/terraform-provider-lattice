@@ -10,7 +10,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	"github.com/stretchr/testify/require"
 
-	"github.com/wirtualdev/terraform-provider-wirtual/provider"
+	"github.com/latticehq/terraform-provider-lattice/provider"
 )
 
 func TestAgent(t *testing.T) {
@@ -25,7 +25,7 @@ func TestAgent(t *testing.T) {
 				provider "wirtual" {
 					url = "https://example.com"
 				}
-				resource "wirtual_agent" "new" {
+				resource "lattice_agent" "new" {
 					os = "linux"
 					arch = "amd64"
 					auth = "aws-instance-identity"
@@ -45,7 +45,7 @@ func TestAgent(t *testing.T) {
 			Check: func(state *terraform.State) error {
 				require.Len(t, state.Modules, 1)
 				require.Len(t, state.Modules[0].Resources, 1)
-				resource := state.Modules[0].Resources["wirtual_agent.new"]
+				resource := state.Modules[0].Resources["lattice_agent.new"]
 				require.NotNil(t, resource)
 				for _, key := range []string{
 					"token",
@@ -86,7 +86,7 @@ func TestAgent_StartupScriptBehavior(t *testing.T) {
 		{
 			Name: "blocking",
 			Config: `
-				resource "wirtual_agent" "new" {
+				resource "lattice_agent" "new" {
 					os = "linux"
 					arch = "amd64"
 					startup_script_behavior = "blocking"
@@ -99,7 +99,7 @@ func TestAgent_StartupScriptBehavior(t *testing.T) {
 		{
 			Name: "non-blocking",
 			Config: `
-				resource "wirtual_agent" "new" {
+				resource "lattice_agent" "new" {
 					os = "linux"
 					arch = "amd64"
 					startup_script_behavior = "non-blocking"
@@ -112,7 +112,7 @@ func TestAgent_StartupScriptBehavior(t *testing.T) {
 		{
 			Name: "login_before_ready (deprecated)",
 			Config: `
-				resource "wirtual_agent" "new" {
+				resource "lattice_agent" "new" {
 					os = "linux"
 					arch = "amd64"
 					login_before_ready = false
@@ -128,7 +128,7 @@ func TestAgent_StartupScriptBehavior(t *testing.T) {
 		{
 			Name: "no login_before_ready with startup_script_behavior",
 			Config: `
-				resource "wirtual_agent" "new" {
+				resource "lattice_agent" "new" {
 					os = "linux"
 					arch = "amd64"
 					login_before_ready = false
@@ -152,7 +152,7 @@ func TestAgent_StartupScriptBehavior(t *testing.T) {
 					Check: func(state *terraform.State) error {
 						require.Len(t, state.Modules, 1)
 						require.Len(t, state.Modules[0].Resources, 1)
-						resource := state.Modules[0].Resources["wirtual_agent.new"]
+						resource := state.Modules[0].Resources["lattice_agent.new"]
 						require.NotNil(t, resource)
 						if tc.Check != nil {
 							tc.Check(resource)
@@ -177,19 +177,19 @@ func TestAgent_Instance(t *testing.T) {
 				provider "wirtual" {
 					url = "https://example.com"
 				}
-				resource "wirtual_agent" "dev" {
+				resource "lattice_agent" "dev" {
 					os = "linux"
 					arch = "amd64"
 				}
-				resource "wirtual_agent_instance" "new" {
-					agent_id = wirtual_agent.dev.id
+				resource "lattice_agent_instance" "new" {
+					agent_id = lattice_agent.dev.id
 					instance_id = "hello"
 				}
 				`,
 			Check: func(state *terraform.State) error {
 				require.Len(t, state.Modules, 1)
 				require.Len(t, state.Modules[0].Resources, 2)
-				resource := state.Modules[0].Resources["wirtual_agent_instance.new"]
+				resource := state.Modules[0].Resources["lattice_agent_instance.new"]
 				require.NotNil(t, resource)
 				for _, key := range []string{
 					"agent_id",
@@ -218,7 +218,7 @@ func TestAgent_Metadata(t *testing.T) {
 				provider "wirtual" {
 					url = "https://example.com"
 				}
-				resource "wirtual_agent" "dev" {
+				resource "lattice_agent" "dev" {
 					os = "linux"
 					arch = "amd64"
 					metadata {
@@ -235,7 +235,7 @@ func TestAgent_Metadata(t *testing.T) {
 				require.Len(t, state.Modules, 1)
 				require.Len(t, state.Modules[0].Resources, 1)
 
-				resource := state.Modules[0].Resources["wirtual_agent.dev"]
+				resource := state.Modules[0].Resources["lattice_agent.dev"]
 				require.NotNil(t, resource)
 
 				t.Logf("resource: %v", resource.Primary.Attributes)
@@ -266,7 +266,7 @@ func TestAgent_MetadataDuplicateKeys(t *testing.T) {
 				provider "wirtual" {
 					url = "https://example.com"
 				}
-				resource "wirtual_agent" "dev" {
+				resource "lattice_agent" "dev" {
 					os = "linux"
 					arch = "amd64"
 					metadata {
@@ -305,7 +305,7 @@ func TestAgent_DisplayApps(t *testing.T) {
 					provider "wirtual" {
 						url = "https://example.com"
 					}
-					resource "wirtual_agent" "dev" {
+					resource "lattice_agent" "dev" {
 						os = "linux"
 						arch = "amd64"
 						display_apps {
@@ -321,7 +321,7 @@ func TestAgent_DisplayApps(t *testing.T) {
 					require.Len(t, state.Modules, 1)
 					require.Len(t, state.Modules[0].Resources, 1)
 
-					resource := state.Modules[0].Resources["wirtual_agent.dev"]
+					resource := state.Modules[0].Resources["lattice_agent.dev"]
 					require.NotNil(t, resource)
 
 					t.Logf("resource: %v", resource.Primary.Attributes)
@@ -358,7 +358,7 @@ func TestAgent_DisplayApps(t *testing.T) {
 					provider "wirtual" {
 						url = "https://example.com"
 					}
-					resource "wirtual_agent" "dev" {
+					resource "lattice_agent" "dev" {
 						os = "linux"
 						arch = "amd64"
 						display_apps {
@@ -371,7 +371,7 @@ func TestAgent_DisplayApps(t *testing.T) {
 					require.Len(t, state.Modules, 1)
 					require.Len(t, state.Modules[0].Resources, 1)
 
-					resource := state.Modules[0].Resources["wirtual_agent.dev"]
+					resource := state.Modules[0].Resources["lattice_agent.dev"]
 					require.NotNil(t, resource)
 
 					t.Logf("resource: %v", resource.Primary.Attributes)
@@ -404,7 +404,7 @@ func TestAgent_DisplayApps(t *testing.T) {
 					provider "wirtual" {
 						url = "https://example.com"
 					}
-					resource "wirtual_agent" "dev" {
+					resource "lattice_agent" "dev" {
 						os = "linux"
 						arch = "amd64"
 					}
@@ -413,7 +413,7 @@ func TestAgent_DisplayApps(t *testing.T) {
 					require.Len(t, state.Modules, 1)
 					require.Len(t, state.Modules[0].Resources, 1)
 
-					resource := state.Modules[0].Resources["wirtual_agent.dev"]
+					resource := state.Modules[0].Resources["lattice_agent.dev"]
 					require.NotNil(t, resource)
 
 					t.Logf("resource: %v", resource.Primary.Attributes)
@@ -450,7 +450,7 @@ func TestAgent_DisplayApps(t *testing.T) {
 					provider "wirtual" {
 						url = "https://example.com"
 					}
-					resource "wirtual_agent" "dev" {
+					resource "lattice_agent" "dev" {
 						os = "linux"
 						arch = "amd64"
 						display_apps {

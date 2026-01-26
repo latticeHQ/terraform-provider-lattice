@@ -7,7 +7,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
-	"github.com/wirtualdev/terraform-provider-wirtual/provider/helpers"
+	"github.com/latticehq/terraform-provider-lattice/provider/helpers"
 )
 
 // gitAuthDataSource returns a schema for a Git authentication data source.
@@ -15,8 +15,8 @@ func gitAuthDataSource() *schema.Resource {
 	return &schema.Resource{
 		SchemaVersion: 1,
 
-		DeprecationMessage: "Use the `wirtual_external_auth` data source instead.",
-		Description:        "~> **Deprecated**\nUse the `wirtual_external_auth` data source instead.\n\nUse this data source to require users to authenticate with a Git provider prior to workspace creation. This can be used to perform an authenticated `git clone` in startup scripts.",
+		DeprecationMessage: "Use the `lattice_external_auth` data source instead.",
+		Description:        "~> **Deprecated**\nUse the `lattice_external_auth` data source instead.\n\nUse this data source to require users to authenticate with a Git provider prior to workspace creation. This can be used to perform an authenticated `git clone` in startup scripts.",
 		ReadContext: func(ctx context.Context, rd *schema.ResourceData, i interface{}) diag.Diagnostics {
 			rawID, ok := rd.GetOk("id")
 			if !ok {
@@ -37,7 +37,7 @@ func gitAuthDataSource() *schema.Resource {
 			"id": {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: "The identifier of a configured git auth provider set up in your Wirtual deployment.",
+				Description: "The identifier of a configured git auth provider set up in your Lattice deployment.",
 			},
 			"access_token": {
 				Type:        schema.TypeString,
@@ -49,5 +49,5 @@ func gitAuthDataSource() *schema.Resource {
 }
 
 func GitAuthAccessTokenEnvironmentVariable(id string) string {
-	return fmt.Sprintf("WIRTUAL_GIT_AUTH_ACCESS_TOKEN_%s", id)
+	return fmt.Sprintf("lattice_GIT_AUTH_ACCESS_TOKEN_%s", id)
 }

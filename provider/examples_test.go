@@ -7,16 +7,16 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/latticehq/terraform-provider-lattice/provider"
 	"github.com/stretchr/testify/require"
-	"github.com/wirtualdev/terraform-provider-wirtual/provider"
 )
 
 func TestExamples(t *testing.T) {
 	t.Parallel()
 
 	for _, testDir := range []string{
-		"wirtual_parameter",
-		"wirtual_workspace_tags",
+		"lattice_parameter",
+		"lattice_workspace_tags",
 	} {
 		t.Run(testDir, func(t *testing.T) {
 			testDir := testDir

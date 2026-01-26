@@ -1,5 +1,5 @@
 {
-  description = "Terraform provider for Wirtual";
+  description = "Terraform provider for Lattice";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";

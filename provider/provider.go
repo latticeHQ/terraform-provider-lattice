@@ -22,11 +22,11 @@ func New() *schema.Provider {
 		Schema: map[string]*schema.Schema{
 			"url": {
 				Type:        schema.TypeString,
-				Description: "The URL to access Wirtual.",
+				Description: "The URL to access Lattice.",
 				Optional:    true,
-				// The "WIRTUAL_AGENT_URL" environment variable is used by default
+				// The "lattice_AGENT_URL" environment variable is used by default
 				// as the Access URL when generating scripts.
-				DefaultFunc: schema.EnvDefaultFunc("WIRTUAL_AGENT_URL", "https://mydeployment.wirtual.dev"),
+				DefaultFunc: schema.EnvDefaultFunc("lattice_AGENT_URL", "https://mydeployment.wirtual.dev"),
 				ValidateFunc: func(i interface{}, s string) ([]string, []error) {
 					_, err := url.Parse(s)
 					if err != nil {
@@ -49,7 +49,7 @@ func New() *schema.Provider {
 				return nil, diag.Errorf("unexpected type %q for url", reflect.TypeOf(resourceData.Get("url")).String())
 			}
 			if rawURL == "" {
-				return nil, diag.Errorf("WIRTUAL_AGENT_URL must not be empty; got %q", rawURL)
+				return nil, diag.Errorf("lattice_AGENT_URL must not be empty; got %q", rawURL)
 			}
 			parsed, err := url.Parse(resourceData.Get("url").(string))
 			if err != nil {
@@ -68,26 +68,26 @@ func New() *schema.Provider {
 			}, nil
 		},
 		DataSourcesMap: map[string]*schema.Resource{
-			"wirtual_workspace":       workspaceDataSource(),
-			"wirtual_workspace_tags":  workspaceTagDataSource(),
-			"wirtual_provisioner":     provisionerDataSource(),
-			"wirtual_parameter":       parameterDataSource(),
-			"wirtual_git_auth":        gitAuthDataSource(),
-			"wirtual_external_auth":   externalAuthDataSource(),
-			"wirtual_workspace_owner": workspaceOwnerDataSource(),
+			"lattice_workspace":       workspaceDataSource(),
+			"lattice_workspace_tags":  workspaceTagDataSource(),
+			"lattice_provisioner":     provisionerDataSource(),
+			"lattice_parameter":       parameterDataSource(),
+			"lattice_git_auth":        gitAuthDataSource(),
+			"lattice_external_auth":   externalAuthDataSource(),
+			"lattice_workspace_owner": workspaceOwnerDataSource(),
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"wirtual_agent":          agentResource(),
-			"wirtual_agent_instance": agentInstanceResource(),
-			"wirtual_app":            appResource(),
-			"wirtual_metadata":       metadataResource(),
-			"wirtual_script":         scriptResource(),
-			"wirtual_env":            envResource(),
+			"lattice_agent":          agentResource(),
+			"lattice_agent_instance": agentInstanceResource(),
+			"lattice_app":            appResource(),
+			"lattice_metadata":       metadataResource(),
+			"lattice_script":         scriptResource(),
+			"lattice_env":            envResource(),
 		},
 	}
 }
 
-// populateIsNull reads the raw plan for a wirtual_metadata resource being created,
+// populateIsNull reads the raw plan for a lattice_metadata resource being created,
 // figures out which items have null "value"s, and augments them by setting the
 // "is_null" field to true. This ugly hack is necessary because terraform-plugin-sdk
 // is designed around a old version of Terraform that didn't support nullable fields,
@@ -97,7 +97,7 @@ func populateIsNull(resourceData *schema.ResourceData) (result interface{}, err 
 	// The cty package reports type mismatches by panicking
 	defer func() {
 		if r := recover(); r != nil {
-			err = xerrors.Errorf("panic while handling wirtual_metadata: %#v", r)
+			err = xerrors.Errorf("panic while handling lattice_metadata: %#v", r)
 		}
 	}()
 

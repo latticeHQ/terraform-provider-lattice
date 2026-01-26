@@ -4,8 +4,8 @@ import (
 	"regexp"
 	"testing"
 
+	"github.com/latticehq/terraform-provider-lattice/provider"
 	"github.com/stretchr/testify/require"
-	"github.com/wirtualdev/terraform-provider-wirtual/provider"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -24,7 +24,7 @@ func TestScript(t *testing.T) {
 			Config: `
 			provider "wirtual" {
 			}
-			resource "wirtual_script" "example" {
+			resource "lattice_script" "example" {
 				agent_id = "some id"
 				display_name = "Hey"
 				script = "Wow"
@@ -34,7 +34,7 @@ func TestScript(t *testing.T) {
 			Check: func(state *terraform.State) error {
 				require.Len(t, state.Modules, 1)
 				require.Len(t, state.Modules[0].Resources, 1)
-				script := state.Modules[0].Resources["wirtual_script.example"]
+				script := state.Modules[0].Resources["lattice_script.example"]
 				require.NotNil(t, script)
 				t.Logf("script attributes: %#v", script.Primary.Attributes)
 				for key, expected := range map[string]string{
@@ -63,7 +63,7 @@ func TestScriptNeverRuns(t *testing.T) {
 			Config: `
 			provider "wirtual" {
 			}
-			resource "wirtual_script" "example" {
+			resource "lattice_script" "example" {
 				agent_id = ""
 				display_name = "Hey"
 				script = "Wow"
@@ -86,7 +86,7 @@ func TestScriptStartBlocksLoginRequiresRunOnStart(t *testing.T) {
 			Config: `
 			provider "wirtual" {
 			}
-			resource "wirtual_script" "example" {
+			resource "lattice_script" "example" {
 				agent_id = ""
 				display_name = "Hey"
 				script = "Wow"
@@ -106,7 +106,7 @@ func TestScriptStartBlocksLoginRequiresRunOnStart(t *testing.T) {
 			Config: `
 			provider "wirtual" {
 			}
-			resource "wirtual_script" "example" {
+			resource "lattice_script" "example" {
 				agent_id = ""
 				display_name = "Hey"
 				script = "Wow"
@@ -117,7 +117,7 @@ func TestScriptStartBlocksLoginRequiresRunOnStart(t *testing.T) {
 			Check: func(state *terraform.State) error {
 				require.Len(t, state.Modules, 1)
 				require.Len(t, state.Modules[0].Resources, 1)
-				script := state.Modules[0].Resources["wirtual_script.example"]
+				script := state.Modules[0].Resources["lattice_script.example"]
 				require.NotNil(t, script)
 				t.Logf("script attributes: %#v", script.Primary.Attributes)
 				for key, expected := range map[string]string{

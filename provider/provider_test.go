@@ -8,7 +8,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 	"github.com/stretchr/testify/require"
 
-	"github.com/wirtualdev/terraform-provider-wirtual/provider"
+	"github.com/latticehq/terraform-provider-lattice/provider"
 )
 
 func TestProvider(t *testing.T) {
@@ -31,16 +31,16 @@ func TestProviderEmpty(t *testing.T) {
 		Steps: []resource.TestStep{{
 			Config: `
 			provider "wirtual" {}
-			data "wirtual_provisioner" "me" {}
-			data "wirtual_workspace" "me" {}
-			data "wirtual_workspace_owner" "me" {}
-			data "wirtual_external_auth" "git" {
+			data "lattice_provisioner" "me" {}
+			data "lattice_workspace" "me" {}
+			data "lattice_workspace_owner" "me" {}
+			data "lattice_external_auth" "git" {
 				id = "git"
 			}
-			data "wirtual_git_auth" "git" {
+			data "lattice_git_auth" "git" {
 				id = "git"
 			}
-			data "wirtual_parameter" "param" {
+			data "lattice_parameter" "param" {
 				name = "hey"
 			}`,
 			Check: func(state *terraform.State) error {

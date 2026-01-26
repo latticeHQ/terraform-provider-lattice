@@ -7,16 +7,16 @@ gen:
 	go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs@latest
 	go run ./scripts/docsgen/...
 
-build: terraform-provider-wirtual
+build: terraform-provider-lattice
 
-# Builds the provider. Note that as wirtualdev/wirtual is based on
+# Builds the provider. Note that as latticeHQ/lattice is based on
 # alpine, we need to disable cgo.
-terraform-provider-wirtual: provider/*.go main.go
+terraform-provider-lattice: provider/*.go main.go
 	CGO_ENABLED=0 go build .
 
 # Run integration tests
 .PHONY: test-integration
-test-integration: terraform-provider-wirtual
+test-integration: terraform-provider-lattice
 	go test -v ./integration
 
 # Run acceptance tests
