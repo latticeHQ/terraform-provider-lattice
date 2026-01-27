@@ -3,12 +3,12 @@
 page_title: "lattice_sidecar_instance Resource - terraform-provider-lattice"
 subcategory: ""
 description: |-
-  Use this resource to associate an instance ID with an sidecar for zero-trust authentication. This association is done automatically for "google_compute_instance", "aws_instance", "azurerm_linux_virtual_machine", and "azurerm_windows_virtual_machine" resources.
+  Use this resource to associate an instance ID with a sidecar for zero-trust authentication. This association is done automatically for "google_compute_instance", "aws_instance", "azurerm_linux_virtual_machine", and "azurerm_windows_virtual_machine" resources.
 ---
 
 # lattice_sidecar_instance (Resource)
 
-Use this resource to associate an instance ID with an sidecar for zero-trust authentication. This association is done automatically for `"google_compute_instance"`, `"aws_instance"`, `"azurerm_linux_virtual_machine"`, and `"azurerm_windows_virtual_machine"` resources.
+Use this resource to associate an instance ID with a sidecar for zero-trust authentication. This association is done automatically for `"google_compute_instance"`, `"aws_instance"`, `"azurerm_linux_virtual_machine"`, and `"azurerm_windows_virtual_machine"` resources.
 
 ## Example Usage
 

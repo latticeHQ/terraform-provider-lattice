@@ -19,7 +19,7 @@ func sidecarResource() *schema.Resource {
 	return &schema.Resource{
 		SchemaVersion: 1,
 
-		Description: "Use this resource to associate an sidecar.",
+		Description: "Use this resource to associate a sidecar.",
 		CreateContext: func(_ context.Context, resourceData *schema.ResourceData, i interface{}) diag.Diagnostics {
 			// This should be a real authentication token!
 			resourceData.SetId(uuid.NewString())
@@ -143,7 +143,7 @@ func sidecarResource() *schema.Resource {
 			"token": {
 				ForceNew:    true,
 				Sensitive:   true,
-				Description: "Set the environment variable `LATTICE_SIDECAR_TOKEN` with this token to authenticate an sidecar.",
+				Description: "Set the environment variable `LATTICE_SIDECAR_TOKEN` with this token to authenticate a sidecar.",
 				Type:        schema.TypeString,
 				Computed:    true,
 			},
@@ -326,7 +326,7 @@ func sidecarResource() *schema.Resource {
 
 func sidecarInstanceResource() *schema.Resource {
 	return &schema.Resource{
-		Description: "Use this resource to associate an instance ID with an sidecar for zero-trust " +
+		Description: "Use this resource to associate an instance ID with a sidecar for zero-trust " +
 			"authentication. This association is done automatically for `\"google_compute_instance\"`, " +
 			"`\"aws_instance\"`, `\"azurerm_linux_virtual_machine\"`, and " +
 			"`\"azurerm_windows_virtual_machine\"` resources.",

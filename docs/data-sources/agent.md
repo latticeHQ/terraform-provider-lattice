@@ -36,7 +36,7 @@ resource "kubernetes_pod" "dev" {
 - `owner_id` (String, **Deprecated**: Use `lattice_agent_owner.id` instead.) UUID of the agent owner.
 - `owner_name` (String, **Deprecated**: Use `lattice_agent_owner.full_name` instead.) Name of the agent owner.
 - `owner_oidc_access_token` (String, **Deprecated**: Use `lattice_agent_owner.oidc_access_token` instead.) A valid OpenID Connect access token of the agent owner. This is only available if the agent owner authenticated with OpenID Connect. If a valid token cannot be obtained, this value will be an empty string.
-- `owner_session_token` (String, **Deprecated**: Use `lattice_agent_owner.session_token` instead.) Session token for authenticating with a Lattice deployment. It is regenerated everytime a agent is started.
+- `owner_session_token` (String, **Deprecated**: Use `lattice_agent_owner.session_token` instead.) Session token for authenticating with a Lattice deployment. It is regenerated every time an agent is started.
 - `start_count` (Number) A computed count based on `transition` state. If `start`, count will equal 1.
 - `template_id` (String) ID of the agent's template.
 - `template_name` (String) Name of the agent's template.
