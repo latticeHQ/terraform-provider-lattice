@@ -143,7 +143,7 @@ func sidecarResource() *schema.Resource {
 			"token": {
 				ForceNew:    true,
 				Sensitive:   true,
-				Description: "Set the environment variable `lattice_SIDECAR_TOKEN` with this token to authenticate an sidecar.",
+				Description: "Set the environment variable `LATTICE_SIDECAR_TOKEN` with this token to authenticate an sidecar.",
 				Type:        schema.TypeString,
 				Computed:    true,
 			},
@@ -380,7 +380,7 @@ func updateInitScript(resourceData *schema.ResourceData, i interface{}) diag.Dia
 	if err != nil {
 		return diag.Errorf("parse access url: %s", err)
 	}
-	script := helpers.OptionalEnv(fmt.Sprintf("lattice_SIDECAR_SCRIPT_%s_%s", operatingSystem, arch))
+	script := helpers.OptionalEnv(fmt.Sprintf("LATTICE_SIDECAR_SCRIPT_%s_%s", operatingSystem, arch))
 	if script != "" {
 		script = strings.ReplaceAll(script, "${ACCESS_URL}", accessURL.String())
 		script = strings.ReplaceAll(script, "${AUTH_TYPE}", auth)
