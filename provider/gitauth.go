@@ -49,5 +49,5 @@ func gitAuthDataSource() *schema.Resource {
 }
 
 func GitAuthAccessTokenEnvironmentVariable(id string) string {
-	return fmt.Sprintf("lattice_GIT_AUTH_ACCESS_TOKEN_%s", id)
+	return fmt.Sprintf("LATTICE_GIT_AUTH_ACCESS_TOKEN_%s", id)
 }

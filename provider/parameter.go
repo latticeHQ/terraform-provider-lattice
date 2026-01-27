@@ -467,7 +467,7 @@ func (v *Validation) Valid(typ, value string) error {
 // can be used in parameter names that may not be valid in env vars.
 func ParameterEnvironmentVariable(name string) string {
 	sum := sha256.Sum256([]byte(name))
-	return "lattice_PARAMETER_" + hex.EncodeToString(sum[:])
+	return "LATTICE_PARAMETER_" + hex.EncodeToString(sum[:])
 }
 
 func takeFirstError(errs ...error) error {
