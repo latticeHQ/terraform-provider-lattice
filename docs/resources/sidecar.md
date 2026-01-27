@@ -3,12 +3,12 @@
 page_title: "lattice_sidecar Resource - terraform-provider-lattice"
 subcategory: ""
 description: |-
-  Use this resource to associate an sidecar.
+  Use this resource to associate a sidecar.
 ---
 
 # lattice_sidecar (Resource)
 
-Use this resource to associate an sidecar.
+Use this resource to associate a sidecar.
 
 ## Example Usage
 
@@ -53,7 +53,7 @@ resource "kubernetes_pod" "dev" {
     container {
       command = ["sh", "-c", lattice_sidecar.dev.init_script]
       env {
-        name  = "lattice_SIDECAR_TOKEN"
+        name  = "LATTICE_SIDECAR_TOKEN"
         value = lattice_sidecar.dev.token
       }
     }
@@ -91,7 +91,7 @@ resource "kubernetes_pod" "dev" {
 
 - `id` (String) The ID of this resource.
 - `init_script` (String) Run this script on startup of an instance to initialize the sidecar.
-- `token` (String, Sensitive) Set the environment variable `lattice_SIDECAR_TOKEN` with this token to authenticate an sidecar.
+- `token` (String, Sensitive) Set the environment variable `LATTICE_SIDECAR_TOKEN` with this token to authenticate a sidecar.
 
 <a id="nestedblock--display_apps"></a>
 ### Nested Schema for `display_apps`

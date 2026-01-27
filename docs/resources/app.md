@@ -3,12 +3,12 @@
 page_title: "lattice_app Resource - terraform-provider-lattice"
 subcategory: ""
 description: |-
-  Use this resource to define shortcuts to access applications in a agent.
+  Use this resource to define shortcuts to access applications in an agent.
 ---
 
 # lattice_app (Resource)
 
-Use this resource to define shortcuts to access applications in a agent.
+Use this resource to define shortcuts to access applications in an agent.
 
 ## Example Usage
 

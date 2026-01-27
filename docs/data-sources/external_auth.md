@@ -3,12 +3,12 @@
 page_title: "lattice_external_auth Data Source - terraform-provider-lattice"
 subcategory: ""
 description: |-
-  Use this data source to require users to authenticate with an external service prior to agent creation. This can be used to pre-authenticate external services https://lattice.dev/docs/admin/external-auth in a agent. (e.g. Google Cloud, Github, Docker, etc.)
+  Use this data source to require users to authenticate with an external service prior to agent creation. This can be used to pre-authenticate external services https://lattice.dev/docs/admin/external-auth in an agent. (e.g. Google Cloud, Github, Docker, etc.)
 ---
 
 # lattice_external_auth (Data Source)
 
-Use this data source to require users to authenticate with an external service prior to agent creation. This can be used to [pre-authenticate external services](https://lattice.dev/docs/admin/external-auth) in a agent. (e.g. Google Cloud, Github, Docker, etc.)
+Use this data source to require users to authenticate with an external service prior to agent creation. This can be used to [pre-authenticate external services](https://lattice.dev/docs/admin/external-auth) in an agent. (e.g. Google Cloud, Github, Docker, etc.)
 
 ## Example Usage
 

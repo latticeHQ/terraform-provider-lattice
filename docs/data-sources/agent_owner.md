@@ -54,6 +54,6 @@ resource "lattice_env" "git_author_email" {
 - `id` (String) The UUID of the agent owner.
 - `name` (String) The username of the user.
 - `oidc_access_token` (String) A valid OpenID Connect access token of the agent owner. This is only available if the agent owner authenticated with OpenID Connect. If a valid token cannot be obtained, this value will be an empty string.
-- `session_token` (String) Session token for authenticating with a Lattice deployment. It is regenerated every time a agent is started.
+- `session_token` (String) Session token for authenticating with a Lattice deployment. It is regenerated every time an agent is started.
 - `ssh_private_key` (String, Sensitive) The user's generated SSH private key.
 - `ssh_public_key` (String) The user's generated SSH public key.

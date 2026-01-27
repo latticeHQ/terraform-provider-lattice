@@ -3,12 +3,12 @@
 page_title: "lattice_env Resource - terraform-provider-lattice"
 subcategory: ""
 description: |-
-  Use this resource to set an environment variable in a agent. Note that this resource cannot be used to overwrite existing environment variables set on the lattice_sidecar resource.
+  Use this resource to set an environment variable in an agent. Note that this resource cannot be used to overwrite existing environment variables set on the lattice_sidecar resource.
 ---
 
 # lattice_env (Resource)
 
-Use this resource to set an environment variable in a agent. Note that this resource cannot be used to overwrite existing environment variables set on the `lattice_sidecar` resource.
+Use this resource to set an environment variable in an agent. Note that this resource cannot be used to overwrite existing environment variables set on the `lattice_sidecar` resource.
 
 ## Example Usage
 

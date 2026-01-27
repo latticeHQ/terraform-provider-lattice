@@ -105,7 +105,7 @@ func TestAgent_UndefinedOwner(t *testing.T) {
 }
 
 func TestAgent_MissingTemplateName(t *testing.T) {
-	t.Setenv("LATTICE_AGENT_BUILD_ID", "1") // Let's pretend this is a agent build
+	t.Setenv("LATTICE_AGENT_BUILD_ID", "1") // Let's pretend this is an agent build
 
 	t.Setenv("LATTICE_AGENT_OWNER", "owner123")
 	t.Setenv("LATTICE_AGENT_OWNER_ID", "11111111-1111-1111-1111-111111111111")

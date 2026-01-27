@@ -176,7 +176,7 @@ func agentDataSource() *schema.Resource {
 			"owner_session_token": {
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: "Session token for authenticating with a Lattice deployment. It is regenerated everytime a agent is started.",
+				Description: "Session token for authenticating with a Lattice deployment. It is regenerated every time an agent is started.",
 				Deprecated:  "Use `lattice_agent_owner.session_token` instead.",
 			},
 			"template_id": {

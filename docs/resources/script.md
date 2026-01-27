@@ -3,12 +3,12 @@
 page_title: "lattice_script Resource - terraform-provider-lattice"
 subcategory: ""
 description: |-
-  Use this resource to run a script from an sidecar. When multiple scripts are assigned to the same sidecar, they are executed in parallel.
+  Use this resource to run a script from a sidecar. When multiple scripts are assigned to the same sidecar, they are executed in parallel.
 ---
 
 # lattice_script (Resource)
 
-Use this resource to run a script from an sidecar. When multiple scripts are assigned to the same sidecar, they are executed in parallel.
+Use this resource to run a script from a sidecar. When multiple scripts are assigned to the same sidecar, they are executed in parallel.
 
 ## Example Usage
 

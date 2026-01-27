@@ -27,7 +27,7 @@ func appResource() *schema.Resource {
 	return &schema.Resource{
 		SchemaVersion: 1,
 
-		Description: "Use this resource to define shortcuts to access applications in a agent.",
+		Description: "Use this resource to define shortcuts to access applications in an agent.",
 		CreateContext: func(c context.Context, resourceData *schema.ResourceData, i interface{}) diag.Diagnostics {
 			resourceData.SetId(uuid.NewString())
 

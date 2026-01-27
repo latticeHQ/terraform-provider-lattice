@@ -28,7 +28,7 @@ import (
 // TestIntegration performs an integration test against an ephemeral Lattice deployment.
 // For each directory containing a `main.tf` under `/integration`, performs the following:
 //   - Pushes the template to a temporary Lattice instance running in Docker
-//   - Creates a agent from the template. Templates here are expected to create a
+//   - Creates an agent from the template. Templates here are expected to create a
 //     local_file resource containing JSON that can be marshalled as a map[string]string
 //   - Fetches the content of the JSON file created and compares it against the expected output.
 //
@@ -154,7 +154,7 @@ func TestIntegration(t *testing.T) {
 			}
 			_, rc := execContainer(ctx, t, ctrID, fmt.Sprintf(`lattice templates %s %s --directory /src/integration/%s --var output_path=/tmp/%s.json --yes`, templateCreateCmd, tt.name, tt.name, tt.name))
 			require.Equal(t, 0, rc)
-			// Create a agent
+			// Create an agent
 			_, rc = execContainer(ctx, t, ctrID, fmt.Sprintf(`lattice create %s -t %s --yes`, tt.name, tt.name))
 			require.Equal(t, 0, rc)
 			// Fetch the output created by the template
