@@ -24,9 +24,9 @@ func New() *schema.Provider {
 				Type:        schema.TypeString,
 				Description: "The URL to access Lattice.",
 				Optional:    true,
-				// The "lattice_SIDECAR_URL" environment variable is used by default
+				// The "LATTICE_SIDECAR_URL" environment variable is used by default
 				// as the Access URL when generating scripts.
-				DefaultFunc: schema.EnvDefaultFunc("lattice_SIDECAR_URL", "https://mydeployment.lattice.dev"),
+				DefaultFunc: schema.EnvDefaultFunc("LATTICE_SIDECAR_URL", "https://mydeployment.lattice.dev"),
 				ValidateFunc: func(i interface{}, s string) ([]string, []error) {
 					_, err := url.Parse(s)
 					if err != nil {
@@ -49,7 +49,7 @@ func New() *schema.Provider {
 				return nil, diag.Errorf("unexpected type %q for url", reflect.TypeOf(resourceData.Get("url")).String())
 			}
 			if rawURL == "" {
-				return nil, diag.Errorf("lattice_SIDECAR_URL must not be empty; got %q", rawURL)
+				return nil, diag.Errorf("LATTICE_SIDECAR_URL must not be empty; got %q", rawURL)
 			}
 			parsed, err := url.Parse(resourceData.Get("url").(string))
 			if err != nil {
