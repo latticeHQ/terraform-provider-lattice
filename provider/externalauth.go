@@ -48,5 +48,5 @@ func externalAuthDataSource() *schema.Resource {
 }
 
 func ExternalAuthAccessTokenEnvironmentVariable(id string) string {
-	return fmt.Sprintf("lattice_EXTERNAL_AUTH_ACCESS_TOKEN_%s", id)
+	return fmt.Sprintf("LATTICE_EXTERNAL_AUTH_ACCESS_TOKEN_%s", id)
 }
