@@ -1,19 +1,46 @@
+<div align="center">
+
 # Terraform Provider for Lattice
 
-Terraform provider for [Lattice Runtime](https://github.com/latticeHQ/latticeRuntime) — the open-source coordination layer for institutional AI.
+### Infrastructure as code for Lattice Runtime deployments
+
+[![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-blue.svg?style=flat-square)](./LICENSE)
+
+**Declare your agent infrastructure. Lattice enforces it.**
+
+[Lattice Runtime](https://github.com/latticeHQ/latticeRuntime) · [Lattice Registry](https://github.com/latticeHQ/latticeRegistry) · [Discussions](https://github.com/latticeHQ/latticeRuntime/discussions)
+
+</div>
+
+---
+
+## Why a Terraform Provider
+
+[Lattice Runtime](https://github.com/latticeHQ/latticeRuntime) is the open-source coordination layer for institutional AI — identity, authorization, audit, and budget for every agent in the organization. The Terraform Provider is how you declare and manage that infrastructure as code.
+
+Agent infrastructure should be versioned, reviewed, and reproducible — the same way application infrastructure is. The Lattice Terraform Provider translates declarative HCL configurations into Runtime API calls, enabling:
+
+- **Version-controlled agent deployments** — agent configurations live in git, not click-ops
+- **Reproducible environments** — `terraform apply` produces identical coordination layer setups every time
+- **Policy-as-code integration** — agent authorization, budget constraints, and audit rules declared alongside infrastructure
+- **CI/CD pipelines** — automate agent lifecycle as part of your deployment pipeline
 
 ## Part of the Lattice Ecosystem
 
 | Component | Role | Repository |
 |-----------|------|------------|
+| [**Enterprise**](https://github.com/latticeHQ/latticeEnterprise) | Enterprise administration and governance | Coming soon |
 | [**Homebrew**](https://github.com/latticeHQ/latticeHomebrew) | One-line install on macOS and Linux | [latticeHomebrew](https://github.com/latticeHQ/latticeHomebrew) |
 | [**Inference**](https://github.com/latticeHQ/latticeInference) | Local AI serving — MLX on Apple Silicon, zero-config clustering | [latticeInference](https://github.com/latticeHQ/latticeInference) |
+| [**Operator**](https://github.com/latticeHQ/latticeOperator) | Self-hosted deployment management for Lattice infrastructure | [latticeOperator](https://github.com/latticeHQ/latticeOperator) |
 | [**Public**](https://github.com/latticeHQ/lattice) | Website + binary releases | [lattice](https://github.com/latticeHQ/lattice) |
 | [**Registry**](https://github.com/latticeHQ/latticeRegistry) | Community ecosystem — Terraform modules, templates, stacks | [latticeRegistry](https://github.com/latticeHQ/latticeRegistry) |
 | [**Runtime**](https://github.com/latticeHQ/latticeRuntime) | Coordination layer — identity, authorization, audit, budget | [latticeRuntime](https://github.com/latticeHQ/latticeRuntime) |
 | **Terraform Provider** (this repo) | Infrastructure as code for Lattice deployments | You are here |
 | [**Toolbox**](https://github.com/latticeHQ/latticeToolbox) | macOS app manager for Lattice products | [latticeToolbox](https://github.com/latticeHQ/latticeToolbox) |
 | [**Workbench**](https://github.com/latticeHQ/latticeWorkbench) | Reference Engineering Stack — multi-model agent workspace | [latticeWorkbench](https://github.com/latticeHQ/latticeWorkbench) |
+
+---
 
 ## Developing
 
@@ -90,4 +117,8 @@ MPL 2.0
 
 ---
 
-**[latticeruntime.com](https://latticeruntime.com)**
+<div align="center">
+
+**[latticeruntime.com](https://latticeruntime.com)** — The open-source coordination layer for institutional AI.
+
+</div>
