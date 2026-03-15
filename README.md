@@ -1,19 +1,25 @@
-# terraform-provider-lattice
+# Terraform Provider for Lattice
 
-Terraform provider for [Lattice](https://github.com/latticehq/lattice).
+Terraform provider for [Lattice Runtime](https://github.com/latticeHQ/latticeRuntime) — the open-source coordination layer for institutional AI.
 
-### Developing
+## Part of the Lattice Ecosystem
 
-#### Prerequisites
+| Component | Role | Repository |
+|-----------|------|------------|
+| [**Runtime**](https://github.com/latticeHQ/latticeRuntime) | Coordination layer — identity, authorization, audit, budget | [latticeRuntime](https://github.com/latticeHQ/latticeRuntime) |
+| **Terraform Provider** (this repo) | Infrastructure as code for Lattice deployments | You are here |
+| [**Registry**](https://github.com/latticeHQ/latticeRegistry) | Community Terraform modules and templates | [latticeRegistry](https://github.com/latticeHQ/latticeRegistry) |
+
+## Developing
+
+### Prerequisites
 
 - [Go](https://golang.org/doc/install)
 - [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli)
 
 We recommend using [`nix`](https://nixos.org/download.html) to manage your development environment. If you have `nix` installed, you can run `nix develop` to enter a shell with all the necessary dependencies.
 
-Alternatively, you can install the dependencies manually.
-
-#### Building
+### Building
 
 Follow the instructions outlined in the [Terraform documentation](https://developer.hashicorp.com/terraform/cli/config/config-file#development-overrides-for-provider-developers)
 to setup your local Terraform to use your local version rather than the registry version.
@@ -23,14 +29,10 @@ to setup your local Terraform to use your local version rather than the registry
 
    ```hcl
     provider_installation {
-        # Override the latticehq/lattice provider to use your local version
         dev_overrides {
           "latticehq/lattice" = "/path/to/terraform-provider-lattice"
         }
 
-        # For all other providers, install them directly from their origin provider
-        # registries as normal. If you omit this, Terraform will _only_ use
-        # the dev_overrides block, and so no other providers will be available.
         direct {}
     }
    ```
@@ -47,17 +49,17 @@ to setup your local Terraform to use your local version rather than the registry
    }
    ```
    2. Run `terraform init` and observe a warning like `Warning: Provider development overrides are in effect`
-4. Run `go build -o terraform-provider-lattice` to build the provider binary, which Terraform will try locate and execute
+4. Run `go build -o terraform-provider-lattice` to build the provider binary
 5. All local Terraform runs will now use your local provider!
-6. _**NOTE**: we vendor in this provider into `github.com/latticehq/lattice`, so if you're testing with a local clone then you should also run `go mod edit -replace github.com/latticehq/terraform-provider-lattice=/path/to/terraform-provider-lattice` in your clone._
+6. _**NOTE**: we vendor in this provider into `github.com/latticehq/latticeRuntime`, so if you're testing with a local clone then you should also run `go mod edit -replace github.com/latticehq/terraform-provider-lattice=/path/to/terraform-provider-lattice` in your clone._
 
-#### Terraform Acceptance Tests
+### Terraform Acceptance Tests
 
 To run Terraform acceptance tests, run `make testacc`. This will test the provider against the locally installed version of Terraform.
 
 > **Note:** our [CI workflow](./github/workflows/test.yml) runs a test matrix against multiple Terraform versions.
 
-#### Integration Tests
+### Integration Tests
 
 The tests under the `./integration` directory perform the following steps:
 
@@ -76,4 +78,11 @@ To run these integration tests locally:
 1. Run `lattice_VERSION=main-x.y.z-devel-abcd1234 make test-integration`.
 
 > **Note:** you can specify `lattice_IMAGE` if the Lattice image you wish to test is hosted somewhere other than `docker.io/onchainengineer/lattice`.
-> For example, `lattice_IMAGE=example.com/repo/lattice lattice_VERSION=foobar make test-integration`.
+
+## License
+
+MPL 2.0
+
+---
+
+**[latticeruntime.com](https://latticeruntime.com)**
