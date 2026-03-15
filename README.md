@@ -7,8 +7,10 @@ Terraform provider for [Lattice Runtime](https://github.com/latticeHQ/latticeRun
 | Component | Role | Repository |
 |-----------|------|------------|
 | [**Runtime**](https://github.com/latticeHQ/latticeRuntime) | Coordination layer — identity, authorization, audit, budget | [latticeRuntime](https://github.com/latticeHQ/latticeRuntime) |
+| [**Workbench**](https://github.com/latticeHQ/latticeWorkbench) | Reference Engineering Stack — multi-model agent workspace | [latticeWorkbench](https://github.com/latticeHQ/latticeWorkbench) |
+| [**Inference**](https://github.com/latticeHQ/latticeInference) | Local AI serving — MLX on Apple Silicon, zero-config clustering | [latticeInference](https://github.com/latticeHQ/latticeInference) |
+| [**Registry**](https://github.com/latticeHQ/latticeRegistry) | Community ecosystem — Terraform modules, templates, stacks | [latticeRegistry](https://github.com/latticeHQ/latticeRegistry) |
 | **Terraform Provider** (this repo) | Infrastructure as code for Lattice deployments | You are here |
-| [**Registry**](https://github.com/latticeHQ/latticeRegistry) | Community Terraform modules and templates | [latticeRegistry](https://github.com/latticeHQ/latticeRegistry) |
 
 ## Developing
 
