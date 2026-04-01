@@ -91,5 +91,3 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gotest.tools/v3 v3.5.1 // indirect
 )
-
-replace github.com/latticehq/terraform-provider-lattice => ~/codespace/modules/github.com/latticehq/terraform-provider-lattice v1.0.2

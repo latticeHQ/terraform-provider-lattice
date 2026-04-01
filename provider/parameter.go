@@ -48,9 +48,10 @@ const (
 type Parameter struct {
 	Value       string
 	Name        string
-	DisplayName string `mapstructure:"display_name"`
+	DisplayName string            `mapstructure:"display_name"`
 	Description string
 	Type        string
+	FormType    ParameterFormType `mapstructure:"form_type"`
 	Mutable     bool
 	Default     string
 	Icon        string
@@ -86,6 +87,7 @@ func parameterDataSource() *schema.Resource {
 				DisplayName interface{}
 				Description interface{}
 				Type        interface{}
+				FormType    interface{} `mapstructure:"form_type"`
 				Mutable     interface{}
 				Default     interface{}
 				Icon        interface{}
@@ -100,6 +102,7 @@ func parameterDataSource() *schema.Resource {
 				DisplayName: rd.Get("display_name"),
 				Description: rd.Get("description"),
 				Type:        rd.Get("type"),
+				FormType:    rd.Get("form_type"),
 				Mutable:     rd.Get("mutable"),
 				Default:     rd.Get("default"),
 				Icon:        rd.Get("icon"),
@@ -132,6 +135,18 @@ func parameterDataSource() *schema.Resource {
 				value = envValue
 			}
 			rd.Set("value", value)
+
+			// Resolve and validate the form_type based on parameter type and options.
+			// Set the resolved value back so it is always present in state.
+			_, parameter.FormType, err = ValidateFormType(
+				OptionType(parameter.Type),
+				len(parameter.Option),
+				parameter.FormType,
+			)
+			if err != nil {
+				return diag.Errorf("invalid form_type: %s", err)
+			}
+			rd.Set("form_type", parameter.FormType)
 
 			if !parameter.Mutable && parameter.Ephemeral {
 				return diag.Errorf("parameter can't be immutable and ephemeral")
@@ -205,6 +220,14 @@ func parameterDataSource() *schema.Resource {
 				Optional:     true,
 				ValidateFunc: validation.StringInSlice([]string{"number", "string", "bool", "list(string)"}, false),
 				Description:  "The type of this parameter. Must be one of: `\"number\"`, `\"string\"`, `\"bool\"`, or `\"list(string)\"`.",
+			},
+			"form_type": {
+				Type:         schema.TypeString,
+				Default:      ParameterFormTypeDefault,
+				Optional:     true,
+				Computed:     true,
+				ValidateFunc: validation.StringInSlice(toStrings(ParameterFormTypes()), false),
+				Description:  "The form type of this parameter. Must be one of: " + formTypeDescription(),
 			},
 			"mutable": {
 				Type:        schema.TypeBool,
@@ -488,4 +511,13 @@ func (v *Validation) errorRendered(value string) error {
 		"{max}", fmt.Sprintf("%d", v.Max),
 		"{value}", value)
 	return xerrors.Errorf(r.Replace(v.Error))
+}
+
+func formTypeDescription() string {
+	types := toStrings(ParameterFormTypes())
+	quoted := make([]string, len(types))
+	for i, t := range types {
+		quoted[i] = fmt.Sprintf("`\"%s\"`", t)
+	}
+	return strings.Join(quoted, ", ") + "."
 }
