@@ -158,7 +158,7 @@ func parameterDataSource() *schema.Resource {
 
 			if len(parameter.Validation) == 1 {
 				validation := &parameter.Validation[0]
-				err = validation.Valid(parameter.Type, value)
+				err = validation.Valid(parameter.Type, value, nil)
 				if err != nil {
 					return diag.FromErr(err)
 				}
@@ -425,8 +425,10 @@ func valueIsType(typ, value string) diag.Diagnostics {
 	return nil
 }
 
-func (v *Validation) Valid(typ, value string) error {
-	if typ != "number" {
+// Valid validates the given value against the validation rules.
+// previous is the prior value of the parameter, used for monotonic validation.
+func (v *Validation) Valid(typ OptionType, value string, previous *string) error {
+	if typ != OptionTypeNumber {
 		if !v.MinDisabled {
 			return fmt.Errorf("a min cannot be specified for a %s type", typ)
 		}
@@ -437,16 +439,16 @@ func (v *Validation) Valid(typ, value string) error {
 			return fmt.Errorf("monotonic validation can only be specified for number types, not %s types", typ)
 		}
 	}
-	if typ != "string" && v.Regex != "" {
+	if typ != OptionTypeString && v.Regex != "" {
 		return fmt.Errorf("a regex cannot be specified for a %s type", typ)
 	}
 	switch typ {
-	case "bool":
+	case OptionTypeBoolean:
 		if value != "true" && value != "false" {
 			return fmt.Errorf(`boolean value can be either "true" or "false"`)
 		}
 		return nil
-	case "string":
+	case OptionTypeString:
 		if v.Regex == "" {
 			return nil
 		}
@@ -461,7 +463,7 @@ func (v *Validation) Valid(typ, value string) error {
 		if !matched {
 			return fmt.Errorf("%s (value %q does not match %q)", v.Error, value, regex)
 		}
-	case "number":
+	case OptionTypeNumber:
 		num, err := strconv.Atoi(value)
 		if err != nil {
 			return takeFirstError(v.errorRendered(value), fmt.Errorf("value %q is not a number", value))
@@ -472,10 +474,28 @@ func (v *Validation) Valid(typ, value string) error {
 		if !v.MaxDisabled && num > v.Max {
 			return takeFirstError(v.errorRendered(value), fmt.Errorf("value %d is more than the maximum %d", num, v.Max))
 		}
-		if v.Monotonic != "" && v.Monotonic != ValidationMonotonicIncreasing && v.Monotonic != ValidationMonotonicDecreasing {
+		switch v.Monotonic {
+		case "":
+			// No monotonicity check.
+		case ValidationMonotonicIncreasing, ValidationMonotonicDecreasing:
+			if previous != nil {
+				previousNum, err := strconv.Atoi(*previous)
+				if err != nil {
+					// Don't error on an unparseable previous value — it would leave
+					// the workspace in an unrecoverable state.
+					break
+				}
+				if v.Monotonic == ValidationMonotonicIncreasing && !(num >= previousNum) {
+					return fmt.Errorf("parameter value '%d' must be equal or greater than previous value: %d", num, previousNum)
+				}
+				if v.Monotonic == ValidationMonotonicDecreasing && !(num <= previousNum) {
+					return fmt.Errorf("parameter value '%d' must be equal or lower than previous value: %d", num, previousNum)
+				}
+			}
+		default:
 			return fmt.Errorf("number monotonicity can be either %q or %q", ValidationMonotonicIncreasing, ValidationMonotonicDecreasing)
 		}
-	case "list(string)":
+	case OptionTypeListString:
 		var listOfStrings []string
 		err := json.Unmarshal([]byte(value), &listOfStrings)
 		if err != nil {
