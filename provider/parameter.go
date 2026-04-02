@@ -505,6 +505,104 @@ func (v *Validation) Valid(typ OptionType, value string, previous *string) error
 	return nil
 }
 
+// ValidOptions returns the set of valid option values for validation.
+func (v *Parameter) ValidOptions(optionType OptionType) (map[string]struct{}, diag.Diagnostics) {
+	optionNames := map[string]struct{}{}
+	optionValues := map[string]struct{}{}
+	var diags diag.Diagnostics
+	for _, option := range v.Option {
+		if _, exists := optionNames[option.Name]; exists {
+			return nil, diag.Diagnostics{{
+				Severity: diag.Error,
+				Summary:  "Option names must be unique.",
+				Detail:   fmt.Sprintf("multiple options found with the same name %q", option.Name),
+			}}
+		}
+		if _, exists := optionValues[option.Value]; exists {
+			return nil, diag.Diagnostics{{
+				Severity: diag.Error,
+				Summary:  "Option values must be unique.",
+				Detail:   fmt.Sprintf("multiple options found with the same value %q", option.Value),
+			}}
+		}
+		if d := valueIsType(string(optionType), option.Value); d.HasError() {
+			diags = append(diags, d...)
+			continue
+		}
+		optionNames[option.Name] = struct{}{}
+		optionValues[option.Value] = struct{}{}
+	}
+	return optionValues, diags
+}
+
+// validValue validates value against options and per-field validations.
+func (v *Parameter) validValue(value string, previous *string, optionValues map[string]struct{}) diag.Diagnostics {
+	if len(optionValues) > 0 {
+		if _, valid := optionValues[value]; !valid {
+			return diag.Diagnostics{{
+				Severity: diag.Error,
+				Summary:  fmt.Sprintf("Value %q is not a valid option.", value),
+				Detail:   fmt.Sprintf("must be one of: %v", optionValues),
+			}}
+		}
+		return nil
+	}
+	for _, val := range v.Validation {
+		if err := val.Valid(OptionType(v.Type), value, previous); err != nil {
+			return diag.Diagnostics{{
+				Severity: diag.Error,
+				Summary:  "Invalid parameter value",
+				Detail:   err.Error(),
+			}}
+		}
+	}
+	return nil
+}
+
+// ValidateInput validates a proposed input value for this parameter. If input
+// is nil, the parameter's default is used. Returns the resolved value and any
+// diagnostics.
+func (v *Parameter) ValidateInput(input *string, previous *string) (string, diag.Diagnostics) {
+	value := input
+	if input == nil && v.Default != "" {
+		value = &v.Default
+	}
+
+	var err error
+	optionType := OptionType(v.Type)
+	optionType, v.FormType, err = ValidateFormType(OptionType(v.Type), len(v.Option), v.FormType)
+	if err != nil {
+		return "", diag.Diagnostics{{
+			Severity: diag.Error,
+			Summary:  "Invalid form_type for parameter",
+			Detail:   err.Error(),
+		}}
+	}
+
+	optionValues, diags := v.ValidOptions(optionType)
+	if diags.HasError() {
+		return "", diags
+	}
+
+	if len(v.Validation) == 0 && value == nil {
+		return "", nil
+	}
+
+	var forcedValue string
+	if value != nil {
+		forcedValue = *value
+	}
+
+	if d := v.validValue(forcedValue, previous, optionValues); d.HasError() {
+		return "", d
+	}
+
+	if value == nil {
+		return "", nil
+	}
+	return *value, nil
+}
+
 // ParameterEnvironmentVariable returns the environment variable to specify for
 // a parameter by it's name. It's hashed because spaces and special characters
 // can be used in parameter names that may not be valid in env vars.
